@@ -78,7 +78,7 @@ block title %}Home{% endblock %} {% block content %}
         <td>{{ ad_request_details.campaign_name }}</td>
         <td>{{ ad_request_details.user_name }}</td>
         <td>{{ ad_request_details.ad_request.payment_amount }}</td>
-        <td><a class="link" href="">View</a></td>
+        <td><a class="link" href="{{ url_for('influencer.viewRequest', ad_request_id=ad_request_details.ad_request.id) }}">View</a></td>
         <td>
           <form
             action="{{ url_for('influencer.accept_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
@@ -99,6 +99,32 @@ block title %}Home{% endblock %} {% block content %}
       </tr>
     </tbody>
   </table>
+
+ 
 </div>
+<table class="prim-table prim-table-home">
+  <caption class="heading2">
+    sent Requests
+  </caption>
+  <thead>
+    <tr>
+      <th class="prim-row">Campaign</th>
+      <th class="prim-row">Sponsor</th>
+      <th class="prim-row">Payment Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for campaignRequest in campaignRequests %} {% if
+      campaignRequest.status == "Pending" %}
+
+    <tr class="prim-row">
+      <td>{{ campaignRequest.requirements }}</td>
+      <td>{{ campaignRequest.messages}}</td>
+      <td>{{ campaignRequest.payment_amount }}</td>
+      <td><a class="link" href="{{ url_for('influencer.viewRequest', ad_request_id=campaignRequest.id) }}">View</a></td>
+      {% endif %} {% endfor %}
+    </tr>
+  </tbody>
+</table>
 
 {% endblock %}

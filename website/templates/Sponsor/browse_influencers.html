@@ -92,7 +92,7 @@ influencer
       <p class="info">{{ influencer.email }}</p>
       <p class="info">Platform</p>
       <p class="info">Reach/ Followers: {{ influencer.reach }}</p>
-      <a class="info" href="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id,influencer_name=influencer.name) }}" >Request {{ influencer.name }}</a>
+      <a class="info" href="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id,influencer_id=influencer.id) }}" >Request {{ influencer.name }}</a>
     </div>
   </div>
   {% endfor %}

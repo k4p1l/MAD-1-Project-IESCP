@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,abort
 from .models import Campaign,AdRequest,User,Influencer,campaignRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
@@ -17,7 +17,15 @@ def dashboard():
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
     campaign_requests = campaignRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
     sent_requests = AdRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
-    return render_template('Sponsor/dashboard.html', user=current_user, active_campaigns=active_campaigns, campaign_requests=campaign_requests, sent_requests=sent_requests)
+    sent_requests_with_details = []
+    for sent_request in sent_requests:
+        influencer=Influencer.query.get(sent_request.influencer_id)
+        influencer_name = influencer.name 
+        sent_requests_with_details.append({
+            'ad_request': sent_request,
+            'influencer_name': influencer_name
+        })
+    return render_template('Sponsor/dashboard.html', user=current_user, active_campaigns=active_campaigns, campaign_requests=campaign_requests, sent_requests=sent_requests_with_details)
 
 
 @sponsor.route('/createCampaign', methods=['GET', 'POST'])
@@ -56,7 +64,17 @@ def createCampaign():
 @login_required
 def viewCampaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-    return render_template('Sponsor/viewCampaign.html', campaign=campaign)
+    adrequests=AdRequest.query.filter_by(campaign_id=campaign_id).all()
+    sent_requests_with_details = []
+    for sent_request in adrequests:
+        influencer=Influencer.query.get(sent_request.influencer_id)
+        influencer_name = influencer.name 
+        sent_requests_with_details.append({
+            'ad_request': sent_request,
+            'influencer_name': influencer_name
+        })
+
+    return render_template('Sponsor/viewCampaign.html', campaign=campaign,ad_requests=sent_requests_with_details)
 
 #to view all the campaigns list
 @sponsor.route('/viewCampaigns', methods=['GET'])
@@ -127,17 +145,22 @@ def editCampaign(campaign_id):
 @role_required('Sponsor')
 @login_required
 def create_ad_request(campaign_id):
-    influencer_name = request.args.get('influencer_name')
     campaign = Campaign.query.get_or_404(campaign_id)
     if request.method == 'POST':
-        influencer_name = request.form['influencer_name']
+        influencer_id = request.form['influencer_id']
         messages = request.form['messages']
         requirements = request.form['requirements']
         payment_amount = request.form['payment_amount']
+    
+       # Retrieve the influencer name from the influencer_id
+        influencer = Influencer.query.get(influencer_id)
+        if not influencer:
+            flash('Influencer not found', 'error')
+            return redirect(url_for('sponsor.dashboard'))
 
         ad_request = AdRequest(
             campaign_id=campaign_id,
-            influencer_name=influencer_name,
+            influencer_id=influencer_id,
             messages=messages,
             requirements=requirements,
             payment_amount=payment_amount,
@@ -196,4 +219,20 @@ def view_all_influencers():
     # Logic to retrieve and display all influencers without any filters applied
     influencers = Influencer.query.all()
     return render_template('Sponsor/browse_influencers.html', influencers=influencers)
+
+@sponsor.route('/ad_request/<int:ad_request_id>/delete', methods=['POST'])
+@role_required('Sponsor')
+@login_required
+def delete_ad_request(ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+
+    if ad_request.campaign.user_id != current_user.id:
+        abort(403)
+    
+    db.session.delete(ad_request)
+    db.session.commit()
+    
+    flash('Ad request deleted successfully.', category='success')
+    return redirect(url_for('sponsor.dashboard'))
+
 

@@ -1411,6 +1411,11 @@ option {
   color: #2d3135;
 }
 
+.influForm1 button.Btn{
+  color: #e1e5ff;
+  align-self: center;
+}
+
 input#profile_picture {
   font-weight: bold;
 }
@@ -1438,13 +1443,6 @@ input#profile_picture {
   font-size: 30px;
 }
 
-.btn-purple {
-  font-family: aesthetic;
-  font-weight: bold;
-  letter-spacing: -0.4px;
-  color: #323a81;
-}
-
 .btn::after {
   content: "";
   position: absolute;
@@ -1470,6 +1468,13 @@ input#profile_picture {
 
 .btn-purple::after {
   background-color: #2b0061;
+}
+
+.btn-purple {
+  font-family: aesthetic;
+  font-weight: bold;
+  letter-spacing: -0.4px;
+  color: #323a81;
 }
 
 .md1 {
@@ -1573,11 +1578,11 @@ textarea {
 .view{
   font-family: aesthetic;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   color: #e1e5ff;
   background-color:#162369;
-  padding: 4px;
-  padding-top: 6px;
+  padding: 6px;
+  padding-top: 9.5px;
   border-radius: 8px;
   transition: all 0.6s ease-in;
 }
@@ -1588,6 +1593,14 @@ textarea {
 
 .hero{
   display: flex;
+}
+
+.purple{
+  color:#2b0061;
+}
+
+.light-purple{
+  background-color:#e1e5ff;
 }
 
 .hover\:bg-transparent:hover {

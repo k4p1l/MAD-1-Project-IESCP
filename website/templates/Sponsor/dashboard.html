@@ -170,15 +170,18 @@ content %}
 
 <div class="flex flex-col gap-4 items-center">
   {% for request in sent_requests %}
-  <div class="adrequest-wrapper border rounded-2xl p-4 w-full max-w-md">
-    <h2 class="text-xl font-bold">{{ request.campaign.name }}</h2>
+  <div class="adrequest-wrapper border rounded-2xl p-4 w-lg max-w-md">
+    <h2 class="text-xl font-bold">{{ request.ad_request.campaign.name }}</h2>
     <p>Influencer: {{ request.influencer_name }}</p>
     <div class="mt-4 flex justify-between">
       <a
-        href="{{ url_for('sponsor.viewCampaign', campaign_id=request.campaign_id) }}"
+        href="{{ url_for('sponsor.viewCampaign', campaign_id=request.ad_request.campaign_id) }}"
         class="view"
         >View</a
       >
+      <form action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}" method="POST" >
+        <button type="submit" class="view" onclick="return confirm('Are you sure you want to delete this ad request?');">Delete</button>
+    </form>
     </div>
   </div>
   {% endfor %}

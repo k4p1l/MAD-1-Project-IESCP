@@ -16,7 +16,8 @@ influencer= Blueprint('influencer', __name__)
 @role_required('Influencer')
 @login_required
 def dashboard():
-    ad_requests = AdRequest.query.filter_by(influencer_name=Influencer.name).all()
+    ad_requests = AdRequest.query.filter_by(influencer_id=Influencer.id).all()
+    campaignRequests = campaignRequest.query.filter_by(influencer_id=Influencer.id).all()
 
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
@@ -30,13 +31,13 @@ def dashboard():
             'campaign_name': campaign.name,
             'user_name': user.name
         })
-    return render_template("Influencer/dashboard.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+    return render_template("Influencer/dashboard.html",campaignRequests=campaignRequests, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
 
 @influencer.route('/activeCampaigns', methods=['GET'])
 @role_required('Influencer')
 @login_required
 def activeCampaigns():
-    ad_requests = AdRequest.query.filter_by(influencer_name=Influencer.name).all()
+    ad_requests = AdRequest.query.filter_by(influencer_id=Influencer.id).all()
 
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
@@ -170,7 +171,7 @@ def viewRequest(ad_request_id):
     influencer = Influencer.query.filter_by(user_id=current_user.id).first()
 
     # Check if the ad request belongs to the currently logged-in influencer
-    if ad_request.influencer_name != influencer.name:
+    if ad_request.influencer_id != influencer.id:
         abort(403) 
 
     campaign = Campaign.query.get(ad_request.campaign_id)
@@ -234,7 +235,7 @@ def create_ad_request(campaign_id):
         
         ad_request = campaignRequest(
             campaign_id=campaign.id,
-            influencer_name=influencer.name,
+            influencer_id=influencer.id,
             messages=messages,
             requirements=requirements,
             payment_amount=payment_amount

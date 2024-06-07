@@ -33,7 +33,7 @@ class Campaign(db.Model):
 class AdRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
-    influencer_name= db.Column(db.String(150),db.ForeignKey('influencer.name'))
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.id'))
     messages = db.Column(db.Text)
     requirements = db.Column(db.Text, nullable=False)
     payment_amount = db.Column(db.Float, nullable=False)
@@ -55,7 +55,7 @@ class Influencer(db.Model, UserMixin):
 class campaignRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
-    influencer_name= db.Column(db.String(150),db.ForeignKey('influencer.name'))
+    influencer_id= db.Column(db.Integer, db.ForeignKey('influencer.id'))
     messages = db.Column(db.Text)
     requirements = db.Column(db.Text, nullable=False)
     payment_amount = db.Column(db.Float, nullable=False)
