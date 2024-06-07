@@ -35,6 +35,7 @@ def addInfluencer():
         niche = request.form.get('niche')
         reach = request.form.get('reach')
         user_id=request.form['user_id']
+        platform=request.form.get('platform')
 
         if profile_picture:
             filename = secure_filename(profile_picture.filename)
@@ -45,10 +46,10 @@ def addInfluencer():
             profile_picture.save(os.path.join(upload_folder, filename))
             profile_picture_path = os.path.join(upload_folder, filename)
         
-            new_influencer = Influencer(name=name, email=email, profile_picture=filename, niche=niche, reach=reach,user_id=user_id)
+            new_influencer = Influencer(name=name, email=email, profile_picture=filename, niche=niche, platform=platform, reach=reach,user_id=user_id)
             db.session.add(new_influencer)
             db.session.commit()
-            flash('Influencer added successfully!', 'success')
+            flash('Influencer added successfully!', category='success')
             return redirect(url_for('influencer.viewInfluencers'))
         
         else:
@@ -64,6 +65,9 @@ def editInfluencer(influencer_id):
     if request.method == 'POST':
         influencer.name = request.form['name']
         influencer.email = request.form['email']
+        influencer.niche = request.form.get('niche')
+        influencer.reach = request.form.get('reach')
+        influencer.platform = request.form.get('platform')
         
         profile_picture = request.files['profile_picture']
         if profile_picture:
@@ -72,7 +76,7 @@ def editInfluencer(influencer_id):
             influencer.profile_picture = filename
 
         db.session.commit()
-        flash('Influencer updated successfully!', 'success')
+        flash('Influencer updated successfully!', category='success')
         return redirect(url_for('influencer.viewInfluencers'))
     
     return render_template('Influencer/editInfluencer.html', influencer=influencer)
@@ -123,7 +127,7 @@ def deleteInfluencer(influencer_id):
 
     db.session.delete(influencer)
     db.session.commit()
-    flash('Profile deleted successfully!', 'success')
+    flash('Profile deleted successfully!', category='success')
     return redirect(url_for('influencer.dashboard'))
 
 @influencer.route('/ad_requests')
@@ -140,7 +144,7 @@ def accept_ad_request(ad_request_id):
     ad_request = AdRequest.query.get_or_404(ad_request_id)
     ad_request.status = "Accepted"
     db.session.commit()
-    flash('Ad request accepted successfully.', 'success')
+    flash('Ad request accepted successfully.', category='success')
     return redirect(url_for('influencer.dashboard'))
 
 @influencer.route('/ad_request/<int:ad_request_id>/reject', methods=['POST'])
@@ -150,7 +154,7 @@ def reject_ad_request(ad_request_id):
     ad_request = AdRequest.query.get_or_404(ad_request_id)
     ad_request.status = "Rejected"
     db.session.commit()
-    flash('Ad request rejected successfully.', 'success')
+    flash('Ad request rejected successfully.', category='success')
     return redirect(url_for('influencer.dashboard'))
 
 @influencer.route('/viewCampaigns')
@@ -191,7 +195,7 @@ def create_ad_request(campaign_id):
         db.session.add(ad_request)
         db.session.commit()
         
-        flash('Ad request created successfully', 'success')
+        flash('Ad request created successfully', category='success')
         return redirect(url_for('influencer.dashboard'))
     return render_template('Influencer/create_ad_request.html', campaign=campaign)
 

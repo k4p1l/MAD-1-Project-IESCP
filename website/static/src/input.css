@@ -272,6 +272,7 @@ hr {
   letter-spacing: 0.2px;
   position: absolute;
   top: 180px;
+  margin: 0 auto;
 }
 
 .wrapper {

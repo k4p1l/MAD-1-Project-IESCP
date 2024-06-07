@@ -21,34 +21,46 @@ block content %}
   enctype="multipart/form-data"
   class="influForm1"
 >
-
   <input
     type="hidden"
     id="name"
     name="name"
     value="{{ current_user.name }}"
-
     required
-    class="w-10 mb-4 rounded-lg p-2 "
+    class="w-10 mb-4 rounded-lg p-2"
   />
   <input
     type="hidden"
     id="email"
     name="email"
     value="{{ current_user.email }}"
-    class="w-10 mb-4 rounded-lg p-2 "
+    class="w-10 mb-4 rounded-lg p-2"
   />
+
+  <label class="heading4" for="platform">Platform</label>
+  <select name="platform" id="platform" class="w-10 mb-4 rounded-lg p-2">
+    <option value="">Please select</option>
+    <option value="Facebook">Facebook</option>
+    <option value="Instagram">Instagram</option>
+    <option value="Twitter">Twitter</option>
+    <option value="LinkedIn">LinkedIn</option>
+    <option value="Youtube">Youtube</option>
+    <option value="Snapchat">Snapchat</option>
+    <option value="TikTok">TikTok</option>
+    <option value="Twitch">Twitch</option>
+    <option value="Other">Other</option>
+  </select>
 
   <label class="heading4" for="profile_picture">Profile Picture:</label>
   <input
     type="file"
     id="profile_picture"
     name="profile_picture"
-    class="w-10 mb-4 rounded-lg p-2 "
+    class="w-10 mb-4 rounded-lg p-2"
   />
 
   <label class="heading4" for="niche">Niche:</label>
-  <select id="niche" name="niche" class="w-10 mb-4 rounded-lg p-2 ">
+  <select id="niche" name="niche" class="w-10 mb-4 rounded-lg p-2">
     <option value="">Please select</option>
     <option value="Tech">Tech</option>
     <option value="Fashion and Beauty">Fashion and Beauty</option>
@@ -70,7 +82,7 @@ block content %}
     id="reach"
     name="reach"
     required
-    class="w-10 mb-4 rounded-lg p-2 "
+    class="w-10 mb-4 rounded-lg p-2"
   />
   <input type="hidden" name="user_id" value="{{ current_user.id }}" />
 

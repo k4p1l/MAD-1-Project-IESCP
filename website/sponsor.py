@@ -46,7 +46,7 @@ def createCampaign():
         
         db.session.add(new_campaign)
         db.session.commit()
-        flash('Campaign created successfully!', 'success')
+        flash('Campaign created successfully!', category='success')
         return redirect(url_for('sponsor.viewCampaigns'))
      
     return render_template("Sponsor/campaignForm.html", user=current_user)
@@ -72,12 +72,12 @@ def viewCampaigns():
 def deleteCampaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
     if campaign.user_id != current_user.id:
-        flash('You are not authorized to delete this campaign.', 'error')
+        flash('You are not authorized to delete this campaign.', category='error')
         return redirect(url_for('sponsor.viewCampaigns'))
 
     db.session.delete(campaign)
     db.session.commit()
-    flash('Campaign deleted successfully!', 'success')
+    flash('Campaign deleted successfully!', category='success')
     return redirect(url_for('sponsor.viewCampaigns'))
 
 @sponsor.route('/editCampaign/<int:campaign_id>', methods=['GET', 'POST'])
@@ -88,7 +88,7 @@ def editCampaign(campaign_id):
     
     # Ensure the current user is the owner of the campaign
     if campaign.user_id != current_user.id:
-        flash('You do not have permission to edit this campaign.', 'error')
+        flash('You do not have permission to edit this campaign.', category='error')
         return redirect(url_for('sponsor.viewCampaigns'))
     
     if request.method == 'POST':
@@ -102,7 +102,7 @@ def editCampaign(campaign_id):
 
         # Check for missing fields
         if not all([name, description, start_date, end_date, budget, visibility, goals]):
-            flash('All fields are required.', 'error')
+            flash('All fields are required.', category='error')
             return render_template('Sponsor/editCampaign.html', campaign=campaign)
         
         try:
@@ -115,10 +115,10 @@ def editCampaign(campaign_id):
             campaign.goals = goals
             
             db.session.commit()
-            flash('Campaign updated successfully!', 'success')
+            flash('Campaign updated successfully!', category='success')
             return redirect(url_for('sponsor.viewCampaigns'))
         except ValueError as e:
-            flash(f'Invalid input: {e}', 'error')
+            flash(f'Invalid input: {e}', category='error')
             return render_template('Sponsor/editCampaign.html', campaign=campaign)
     
     return render_template('Sponsor/editCampaign.html', campaign=campaign)
@@ -145,7 +145,7 @@ def create_ad_request(campaign_id):
         )
         db.session.add(ad_request)
         db.session.commit()
-        flash('Ad request created successfully.', 'success')
+        flash('Ad request created successfully.', category='success')
         return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
     
     #getting all influencers
@@ -172,7 +172,7 @@ def create_ad_request(campaign_id):
         )
         db.session.add(ad_request)
         db.session.commit()
-        flash('Ad request created successfully.', 'success')
+        flash('Ad request created successfully.', category='success')
         return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
     
     return render_template('Sponsor/create_adrequest.html', campaign=campaign)
@@ -187,7 +187,7 @@ def request_action(request_id, action):
     elif action == 'reject':
         ad_request.status = 'Rejected'
     db.session.commit()
-    flash(f'Request has been {action}ed.', 'success')
+    flash(f'Request has been {action}ed.', category='success')
     return redirect(url_for('sponsor.dashboard'))
 
 @sponsor.route('/campaign/<int:campaign_id>/browse_influencers')

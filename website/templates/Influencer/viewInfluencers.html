@@ -26,7 +26,7 @@ influencer
   action="{{ url_for('influencer.viewInfluencers') }}"
   method="get"
 >
-<h1 class="heading2">FILTER INFLUENCERS</h1>
+<h1 class="heading2">FILTERS</h1>
 
   <label class=" heading3" for="reach">Minimum Reach: </label>
 
@@ -59,10 +59,11 @@ influencer
     </option>
   </select>
   <br />
-
-  <button class="btn" type="submit">FILTER</button>
+<a href="">
+    <button class="btn btn-big" type="submit">APPLY</button>
+</a>
   <a href="{{ url_for('influencer.view_all_influencers') }}">
-    <button class="btn" type="button">REMOVE ALL FILTERS</button></a
+    <button class="btn btn-big" type="button">REMOVE</button></a
   >
 </form>
 
@@ -90,7 +91,7 @@ influencer
         alt="Arrow"
       />
       <p class="info">{{ influencer.email }}</p>
-      <p class="info">Platform</p>
+      <p class="info">Platform: {{ influencer.platform }}</p>
       <p class="info">Reach/ Followers: {{ influencer.reach }}</p>
     </div>
   </div>
