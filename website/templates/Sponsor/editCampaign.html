@@ -1,0 +1,47 @@
+{% extends "base.html" %}  {% block body_class %}sponsor{% endblock %}{% block content %}
+
+<div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
+    <div class="mx-auto max-w-lg text-center ">
+        <h1 class="cc cc-purple">Edit campaign</h1>
+      </div>
+</div>
+
+<form method="POST"  class="mx-auto max-w-lg">
+    <div class="space-y-4">
+        <div>
+            <label for="name">Name:</label>
+            <input class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" type="text" id="name" name="name" value="{{ campaign.name }}" required>
+          </div>
+          <div>
+            <label for="description">Description:</label>
+            <textarea class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" id="description" name="description" required>{{ campaign.description }}</textarea>
+          </div>
+          <div>
+            <label for="start_date">Start Date:</label>
+            <input class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" type="date" id="start_date" name="start_date" value="{{ campaign.start_date.strftime('%Y-%m-%d') }}" required>
+          </div>
+          <div>
+            <label for="end_date">End Date:</label>
+            <input class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" type="date" id="end_date" name="end_date" value="{{ campaign.end_date.strftime('%Y-%m-%d') }}" required>
+          </div>
+          <div>
+            <label for="budget">Budget:</label>
+            <input class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" type="number" step="1" id="budget" name="budget" value="{{ campaign.budget }}" required>
+          </div>
+          <div>
+            <label for="visibility">Visibility:</label>
+            <select class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" id="visibility" name="visibility" required>
+              <option value="public" {% if campaign.visibility == 'public' %}selected{% endif %}>Public</option>
+              <option value="private" {% if campaign.visibility == 'private' %}selected{% endif %}>Private</option>
+            </select>
+          </div>
+          <div>
+            <label for="goals">Goals:</label>
+            <textarea class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" id="goals" name="goals" required>{{ campaign.goals }}</textarea>
+          </div>
+          <button type="submit" class="Btn">Update Campaign</button>
+        </form>
+        <a class="Btn" href="{{ url_for('sponsor.dashboard') }}">Back </a>
+</div>
+
+{% endblock %}

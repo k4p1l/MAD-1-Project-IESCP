@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} 
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Create Ad Request for {{ campaign.name }}</h1>
+
+<form action="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id) }}" method="post">
+
+    <input type="hidden" name="influencer_name" value="{{ request.args.get('influencer_name') }}">
+    
+    <div class="mb-4">
+        <label for="messages" class="block text-gray-700">Messages:</label>
+        <textarea id="messages" name="messages" class="block w-full mt-1 border rounded"></textarea>
+    </div>
+    <div class="mb-4">
+        <label for="requirements" class="block text-gray-700">Requirements:</label>
+        <textarea id="requirements" name="requirements" class="block w-full mt-1 border rounded"></textarea>
+    </div>
+    <div class="mb-4">
+        <label for="payment_amount" class="block text-gray-700">Payment Amount:</label>
+        <input type="number" id="payment_amount" name="payment_amount" class="block w-full mt-1 border rounded" step="0.01">
+    </div>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Ad Request</button>
+</form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}{% block body_class %} influencer {% endblock %} {%
+block title %}Home{% endblock %} {% block content %}
+
+<div class="navbar">
+  <a class="text-center mb-8 heading1 link" href="{{ url_for('views.logout') }}"
+    >LOGOUT</a
+  >
+  <h1 class="text-center mb-8 heading1">Influencers</h1>
+  <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}">
+    View campaigns</a
+  >
+</div>
+
+<div class="text-center mt-8">
+  {% if not current_user.influencers %}
+  <a href="{{ url_for('influencer.addInfluencer') }}" class="cta link">
+    COMPLETE YOUR PROFILE
+  </a>
+  {% endif %} {% if influencer %}
+  <a
+    href="{{ url_for('influencer.viewInfluencer', influencer_id=influencer.id) }}"
+  >
+    <button class="Btn">View Profile</button>
+  </a>
+
+  {% endif %}
+</div>
+
+<p>Pending Requests</p>
+
+{% for ad_request in ad_requests %}
+{% if ad_request.status == "Pending" %}
+
+<div>
+  <p>Messages: {{ ad_request.messages }}</p>
+  <p>Requirements: {{ ad_request.requirements }}</p>
+  <p>payment amount: {{ ad_request.payment_amount }}</p>
+  <form
+    action="{{ url_for('influencer.accept_ad_request', ad_request_id=ad_request.id) }}"
+    method="post"
+  >
+    <button type="submit">Accept</button>
+  </form>
+  <form
+    action="{{ url_for('influencer.reject_ad_request', ad_request_id=ad_request.id) }}"
+    method="post"
+  >
+    <button type="submit">Reject</button>
+  </form>
+</div>
+ {% endif %}{% endfor %} {% endblock %}

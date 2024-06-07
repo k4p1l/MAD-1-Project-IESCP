@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block body_class %}
+grey{% endblock %} {% block title %}Login{% endblock %} {% block content
+%}
+
+<header>
+  <h1 class="text-center title lg-title">aDFLUENCEFLOW</h1>
+</header>
+
+<div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-lg text-center">
+    <h1 class="login">LOGIN</h1>
+  </div>
+
+  <form method="POST" class="mx-auto mb-0 mt-8 max-w-md space-y-4">
+    <div>
+      <label for="role" class="block text-sm font-medium text-gray-600">
+        Role
+      </label>
+
+      <select
+        name="role"
+        id="role"
+        class="mt-1.5 w-full p-2 pe-12 rounded-lg border-gray-300 text-gray-600 sm:text-sm"
+      >
+        <option value="">Please select</option>
+        <option value="Admin">Admin</option>
+        <option value="Sponsor">Sponsor</option>
+        <option value="Influencer">Influencer</option>
+      </select>
+    </div>
+    <div>
+      <label for="email" class="sr-only">Email</label>
+
+      <div class="relative">
+        <input
+          type="email"
+          class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+          placeholder="Enter email"
+          id="email"
+          name="email"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="password" class="sr-only">Password</label>
+
+      <div class="relative">
+        <input
+          type="password"
+          class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+          placeholder="Enter password"
+          id="password"
+          name="password"
+        />
+      </div>
+    </div>
+    
+
+    <div class="flex items-center justify-between">
+      <p class="text-sm ml-2 text-gray-500">
+        No account?
+        <a class="underline" href="/sign-up">Sign up</a>
+      </p>
+
+      <button
+        type="submit"
+        class="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+      >
+        Sign in
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

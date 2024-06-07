@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
+content %}
+<div class="navbar">
+  <div></div>
+  <div class="buttons">
+    <a
+    href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
+    class="btn btn-purple cc cc-purple"
+    >Find Influencer
+  </a>
+  <a
+    href="{{ url_for('sponsor.dashboard') }}"
+    class="btn btn-purple cc cc-purple"
+    >Back</a
+  >
+  </div>
+
+  </div>
+
+  <table class="campaign-table">
+    <tr>
+      <th>Campaign Detail</th>
+      <th>Information</th>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{ campaign.name }}</td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>{{ campaign.description }}</td>
+    </tr>
+    <tr>
+      <td>Start Date</td>
+      <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+    </tr>
+    <tr>
+      <td>End Date</td>
+      <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+    </tr>
+    <tr>
+      <td>Budget</td>
+      <td>{{ campaign.budget }}</td>
+    </tr>
+    <tr>
+      <td>Visibility</td>
+      <td>{{ campaign.visibility }}</td>
+    </tr>
+    <tr>
+      <td>Goals</td>
+      <td>{{ campaign.goals }}</td>
+    </tr>
+  </table>
+
+  <div class="flex flex-col gap-4 items-center">
+    {% for ad_request in campaign.ad_requests %}
+    <div class="border rounded p-4 w-full max-w-md bg-white shadow-md">
+      <p>Influencer: {{ ad_request.influencer_name }}</p>
+      <p>Messages: {{ ad_request.messages }}</p>
+      <p>Requirements: {{ ad_request.requirements }}</p>
+      <p>Payment Amount: ${{ ad_request.payment_amount }}</p>
+      <p>Status: {{ ad_request.status }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% endblock %}
+</div>

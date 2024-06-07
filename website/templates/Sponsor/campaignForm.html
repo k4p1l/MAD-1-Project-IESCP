@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block title %}{{ 'Edit' if campaign else 'Create'
+}} Campaign{% endblock %}
+{% block body_class %}sponsor{% endblock %} {% block content %}
+
+<div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
+  <div class="mx-auto max-w-lg text-center ">
+    <h1 class="heading">Create campaign</h1>
+  </div>
+
+  <form method="POST" class="mx-auto max-w-lg">
+    <div class="space-y-4">
+      <div>
+        <label for="name" class="cc-label">Name of Campaign</label>
+
+        <div class="relative">
+          <input
+            type="text"
+            class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+            id="name"
+            name="name"
+            required
+          />
+        </div>
+      </div>
+
+      <div >
+        <label class="cc-label" for="description">Description</label>
+        <div class="relative">
+          <textarea
+            class="w-full rounded-lg border-gray-200 p-2 shadow-sm"
+            id="description"
+            name="description"
+            required
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div>
+        <label class="cc-label" for="start_date">Start Date</label>
+
+        <div class="relative">
+          <input
+            type="date"
+            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+            id="start_date"
+            name="start_date"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="cc-label" for="end_date">End Date</label>
+
+        <div class="relative">
+          <input
+            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+            type="date"
+            id="end_date"
+            name="end_date"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="cc-label" for="budget">Budget</label>
+
+        <div class="relative">
+          <input
+            type="number"
+            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+            placeholder="Enter Budget"
+            id="budget"
+            step="1"
+            name="budget"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="cc-label" for="visibility">Visibility:</label>
+        <select
+          class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+          id="visibility"
+          name="visibility"
+          required
+        >
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="cc-label" for="goals">Goals:</label>
+        <textarea
+          class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
+          id="goals"
+          name="goals"
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="Btn"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

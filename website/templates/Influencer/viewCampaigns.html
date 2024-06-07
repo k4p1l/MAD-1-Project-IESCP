@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block title %}{{ 'Edit' if campaign else 'Create'
+}} Campaign{% endblock %} {% block body_class %}influencer{% endblock %} {%
+block content %}
+
+<div class="navbar">
+  <div></div>
+  <div class="buttons">
+    <a href="{{ url_for('influencer.dashboard') }}" class="link heading1"
+      >Back to Home</a
+    >
+    <a href="{{ url_for('views.logout') }}" class="link heading1">Logout</a>
+  </div>
+</div>
+<p class="text-center cc">all Campaigns</p>
+
+<table class="prim-table">
+  <thead>
+    <tr>
+      <th class="prim-row">Name of Sponsor</th>
+      <th class="prim-row">Start Date</th>
+      <th class="prim-row">End Date</th>
+      <th class="prim-row">Budget</th>
+      <th class="prim-row">Campaign description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for campaign in campaigns %}
+    <tr class="prim-row">
+      <td>
+        <a
+          href="{{ url_for('sponsor.viewCampaign', campaign_id=campaign.id) }}"
+          class="link"
+          >{{ campaign.name }}</a
+        >
+      </td>
+      <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+      <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+      <td>Rs. {{ campaign.budget }}</td>
+      <td>{{ campaign.description }}</td>
+      <td>
+        <a class="link" href="">View</a>
+      </td>
+      <td>
+        <a class="link" href="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id)}}">Request</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
