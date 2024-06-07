@@ -3,13 +3,16 @@
 block content %}
 
 <div class="navbar">
+  <a class="mb-8 heading1 link" href="{{ url_for('influencer.dashboard') }}">Back to HOME</a>
   <div></div>
-  <div class="buttons">
-    <a href="{{ url_for('influencer.dashboard') }}" class="link heading1"
-      >Back to Home</a
-    >
-    <a href="{{ url_for('views.logout') }}" class="link heading1">Logout</a>
-  </div>
+  <div></div>
+  <div></div>
+  <a href="{{ url_for('influencer.viewInfluencers') }}">
+    <h1 class="text-center mb-8 heading1 link">Influencers</h1>
+  </a>
+  <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}">aCTIVE Campaigns</a>
+  <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+    >Find campaigns</a>
 </div>
 <p class="text-center cc">all Campaigns</p>
 

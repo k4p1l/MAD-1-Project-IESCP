@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app,abort
 from .models import User
 from .models import Influencer,AdRequest,Campaign,campaignRequest
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,7 +21,37 @@ def dashboard():
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
 
-    return render_template("Influencer/dashboard.html", user=current_user, influencer=influencer, ad_requests=ad_requests)
+    ad_requests_with_details = []
+    for ad_request in ad_requests:
+        campaign = Campaign.query.get(ad_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        ad_requests_with_details.append({
+            'ad_request': ad_request,
+            'campaign_name': campaign.name,
+            'user_name': user.name
+        })
+    return render_template("Influencer/dashboard.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+
+@influencer.route('/activeCampaigns', methods=['GET'])
+@role_required('Influencer')
+@login_required
+def activeCampaigns():
+    ad_requests = AdRequest.query.filter_by(influencer_name=Influencer.name).all()
+
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+
+    ad_requests_with_details = []
+    for ad_request in ad_requests:
+        campaign = Campaign.query.get(ad_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        ad_requests_with_details.append({
+            'ad_request': ad_request,
+            'campaign_name': campaign.name,
+            'user_name': user.name
+        })
+    return render_template("Influencer/activeCampaigns.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+
 
     
 @influencer.route('/addInfluencer', methods=['GET', 'POST'])
@@ -77,7 +107,7 @@ def editInfluencer(influencer_id):
 
         db.session.commit()
         flash('Influencer updated successfully!', category='success')
-        return redirect(url_for('influencer.viewInfluencers'))
+        return redirect(url_for('influencer.dashboard'))
     
     return render_template('Influencer/editInfluencer.html', influencer=influencer)
 
@@ -130,12 +160,30 @@ def deleteInfluencer(influencer_id):
     flash('Profile deleted successfully!', category='success')
     return redirect(url_for('influencer.dashboard'))
 
-@influencer.route('/ad_requests')
+@influencer.route('/viewRequest/<int:ad_request_id>', methods=['GET'])
 @role_required('Influencer')
 @login_required
-def view_ad_requests():
-    ad_requests = AdRequest.query.filter_by(influencer_id=current_user.id).all()
-    return render_template('Influencer/dashboard.html', ad_requests=ad_requests)
+def viewRequest(ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+
+    # Retrieve the currently logged-in influencer
+    influencer = Influencer.query.filter_by(user_id=current_user.id).first()
+
+    # Check if the ad request belongs to the currently logged-in influencer
+    if ad_request.influencer_name != influencer.name:
+        abort(403) 
+
+    campaign = Campaign.query.get(ad_request.campaign_id)
+    user = User.query.get(campaign.user_id)
+
+    ad_request_with_details = {
+        'ad_request': ad_request,
+        'campaign_name': campaign.name,
+        'user_name': user.name
+    }
+
+    return render_template('Influencer/viewRequest.html', ad_request_details=ad_request_with_details)
+
 
 @influencer.route('/ad_request/<int:ad_request_id>/accept', methods=['POST'])
 @role_required('Influencer')
@@ -169,24 +217,24 @@ def viewCampaigns():
 @login_required
 def create_ad_request(campaign_id):
     campaign = Campaign.query.get(campaign_id)
+    influencer = Influencer.query.filter_by(user_id=current_user.id).first()
     
     if not campaign:
         flash('Campaign not found', 'error')
         return redirect(url_for('sponsor.dashboard'))
     
     if request.method == 'POST':
-        influencer_name = request.form.get('influencer_name')
         messages = request.form.get('messages')
         requirements = request.form.get('requirements')
         payment_amount = request.form.get('payment_amount')
         
-        if not influencer_name:
+        if not influencer:
             flash('Influencer name is required', 'error')
             return render_template('Influencer/create_ad_request.html', campaign=campaign)
         
         ad_request = campaignRequest(
             campaign_id=campaign.id,
-            influencer_name=influencer_name,
+            influencer_name=influencer.name,
             messages=messages,
             requirements=requirements,
             payment_amount=payment_amount

@@ -6,7 +6,7 @@ content %}
   <p class="heading2 login-purple">The Dashboard</p>
   <div class="buttons">
     <a href="{{ url_for('sponsor.createCampaign') }}" class="Btn">Create +</a>
-    <a href="viewCampaigns" class="Btn">View campaigns</a>
+    <a href="viewCampaigns" class="Btn">All campaigns</a>
     <a href="{{ url_for('views.logout') }}" class="Btn">Logout</a>
   </div>
 </div>
@@ -29,7 +29,7 @@ content %}
       <td>
         <a
           href="{{ url_for('sponsor.viewCampaign', campaign_id=campaign.id) }}"
-          class="link"
+          class="link link-purple"
           >{{ campaign.name }}</a
         >
       </td>
@@ -133,7 +133,7 @@ content %}
   </tbody>
 </table>
 
-<h2 class="text-2xl font-semibold mt-8 mb-4">Influencer Requests</h2>
+<h2 class="heading2-sm">Influencer Requests</h2>
 <div class="flex flex-col gap-4 items-center">
   {% for request in campaign_requests %}
   <div class="border rounded p-4 w-full max-w-md bg-black shadow-md">
@@ -165,17 +165,18 @@ content %}
   </div>
   {% endfor %}
 </div>
-<h2 class="text-2xl font-semibold mt-8 mb-4">Sent Requests</h2>
+
+<h2 class="heading2-sm">Sent Requests</h2>
 
 <div class="flex flex-col gap-4 items-center">
   {% for request in sent_requests %}
-  <div class="border rounded p-4 w-full max-w-md bg-white shadow-md">
+  <div class="adrequest-wrapper border rounded-2xl p-4 w-full max-w-md">
     <h2 class="text-xl font-bold">{{ request.campaign.name }}</h2>
     <p>Influencer: {{ request.influencer_name }}</p>
     <div class="mt-4 flex justify-between">
       <a
         href="{{ url_for('sponsor.viewCampaign', campaign_id=request.campaign_id) }}"
-        class="bg-blue-500 text-white px-4 py-2 rounded"
+        class="view"
         >View</a
       >
     </div>

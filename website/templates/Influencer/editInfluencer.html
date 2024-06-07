@@ -12,6 +12,15 @@ block content %}
   <a class="text-center mb-8 heading1 link" href="{{ url_for('views.logout') }}"
     >LOGOUT</a
   >
+  <form
+    action="{{ url_for('influencer.deleteInfluencer', influencer_id=influencer.id) }}"
+    method="POST"
+    onsubmit="return confirm('Are you sure you want to delete your profile?');"
+  >
+    <button class="heading1 link" type="submit">
+      Delete Profile
+    </button>
+  </form>
 </div>
 
 <h1 class="cc text-center">Edit Details</h1>
@@ -54,10 +63,20 @@ block content %}
   /><br />
 
   <label for="profile_picture">Profile Picture:</label>
-  <input value="{{ influencer.profile_picture }}" type="file" id="profile_picture" name="profile_picture" /><br />
+  <input
+    value="{{ influencer.profile_picture }}"
+    type="file"
+    id="profile_picture"
+    name="profile_picture"
+  /><br />
 
   <label class="heading4" for="niche">Niche:</label>
-  <select value="{{ influencer.niche }}" id="niche" name="niche" class="w-10 mb-4 rounded-lg p-2">
+  <select
+    value="{{ influencer.niche }}"
+    id="niche"
+    name="niche"
+    class="w-10 mb-4 rounded-lg p-2"
+  >
     <option value="">Please select</option>
     <option value="Tech">Tech</option>
     <option value="Fashion and Beauty">Fashion and Beauty</option>

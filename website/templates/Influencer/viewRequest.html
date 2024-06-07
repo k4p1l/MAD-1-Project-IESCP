@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block body_class %} influencer {% endblock %} {%
+block content %}
+
+<div class="navbar">
+    <a class="mb-8 heading1 link" href="{{ url_for('influencer.dashboard') }}">HOME</a>
+    <div></div>
+    <div></div>
+    <div></div>
+    <a href="{{ url_for('influencer.viewInfluencers') }}">
+      <h1 class="text-center mb-8 heading1 link">Influencers</h1>
+    </a>
+    <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}">aCTIVE Campaigns</a>
+    <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+      >Find campaigns</a>
+  </div>
+
+<div class="campaignContainer cc-in">
+  <table class="prim-table prim-table-home">
+    <caption class="heading2">Ad Request</caption>
+    <tr >
+      <th class="prim-row">Ad Request Details</th>
+      <th class="prim-row">Information</th>
+    </tr>
+    <tr class="prim-row">
+      <td>Campaign</td>
+      <td>{{ ad_request_details.campaign_name }}</td>
+    </tr>
+    <tr class="prim-row">
+      <td>Sponsor</td>
+      <td>{{ ad_request_details.user_name }}</td>
+    </tr class="prim-row">
+    <tr class="prim-row">
+      <td>Requirements</td>
+      <td>{{ad_request_details.ad_request.requirements}}</td>
+    </tr>
+    <tr class="prim-row">
+      <td>Payment Amount</td>
+      <td>{{ ad_request_details.ad_request.payment_amount }}</td>
+    </tr>
+    <tr class="prim-row">
+      <td>Message</td>
+      <td>{{ ad_request_details.ad_request.messages }}</td>
+    </tr>
+    <tr class="prim-row">
+      <td>Status</td>
+      <td>{{ ad_request_details.ad_request.status }}</td>
+    </tr>
+  </table>
+</div>
+
+{% endblock %}

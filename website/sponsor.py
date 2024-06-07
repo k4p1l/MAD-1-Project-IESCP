@@ -47,7 +47,7 @@ def createCampaign():
         db.session.add(new_campaign)
         db.session.commit()
         flash('Campaign created successfully!', category='success')
-        return redirect(url_for('sponsor.viewCampaigns'))
+        return redirect(url_for('sponsor.dashboard'))
      
     return render_template("Sponsor/campaignForm.html", user=current_user)
 
@@ -152,30 +152,6 @@ def create_ad_request(campaign_id):
     influencers = Influencer.query.all()
 
     return render_template('Sponsor/create_ad_request.html', campaign=campaign, influencers=influencers)
-
-    campaign = Campaign.query.get_or_404(campaign_id)
-
-    if request.method == 'POST':
-        influencer_name = influencer_name
-        messages = request.form['messages']
-        requirements = request.form['requirements']
-        payment_amount = request.form['payment_amount']
-
-        
-        ad_request = AdRequest(
-            campaign_id=campaign_id,
-            influencer_name=influencer_name,
-            messages=messages,
-            requirements=requirements,
-            payment_amount=payment_amount,
-            status='Pending'
-        )
-        db.session.add(ad_request)
-        db.session.commit()
-        flash('Ad request created successfully.', category='success')
-        return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
-    
-    return render_template('Sponsor/create_adrequest.html', campaign=campaign)
 
 @sponsor.route('/request_action/<int:request_id>/<action>', methods=['POST'])
 @role_required('Sponsor')

@@ -4,20 +4,21 @@ content %}
   <div></div>
   <div class="buttons">
     <a
-    href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
-    class="btn btn-purple cc cc-purple"
-    >Find Influencer
-  </a>
-  <a
-    href="{{ url_for('sponsor.dashboard') }}"
-    class="btn btn-purple cc cc-purple"
-    >Back</a
-  >
+      href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
+      class="btn btn-purple cc cc-purple"
+      >Find Influencer
+    </a>
+    <a
+      href="{{ url_for('sponsor.dashboard') }}"
+      class="btn btn-purple cc cc-purple"
+      >Back</a
+    >
   </div>
+</div>
 
-  </div>
-
-  <table class="campaign-table">
+<div class="campaignContainer">
+  <h1 class="cc cc-purple text-center">Campaign</h1>
+  <table>
     <tr>
       <th>Campaign Detail</th>
       <th>Information</th>
@@ -51,16 +52,47 @@ content %}
       <td>{{ campaign.goals }}</td>
     </tr>
   </table>
+</div>
 
-  <div class="flex flex-col gap-4 items-center">
-    {% for ad_request in campaign.ad_requests %}
-    <div class="border rounded p-4 w-full max-w-md bg-white shadow-md">
-      <p>Influencer: {{ ad_request.influencer_name }}</p>
-      <p>Messages: {{ ad_request.messages }}</p>
-      <p>Requirements: {{ ad_request.requirements }}</p>
-      <p>Payment Amount: ${{ ad_request.payment_amount }}</p>
-      <p>Status: {{ ad_request.status }}</p>
+
+<div class="ad-request-container">
+  <h1 class="cc cc-purple">ad Requests</h1>
+
+  {% for ad_request in campaign.ad_requests %} 
+  {% if loop.index0 % 4 == 0 %}
+  <div class="ad-request-row">
+    {% endif %}
+  <div class="ad-request-table">
+    <table>
+      <tr>
+        <th>Ad Request</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td>Influencer</td>
+        <td>{{ ad_request.influencer_name }}</td>
+      </tr>
+      <tr>
+        <td>Messages</td>
+        <td>{{ ad_request.messages }}</td>
+      </tr>
+      <tr>
+        <td>Requirements</td>
+        <td>{{ ad_request.requirements }}</td>
+      </tr>
+      <tr>
+        <td>Payment Amount</td>
+        <td>{{ ad_request.payment_amount }}</td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>{{ ad_request.status }}</td>
+      </tr>
+    </table>
     </div>
+    {% if loop.index0 % 4 == 3 or loop.last %}
+    </div>
+    {% endif %}
     {% endfor %}
   </div>
 

@@ -1,23 +1,52 @@
-{% extends "base.html" %} {% block body_class %}influencer{% endblock %} 
-{% block content %}
-<h1 class="text-3xl font-bold mb-6">Create Ad Request for {{ campaign.name }}</h1>
+{% extends "base.html" %} {% block body_class %}influencer{% endblock %} {%
+block content %}
 
-<form action="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id) }}" method="post">
+  <div class="navbar">
+    <a class="mb-8 heading1 link" href="{{ url_for('views.logout') }}">LOGOUT</a>
+    <div></div>
+    <div></div>
+    <div></div>
+    <a href="{{ url_for('influencer.viewInfluencers') }}">
+      <h1 class="text-center mb-8 heading1 link">Influencers</h1>
+    </a>
+    <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}">aCTIVE Campaigns</a>
+    <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+      >Find campaigns</a>
+  </div>
 
-    <input type="hidden" name="influencer_name" value="{{ current_user.name }}">
-    
-    <div class="mb-4">
-        <label for="messages" class="block text-gray-700">Messages:</label>
-        <textarea id="messages" name="messages" class="block w-full mt-1 border rounded"></textarea>
-    </div>
-    <div class="mb-4">
-        <label for="requirements" class="block text-gray-700">Requirements:</label>
-        <textarea id="requirements" name="requirements" class="block w-full mt-1 border rounded"></textarea>
-    </div>
-    <div class="mb-4">
-        <label for="payment_amount" class="block text-gray-700">Payment Amount:</label>
-        <input type="number" id="payment_amount" name="payment_amount" class="block w-full mt-1 border rounded" step="0.01">
-    </div>
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Ad Request</button>
+
+<h1 class="cc text-center">Create ad Request for {{ campaign.name }}</h1>
+
+<form
+  action="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id) }}"
+  method="post"
+  class="influForm1">
+  
+  <label for="requirements" class="heading4">Task:</label>
+  <textarea
+    id="requirements"
+    name="requirements"
+    class="w-full mb-4 rounded-lg p-2 pe-12"
+  ></textarea>
+  <br>
+
+  <label for="messages" class="heading4">Message:</label>
+  <textarea
+    id="messages"
+    name="messages"
+    class="w-full mb-4 rounded-lg p-2 pe-12"
+  ></textarea>
+  <br>
+
+  <label for="payment_amount" class="heading4">Payment Amount:</label>
+  <input
+    type="number"
+    id="payment_amount"
+    name="payment_amount"
+    class="block w-full mt-1 border rounded"
+    step="1"
+  />
+  <br>
+  <button type="submit" class="btn btn-primary md1">Create ad Request</button>
 </form>
 {% endblock %}

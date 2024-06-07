@@ -954,6 +954,12 @@ body.grey {
   transition: transform 0.3s ease;
 }
 
+.square2{
+  height: 100vh;
+  margin-left: 20px;
+  width: fixed;
+}
+
 .square:hover {
   transform: scale(1.05);
 }
@@ -1079,6 +1085,17 @@ hr {
   margin-bottom: 8px;
 }
 
+.heading2-sm {
+  color:#162369;
+  font-family: ultra;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+  margin-left: 18px;
+  margin-top:10px;
+}
+
 .heading3 {
   color: #433e30;
   font-family: garamond;
@@ -1138,6 +1155,7 @@ hr {
   letter-spacing: 0.2px;
   position: absolute;
   top: 180px;
+  margin: 0 auto;
 }
 
 .wrapper {
@@ -1180,8 +1198,12 @@ th {
 }
 
 .link:hover::after {
-  background-color: #b8af96;
+  background-color: #8d846c;
   /* Change background color on hover */
+}
+
+.link-purple:hover::after {
+  background-color: #27203f;
 }
 
 .arrow {
@@ -1197,6 +1219,11 @@ table {
 
 table.prim-table {
   background-color: #e3d8bc;
+}
+
+.prim-table-home{
+  height: -moz-fit-content;
+  height: fit-content;
 }
 
 tr {
@@ -1452,6 +1479,10 @@ input#profile_picture {
 
 textarea {
   white-space: pre-line;
+  font-family: garamond;
+  font-weight: bold;
+  font-size: 16px;
+  color: #544e37;
 }
 
 .alert {
@@ -1494,6 +1525,69 @@ textarea {
   /* Red color for error alerts */
   color: #721c24;
   border: 1px solid #f5c6cb;
+}
+
+.ad-request-table {
+  display: flex;
+}
+
+.ad-request-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ad-request-container h1{
+  margin-top: 40px;
+  text-align: center;
+  margin-bottom: -20px;
+}
+
+.ad-request-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.ad-request-table {
+  flex: 1;
+  margin: 10px;
+  max-width: calc(
+    25% - 20px
+  );
+}
+
+.adrequest-wrapper{
+  background-color: #e1e5ff;
+  margin: 10px;
+  border-radius: 20px;
+  color:#323a81;
+  font-family: inter;
+  font-weight: bold;
+  transition: all 0.2s ease-out;
+}
+
+.adrequest-wrapper:hover{
+  transform: scale(1.08);
+}
+
+.view{
+  font-family: aesthetic;
+  font-weight: bold;
+  font-size: 16px;
+  color: #e1e5ff;
+  background-color:#162369;
+  padding: 4px;
+  padding-top: 6px;
+  border-radius: 8px;
+  transition: all 0.6s ease-in;
+}
+
+.view:hover{
+  color: yellow;
+}
+
+.hero{
+  display: flex;
 }
 
 .hover\:bg-transparent:hover {
