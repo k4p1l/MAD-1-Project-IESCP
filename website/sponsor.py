@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,abort
-from .models import Campaign,AdRequest,User,Influencer,campaignRequest
+from .models import Campaign,AdRequest,User,Influencer,campaignRequest,Transaction
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 from .auth import role_required
+from sqlalchemy.sql import func
 
 
 sponsor = Blueprint('sponsor', __name__)
@@ -250,3 +251,61 @@ def delete_ad_request(ad_request_id):
     
     flash('Ad request deleted successfully.', category='success')
     return redirect(url_for('sponsor.dashboard'))
+
+@sponsor.route('/viewCampaign/<int:campaign_id>/<int:ad_request_id>/confirm_completion', methods=['POST'])
+@role_required('Sponsor')
+@login_required
+def confirm_completion(campaign_id, ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+    if ad_request.completed==True:
+        ad_request.completion_confirmed=True
+
+   
+    db.session.commit()
+    
+    flash('Ad request completed successfully.', category='success')
+    return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
+
+@sponsor.route('/view_completed_ad_requests/<int:campaign_id>')
+@role_required('Sponsor')
+@login_required
+def view_completed_ad_requests(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    adrequests=AdRequest.query.filter_by(campaign_id=campaign_id,completion_confirmed=True).all()
+    sent_requests_with_details = []
+    for sent_request in adrequests:
+        influencer=Influencer.query.get(sent_request.influencer_id)
+        influencer_name = influencer.name 
+        sent_requests_with_details.append({
+            'ad_request': sent_request,
+            'influencer_name': influencer_name
+        })
+
+    return render_template('Sponsor/view_completed_ad_requests.html', campaign=campaign,ad_requests=sent_requests_with_details)
+
+@sponsor.route('/make_payment/<int:ad_request_id>', methods=['GET', 'POST'])
+@role_required('Sponsor')
+@login_required
+def make_payment(ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+    
+    if request.method == 'POST':
+        card_number = request.form.get('card_number')
+        expiration_date = request.form.get('expiration_date')
+        cvv = request.form.get('cvv')
+        
+        # Dummy payment processing
+        transaction = Transaction(
+            ad_request_id=ad_request.id,
+            amount=ad_request.payment_amount,
+            timestamp=func.now(),
+            status='Completed'
+        )
+        
+        db.session.add(transaction)
+        db.session.commit()
+        
+        flash('Payment successful!', category='success')
+        return redirect(url_for('sponsor.dashboard'))
+    
+    return render_template('sponsor/make_payment.html', ad_request=ad_request)

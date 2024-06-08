@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
+content %}
+<h1>Make Payment</h1>
+<p>Ad Request: {{ ad_request.id }}</p>
+<p>Amount: ${{ ad_request.payment_amount }}</p>
+
+<form method="POST">
+  <label for="card_number">Card Number:</label><br />
+  <input type="text" id="card_number" name="card_number" required /><br /><br />
+
+  <label for="expiration_date">Expiration Date (MM/YY):</label><br />
+  <input
+    type="text"
+    id="expiration_date"
+    name="expiration_date"
+    required
+  /><br /><br />
+
+  <label for="cvv">CVV:</label><br />
+  <input type="text" id="cvv" name="cvv" required /><br /><br />
+
+  <input type="submit" value="Submit Payment" />
+</form>
+
+{% endblock %}

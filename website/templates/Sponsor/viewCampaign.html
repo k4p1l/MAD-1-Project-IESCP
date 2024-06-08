@@ -13,6 +13,7 @@ content %}
       class="btn btn-purple cc cc-purple"
       >Back</a
     >
+    <a class="btn btn-purple cc cc-purple" href="{{url_for('sponsor.view_completed_ad_requests', campaign_id=campaign.id)}}">Completed Ad requests</a>
   </div>
 </div>
 
@@ -59,6 +60,7 @@ content %}
   <h1 class="cc cc-purple">ad Requests</h1>
 
   {% for ad_request in ad_requests %} 
+  {% if ad_request.ad_request.completion_confirmed == False %}
   {% if loop.index0 % 4 == 0 %}
   <div class="ad-request-row">
     {% endif %}
@@ -88,10 +90,22 @@ content %}
         <td>Status</td>
         <td>{{ ad_request.ad_request.status }}</td>
       </tr>
+      <tr>
+        <td>Completion Status</td>
+        <td>{{ ad_request.ad_request.completed }}</td>
+      </tr>
+      <tr>
+        <td>
+          <form action="{{ url_for('sponsor.confirm_completion',campaign_id=campaign.id, ad_request_id=ad_request.ad_request.id) }}" method="post">
+            <button type="submit">Mark Completed</button>
+          </form>
+        </td>
+      </tr>
     </table>
     </div>
     {% if loop.index0 % 4 == 3 or loop.last %}
     </div>
+    {% endif %}
     {% endif %}
     {% endfor %}
   </div>

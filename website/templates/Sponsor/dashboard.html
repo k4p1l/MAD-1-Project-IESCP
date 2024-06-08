@@ -27,6 +27,7 @@ content %}
   </thead>
   <tbody>
     {% for request in campaign_requests %}
+    {% if request.campaign_request.status == 'Pending' %}
     <tr>
       <td>{{ request.campaign_name }}</td>
       <td>{{ request.influencer_name }}</td>
@@ -51,6 +52,7 @@ content %}
       </td>
     </tr>
   </tbody>
+  {% endif %}
   {% endfor %}
 </table>
 

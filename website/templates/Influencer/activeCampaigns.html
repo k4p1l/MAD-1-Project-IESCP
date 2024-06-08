@@ -14,15 +14,52 @@ block title %}Home{% endblock %} {% block content %}
     >Find campaigns</a>
 </div>
 
+
+
+<h1 class="heading2 mt-4">
+  Active Campaigns
+</h1>
+<a href="{{url_for('influencer.view_completed_requests')}}" class="btn-sec">
+  <button class="heading3 heading3-lg">
+    <span class="text">Completed Requests</span>
+    <span class="icon">
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        transform="rotate(45)"
+      >
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g
+          id="SVGRepo_tracerCarrier"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M6 18L18 6M18 6H9M18 6V15"
+            stroke="#433e30"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </g>
+      </svg>
+    </span>
+  </button>
+</a>
+
 <table class="prim-table">
-  <caption class="heading2">
-    Active Campaigns
-  </caption>
+
   <thead>
     <tr>
       <th class="prim-row">Campaign</th>
       <th class="prim-row">Sponsor</th>
       <th class="prim-row">Payment Amount</th>
+      <th class="prim-row">Requirements</th>
+      <th class="prim-row">Message</th>
     </tr>
   </thead>
   <tbody>
@@ -33,10 +70,18 @@ block title %}Home{% endblock %} {% block content %}
       <td>{{ ad_request_details.campaign_name }}</td>
       <td>{{ ad_request_details.user_name }}</td>
       <td>{{ ad_request_details.ad_request.payment_amount }}</td>
+      <td>{{ ad_request_details.ad_request.requirements }}</td>
+      <td>{{ ad_request_details.ad_request.messages }}</td>
       <td><a class="link" href="{{ url_for('influencer.viewRequest', ad_request_id=ad_request_details.ad_request.id)}}">View</a></td>
+      <td>
+        <form method="POST" action="{{url_for('influencer.mark_completed', ad_request_id=ad_request_details.ad_request.id)}}">
+          <button class="link" type="submit">Mark Completed</button>
+        </form>
+      </td>
       {% endif %} {% endfor %}
     </tr>
   </tbody>
 </table>
+
 
 {% endblock %}

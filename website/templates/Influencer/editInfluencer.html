@@ -37,11 +37,10 @@ block content %}
   <label class="heading4" for="platform">Platform</label>
   <select
     name="platform"
-    value="{{ influencer.platform }}"
     id="platform"
     class="w-10 mb-4 rounded-lg p-2"
   >
-    <option value="">Please select</option>
+    <option value="{{influencer.platform}}">Please select</option>
     <option value="Facebook">Facebook</option>
     <option value="Instagram">Instagram</option>
     <option value="Twitter">Twitter</option>
@@ -72,12 +71,11 @@ block content %}
 
   <label class="heading4" for="niche">Niche:</label>
   <select
-    value="{{ influencer.niche }}"
     id="niche"
     name="niche"
     class="w-10 mb-4 rounded-lg p-2"
   >
-    <option value="">Please select</option>
+    <option value="{{influencer.niche}}">Please select</option>
     <option value="Tech">Tech</option>
     <option value="Fashion and Beauty">Fashion and Beauty</option>
     <option value="Fitness and Wellness">Fitness and Wellness</option>

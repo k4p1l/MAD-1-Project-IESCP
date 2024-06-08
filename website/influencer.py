@@ -48,11 +48,12 @@ def dashboard():
 @role_required('Influencer')
 @login_required
 def activeCampaigns():
-    ad_requests = AdRequest.query.filter_by(influencer_id=Influencer.id).all()
-
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
+    ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id, completed=False).all()
 
+
+    campaign_requests = campaignRequest.query.filter_by(influencer_id=influencer.id).all()
     ad_requests_with_details = []
     for ad_request in ad_requests:
         campaign = Campaign.query.get(ad_request.campaign_id)
@@ -64,6 +65,23 @@ def activeCampaigns():
         })
     return render_template("Influencer/activeCampaigns.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
 
+@influencer.route('/view_completed_requests', methods=['GET'])
+@role_required('Influencer')
+@login_required
+def view_completed_requests():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id, completed=True).all()
+    ad_requests_with_details = []
+    for ad_request in ad_requests:
+        campaign = Campaign.query.get(ad_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        ad_requests_with_details.append({
+            'ad_request': ad_request,
+            'campaign_name': campaign.name,
+            'user_name': user.name
+        })
+    return render_template("Influencer/view_completed_requests.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
 
     
 @influencer.route('/addInfluencer', methods=['GET', 'POST'])
@@ -334,4 +352,14 @@ def search_campaigns():
             campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first() is not None
         return render_template('Influencer/searchResults.html', campaigns=campaigns, search_query=search_query)
     return render_template('Influencer/viewCampaigns.html')
+
+@influencer.route('/activeCampaigns/<int:ad_request_id>/mark_completed', methods=['POST'])
+@login_required
+@role_required('Influencer')
+def mark_completed(ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+    ad_request.completed = True
+    db.session.commit()
+    flash('Ad request completed successfully.', category='success')
+    return redirect(url_for('influencer.dashboard'))
 

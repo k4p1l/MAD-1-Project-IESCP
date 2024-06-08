@@ -30,16 +30,6 @@ class Campaign(db.Model):
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
 
 
-class AdRequest(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
-    influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.id'))
-    messages = db.Column(db.Text)
-    requirements = db.Column(db.Text, nullable=False)
-    payment_amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='Pending')
-
-
 class Influencer(db.Model, UserMixin):
     __tablename__ = 'influencer'
     id = db.Column(db.Integer, primary_key=True)
@@ -52,6 +42,18 @@ class Influencer(db.Model, UserMixin):
     platform= db.Column(db.String(100), nullable=False)
 
 
+class AdRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.id'))
+    messages = db.Column(db.Text)
+    requirements = db.Column(db.Text, nullable=False)
+    payment_amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='Pending')
+    completed = db.Column(db.Boolean, default=False)
+    completion_confirmed = db.Column(db.Boolean, default=False)
+
+
 class campaignRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
@@ -60,8 +62,22 @@ class campaignRequest(db.Model):
     requirements = db.Column(db.Text, nullable=False)
     payment_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), nullable=False, default='Pending')
+    completed = db.Column(db.Boolean, default=False)
+    completion_confirmed = db.Column(db.Boolean, default=False)
 
 class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey('campaign.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.id'), nullable=False)
+    amount_earned = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=func.now())
+    status=db.Column(db.boolean,nullable=False, default=False)
+
+
+    
+    influencer = relationship('Influencer', backref='transactions')

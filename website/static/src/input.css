@@ -224,6 +224,11 @@ hr {
   font-weight: bold;
   font-size: 44px;
   margin-bottom: 8px;
+  text-align: center;
+}
+
+.text-center{
+  text-align: center;
 }
 
 .heading2-sm {
@@ -392,6 +397,7 @@ table {
 
 table.prim-table {
   background-color: #e3d8bc;
+  min-width: 786px;
 }
 
 th.prim-row {
@@ -732,8 +738,12 @@ textarea {
 
 .hero {
   display: flex;
+  justify-content: space-between;
+  padding-right: 60px;
 }
 .hero-vc {
+  display: flex;
+
   justify-content: space-between;
   padding-left: 30px;
   padding-bottom: 10px;
@@ -752,11 +762,12 @@ textarea {
   border-radius: 6px;
   margin-bottom: 14px;
   color: #433e30;
-  font-family: Helvetica, sans-serif;
-  /* font-weight: bold; */
+  font-family: inter;
+  font-weight: 600;
   letter-spacing: -0.5px;
   font-size: 14px;
   width: 100%;
+  background-color:#e3d8bc;
 }
 
 #search_query:focus {
@@ -807,10 +818,7 @@ textarea {
   background-color: #d4f7dc;
   color: #155724; 
   border-radius: 40px;
-
   font-size: 16px;
-
-
 }
 
 .status-rejected {
@@ -818,6 +826,4 @@ textarea {
   color: #721c24; 
   font-size: 16px;
   border-radius: 40px;
-
-
 }
