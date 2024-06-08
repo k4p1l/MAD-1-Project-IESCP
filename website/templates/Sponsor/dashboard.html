@@ -136,30 +136,26 @@ content %}
 <h2 class="heading2-sm">Influencer Requests</h2>
 <div class="flex flex-col gap-4 items-center">
   {% for request in campaign_requests %}
-  <div class="border rounded p-4 w-full max-w-md bg-black shadow-md">
+  <div class="adrequest-wrapper border rounded-2xl p-4">
     <h2 class="text-xl font-bold">{{ request.campaign_name }}</h2>
     <p>Influencer: {{ request.influencer_name }}</p>
-    <div class="mt-4 flex justify-between">
+    <div class="buttons-sm">
       <a
-        href="{{ url_for('sponsor.viewCampaign', campaign_id=request.campaign_id) }}"
-        class="bg-blue-500 text-white px-4 py-2 rounded"
+        href="{{ url_for('sponsor.viewCampaign', campaign_id=request.campaign_request.campaign_id) }}"
+        class="view"
         >View</a
       >
       <form
-        action="{{ url_for('sponsor.request_action', request_id=request.id, action='accept') }}"
+        action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='accept') }}"
         method="post"
       >
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
-          Accept
-        </button>
+        <button type="submit" class="view">Accept</button>
       </form>
       <form
-        action="{{ url_for('sponsor.request_action', request_id=request.id, action='reject') }}"
+        action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='reject') }}"
         method="post"
       >
-        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">
-          Reject
-        </button>
+        <button type="submit" class="view">Reject</button>
       </form>
     </div>
   </div>
@@ -170,18 +166,27 @@ content %}
 
 <div class="flex flex-col gap-4 items-center">
   {% for request in sent_requests %}
-  <div class="adrequest-wrapper border rounded-2xl p-4 w-lg max-w-md">
+  <div class="adrequest-wrapper border rounded-2xl p-4">
     <h2 class="text-xl font-bold">{{ request.ad_request.campaign.name }}</h2>
     <p>Influencer: {{ request.influencer_name }}</p>
-    <div class="mt-4 flex justify-between">
+    <div class="buttons-sm">
+      <form
+        action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}"
+        method="POST"
+      >
+        <button
+          type="submit"
+          class="view"
+          onclick="return confirm('Are you sure you want to delete this ad request?');"
+        >
+          Delete
+        </button>
+      </form>
       <a
         href="{{ url_for('sponsor.viewCampaign', campaign_id=request.ad_request.campaign_id) }}"
         class="view"
         >View</a
       >
-      <form action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}" method="POST" >
-        <button type="submit" class="view" onclick="return confirm('Are you sure you want to delete this ad request?');">Delete</button>
-    </form>
     </div>
   </div>
   {% endfor %}

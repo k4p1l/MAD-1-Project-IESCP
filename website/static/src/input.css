@@ -245,6 +245,28 @@ hr {
   font-size: 14px;
   margin-top: 2px;
 }
+
+.heading3-lg{
+  font-size:18px;
+  display: inline;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+gap: 6px;
+
+}
+
+.icon {
+  opacity: 0;
+  transform: translateX(-4px); 
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  margin-left: 5px; /* Initial margin to give some space between text and icon */
+}
+
+.btn-sec:hover .icon {
+  opacity: 1;
+  transform: translateX(0); /* Move the icon to its normal position */
+}
 .heading4 {
   color: #544e37;
   font-size: 24px;
@@ -348,6 +370,7 @@ table.prim-table {
 
 .prim-table-home{
   height: fit-content;
+  padding: 20px;
 }
 
 
@@ -416,6 +439,14 @@ td {
   flex-direction: row;
   gap: 3vw;
   margin: 0;
+}
+.buttons-sm{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1vw;
+  margin: 0;
+  margin-top: 6px;
 }
 
 label {
@@ -552,6 +583,11 @@ input#profile_picture {
   font-size: 30px;
 }
 
+.btn-sec{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 18px;
+}
 
 
 .btn::after {
@@ -670,6 +706,13 @@ margin-bottom: -20px;
   font-family: inter;
   font-weight: bold;
   transition: all 0.2s ease-out;
+  max-width: 700px;
+  min-width: 300px;
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
 }
 
 .adrequest-wrapper:hover{

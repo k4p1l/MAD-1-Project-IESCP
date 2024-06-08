@@ -3,57 +3,25 @@
 block content %}
 
 <div class="navbar">
-  <a class="mb-8 heading1 link" href="{{ url_for('influencer.dashboard') }}"
-    >Back to HOME</a
-  >
-  <div></div>
-  <div></div>
-  <div></div>
-  <a href="{{ url_for('influencer.viewInfluencers') }}">
-    <h1 class="text-center mb-8 heading1 link">Influencers</h1>
-  </a>
-  <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}"
-    >aCTIVE Campaigns</a
-  >
-  <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
-    >Find campaigns</a
-  >
-</div>
-<p class="text-center cc">all Campaigns</p>
-
-<a href="{{url_for('influencer.view_bookmarks')}}" class="btn-sec">
-  <button class="heading3 heading3-lg">
-    <span class="text">Bookmarked Campaigns</span>
-    <span class="icon">
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        transform="rotate(45)"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M6 18L18 6M18 6H9M18 6V15"
-            stroke="#433e30"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </g>
-      </svg>
-    </span>
-  </button>
-</a>
+    <a class="mb-8 heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+      >Back</a
+    >
+    <div></div>
+    <div></div>
+    <div></div>
+    <a href="{{ url_for('influencer.viewInfluencers') }}">
+      <h1 class="text-center mb-8 heading1 link">Influencers</h1>
+    </a>
+    <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}"
+      >aCTIVE Campaigns</a
+    >
+    <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+      >Find campaigns</a
+    >
+  </div>
 
 <table class="prim-table">
+    <caption class="heading2">Bookmarked Campaigns</caption>
   <thead>
     <tr>
       <th class="prim-row">Name of Sponsor</th>
@@ -64,7 +32,7 @@ block content %}
     </tr>
   </thead>
   <tbody>
-    {% for campaign in campaigns %}
+    {% for campaign in bookmarked_campaigns %}
     <tr class="prim-row">
       <td>{{ campaign.name }}</td>
       <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>

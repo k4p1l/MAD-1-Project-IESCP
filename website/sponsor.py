@@ -16,6 +16,21 @@ sponsor = Blueprint('sponsor', __name__)
 def dashboard():
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
     campaign_requests = campaignRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaign_requests:
+        campaign=Campaign.query.get(campaign_request.campaign_id)
+        campaign_name=campaign.name
+        influencer=Influencer.query.get(campaign_request.influencer_id)
+        if influencer:
+            influencer_name=influencer.name
+            campaign_requests_with_details.append({
+                'campaign_name':campaign_name,
+                'campaign_request': campaign_request,
+                'influencer_name':influencer_name})
+        else:
+            flash('Influencer not found', category='error')
+
+            
     sent_requests = AdRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
     sent_requests_with_details = []
     for sent_request in sent_requests:
@@ -25,7 +40,7 @@ def dashboard():
             'ad_request': sent_request,
             'influencer_name': influencer_name
         })
-    return render_template('Sponsor/dashboard.html', user=current_user, active_campaigns=active_campaigns, campaign_requests=campaign_requests, sent_requests=sent_requests_with_details)
+    return render_template('Sponsor/dashboard.html', user=current_user, active_campaigns=active_campaigns, campaign_requests=campaign_requests_with_details, sent_requests=sent_requests_with_details)
 
 
 @sponsor.route('/createCampaign', methods=['GET', 'POST'])

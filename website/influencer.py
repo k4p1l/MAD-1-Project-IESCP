@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app,abort
 from .models import User
-from .models import Influencer,AdRequest,Campaign,campaignRequest
+from .models import Influencer,AdRequest,Campaign,campaignRequest,Bookmark
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -211,7 +211,16 @@ def reject_ad_request(ad_request_id):
 @login_required
 def viewCampaigns():
     campaigns = Campaign.query.all()
+    for campaign in campaigns:
+        campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first() is not None
     return render_template('Influencer/viewCampaigns.html', campaigns=campaigns)
+
+@influencer.route('/viewCampaign/<int:campaign_id>')
+@role_required('Influencer')
+@login_required
+def viewCampaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    return render_template('Influencer/viewCampaign.html', campaign=campaign)
 
 @influencer.route('create_ad_request/<int:campaign_id>', methods=['GET', 'POST'])
 @role_required('Influencer')
@@ -247,4 +256,35 @@ def create_ad_request(campaign_id):
         flash('Ad request created successfully', category='success')
         return redirect(url_for('influencer.dashboard'))
     return render_template('Influencer/create_ad_request.html', campaign=campaign)
+
+@influencer.route('/bookmark_campaign/<int:campaign_id>', methods=['POST'])
+@role_required('Influencer')
+@login_required
+def bookmark_campaign(campaign_id):
+    if request.method == 'POST':
+        # Check if the campaign is already bookmarked
+        bookmark = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign_id).first()
+        if bookmark:
+            # If already bookmarked, remove the bookmark
+            db.session.delete(bookmark)
+            db.session.commit()
+        else:
+            # If not bookmarked, create a new bookmark entry
+            new_bookmark = Bookmark(user_id=current_user.id, campaign_id=campaign_id)
+            db.session.add(new_bookmark)
+            db.session.commit()
+        return redirect(url_for('influencer.viewCampaigns', campaign_id=campaign_id))
+    
+@influencer.route('/view_bookmarks')
+@role_required('Influencer')
+@login_required
+def view_bookmarks():
+    campaigns = Campaign.query.all()
+    for campaign in campaigns:
+        campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first() is not None
+    influencer_bookmarks = Bookmark.query.filter_by(user_id=current_user.id).all()
+    bookmarked_campaigns = [Campaign.query.get(bookmark.campaign_id) for bookmark in influencer_bookmarks]
+    
+    return render_template('Influencer/Bookmarks.html', bookmarked_campaigns=bookmarked_campaigns, campaigns=campaigns)
+
 
