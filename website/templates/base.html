@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/main.css') }}"
@@ -17,6 +18,8 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    {% block head %}{% endblock %}
+
 
     <title>{% block title %}Home{% endblock %}</title>
   </head>
@@ -24,7 +27,7 @@
     {% block content %} {% endblock %} {% with messages =
     get_flashed_messages(with_categories=true) %} {% if messages %} {% for
     category, message in messages %} {% if category == 'error' %}
-    <div class="alert danger " role="alert">
+    <div class="alert danger" role="alert">
       {{ message }}
       <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
@@ -53,18 +56,5 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-
-    {% block javascript %}
-    <script type="text/javascript">
-      function deleteNote(noteId) {
-        fetch("/delete-note", {
-          method: "POST",
-          body: JSON.stringify({ noteId: noteId }),
-        }).then((_res) => {
-          window.location.href = "/";
-        });
-      }
-    </script>
-    {% endblock %}
   </body>
 </html>

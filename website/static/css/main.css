@@ -554,18 +554,6 @@ video {
   --tw-contain-style:  ;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
 .static {
   position: static;
 }
@@ -584,19 +572,6 @@ video {
 
 .col-span-6 {
   grid-column: span 6 / span 6;
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.mb-0 {
-  margin-bottom: 0px;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
 }
 
 .mt-1 {
@@ -647,18 +622,6 @@ video {
   width: 100%;
 }
 
-.max-w-lg {
-  max-width: 32rem;
-}
-
-.max-w-md {
-  max-width: 28rem;
-}
-
-.max-w-screen-xl {
-  max-width: 1280px;
-}
-
 .max-w-xl {
   max-width: 36rem;
 }
@@ -683,18 +646,8 @@ video {
   justify-content: center;
 }
 
-.justify-between {
-  justify-content: space-between;
-}
-
 .gap-6 {
   gap: 1.5rem;
-}
-
-.space-y-4 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
 .rounded-lg {
@@ -724,11 +677,6 @@ video {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-
 .bg-blue-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(37 99 235 / var(--tw-bg-opacity));
@@ -748,10 +696,6 @@ video {
   padding: 0.5rem;
 }
 
-.p-4 {
-  padding: 1rem;
-}
-
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -765,16 +709,6 @@ video {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
-}
-
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-}
-
-.py-16 {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
 }
 
 .py-2 {
@@ -794,10 +728,6 @@ video {
 
 .pe-12 {
   padding-inline-end: 3rem;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .text-sm {
@@ -894,7 +824,8 @@ body.grey {
 }
 
 .lg-title {
-  color: #212529;
+  color: #162369;
+  font-weight: normal;
 }
 
 .navbar {
@@ -954,7 +885,7 @@ body.grey {
   transition: transform 0.3s ease;
 }
 
-.square2{
+.square2 {
   height: 100vh;
   margin-left: 20px;
   width: fixed;
@@ -1067,6 +998,10 @@ hr {
   margin-bottom: 20px;
 }
 
+.heading-ultra {
+  font-family: ultra;
+}
+
 .heading1 {
   font-family: aesthetic;
   font-weight: bold;
@@ -1081,19 +1016,19 @@ hr {
   /* font-family: Arial, Helvetica, sans-serif; */
   /* letter-spacing: -4px; */
   font-weight: bold;
-  font-size: 40px;
+  font-size: 44px;
   margin-bottom: 8px;
 }
 
 .heading2-sm {
-  color:#162369;
+  color: #162369;
   font-family: ultra;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 8px;
-  letter-spacing: 2px;
+  letter-spacing: 0.4px;
   margin-left: 18px;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 .heading3 {
@@ -1102,12 +1037,12 @@ hr {
   font-family: Helvetica, sans-serif;
   font-weight: bold;
   letter-spacing: -0.5px;
-  font-size: 14px;
+  font-size: 18px;
   margin-top: 2px;
 }
 
-.heading3-lg{
-  font-size:18px;
+.heading3-lg {
+  font-size: 18px;
   display: inline;
   display: flex;
   flex-direction: row;
@@ -1226,7 +1161,7 @@ th {
 }
 
 .link-purple:hover::after {
-  background-color: #27203f;
+  background-color: #53408f;
 }
 
 .arrow {
@@ -1234,17 +1169,7 @@ th {
   /* Adjust spacing between text and arrow */
 }
 
-table {
-  background-color: #e1e5ff;
-  border-radius: 40px;
-  padding: 10px;
-}
-
-table.prim-table {
-  background-color: #e3d8bc;
-}
-
-.prim-table-home{
+.prim-table-home {
   height: -moz-fit-content;
   height: fit-content;
   padding: 20px;
@@ -1259,7 +1184,7 @@ tr.prim-row {
 }
 
 td {
-  font-size: 1.2 rem;
+  font-size: 1 rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -1267,13 +1192,19 @@ td {
 
 table {
   margin: 0 auto;
-  /* Center the table horizontally */
   border-collapse: separate;
   /* Separate border spacing */
   border-spacing: 8px;
   /* Add 8px gap between columns and rows */
-  max-width: 800px;
+  max-width: 1200px;
   margin-top: 40px;
+  background-color: #e1e5ff;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+table.prim-table {
+  background-color: #e3d8bc;
 }
 
 th.prim-row {
@@ -1284,7 +1215,7 @@ th,
 td {
   padding: 12px;
   /* Add padding to cells for better spacing */
-  text-align: left;
+  text-align: center;
   /* Align text to the left within cells */
 }
 
@@ -1325,7 +1256,7 @@ td {
   margin: 0;
 }
 
-.buttons-sm{
+.buttons-sm {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1444,7 +1375,7 @@ option {
   color: #2d3135;
 }
 
-.influForm1 button.Btn{
+.influForm1 button.Btn {
   color: #e1e5ff;
   align-self: center;
 }
@@ -1457,7 +1388,6 @@ input#profile_picture {
   font-family: ultra;
   letter-spacing: 1px;
   color: #433e30;
-  /* font-weight: bold; */
   cursor: pointer;
   position: relative;
   align-self: flex-start;
@@ -1476,7 +1406,7 @@ input#profile_picture {
   font-size: 30px;
 }
 
-.btn-sec{
+.btn-sec {
   display: flex;
   justify-content: flex-end;
   margin-right: 18px;
@@ -1580,7 +1510,7 @@ textarea {
   flex-direction: column;
 }
 
-.ad-request-container h1{
+.ad-request-container h1 {
   margin-top: 40px;
   text-align: center;
   margin-bottom: -20px;
@@ -1595,16 +1525,14 @@ textarea {
 .ad-request-table {
   flex: 1;
   margin: 10px;
-  max-width: calc(
-    25% - 20px
-  );
+  max-width: calc(25% - 20px);
 }
 
-.adrequest-wrapper{
+.adrequest-wrapper {
   background-color: #e1e5ff;
   margin: 10px;
   border-radius: 20px;
-  color:#323a81;
+  color: #323a81;
   font-family: inter;
   font-weight: bold;
   transition: all 0.2s ease-out;
@@ -1617,36 +1545,113 @@ textarea {
   padding: 20px;
 }
 
-.adrequest-wrapper:hover{
+.adrequest-wrapper:hover {
   transform: scale(1.08);
 }
 
-.view{
-  font-family: aesthetic;
+.view {
+  font-family: inter;
   font-weight: bold;
   font-size: 14px;
-  color: #e1e5ff;
-  background-color:#162369;
-  padding: 6px;
-  padding-top: 9.5px;
-  border-radius: 8px;
+  color: #162369;
+  /* background-color: #162369; */
+  /* padding: 6px; */
+  /* border-radius: 8px; */
   transition: all 0.6s ease-in;
 }
 
-.view:hover{
-  color: yellow;
+.view:hover {
+  color: rgb(64, 41, 127);
 }
 
-.hero{
+.hero {
   display: flex;
 }
 
-.purple{
-  color:#2b0061;
+.hero-vc {
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-bottom: 10px;
 }
 
-.light-purple{
-  background-color:#e1e5ff;
+.purple {
+  color: #2b0061;
+}
+
+.light-purple {
+  background-color: #e1e5ff;
+}
+
+#search_query {
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  color: #433e30;
+  font-family: Helvetica, sans-serif;
+  /* font-weight: bold; */
+  letter-spacing: -0.5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+#search_query:focus {
+  outline: none;
+  border: 1px solid #8d846c;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  align-items: flex-start;
+  /* gap: 8px; */
+}
+
+.search-form button {
+  font-size: 24px;
+}
+
+.search-form:hover .icon {
+  opacity: 1;
+  transform: translateX(0);
+  /* Move the icon to its normal position */
+}
+
+.search-wrapper {
+  display: flex;
+  margin-top: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.search-form.icon {
+  transition: all 0.3s ease;
+}
+
+.search-form.icon:hover {
+  color: #433e30;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border-radius: 40px;
+  font-size: 16px;
+}
+
+.status-accepted {
+  background-color: #d4f7dc;
+  color: #155724;
+  border-radius: 40px;
+  font-size: 16px;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-size: 16px;
+  border-radius: 40px;
 }
 
 .hover\:bg-transparent:hover {
@@ -1700,11 +1705,6 @@ textarea {
     padding-right: 3rem;
   }
 
-  .sm\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
   .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -1743,11 +1743,6 @@ textarea {
   .lg\:px-16 {
     padding-left: 4rem;
     padding-right: 4rem;
-  }
-
-  .lg\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
   }
 
   .lg\:py-12 {

@@ -1,0 +1,62 @@
+{% extends "base.html" %}{% block body_class %} influencer {% endblock %} {%
+block title %}Home{% endblock %} {% block content %}
+
+<div class="navbar">
+  <a class="mb-8 heading1 link" href="{{ url_for('influencer.dashboard') }}"
+    >Back</a
+  >
+  <div></div>
+  <div></div>
+  <div></div>
+  <a href="{{ url_for('influencer.viewInfluencers') }}">
+    <h1 class="text-center mb-8 heading1 link">Influencers</h1>
+  </a>
+  <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}"
+    >aCTIVE Campaigns</a
+  >
+  <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
+    >Find campaigns</a
+  >
+</div>
+
+<h1 class="cc text-center">Edit ad Request</h1>
+
+<form
+  class="influForm1"
+  enctype="multipart/form-data""
+  method="POST"
+>
+  <label for="payment_amount">Payment Amount</label>
+  <input
+    class="w-10 mb-4 rounded-lg p-2"
+    type="number"
+    id="payment_amount"
+    name="payment_amount"
+    value="{{ campaign_request.payment_amount }}"
+    required
+  />
+
+  <label for="messages">Messages</label>
+  <input
+    class="w-full mb-4 rounded-lg p-2 pe-12"
+    type="text"
+    id="messages"
+    name="messages"
+    value="{{ campaign_request.messages }}"
+    required
+  />
+
+  <label for="requirements">Requirements</label>
+  <input
+    class="w-full mb-4 rounded-lg p-2 pe-12"
+    type="text"
+    id="requirements"
+    name="requirements"
+    value="{{ campaign_request.requirements }}"
+    required
+  />
+
+  <button type="submit" class="btn btn-primary md1">Submit</button>
+
+  {% endblock %}
+</form>

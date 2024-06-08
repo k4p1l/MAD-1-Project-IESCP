@@ -16,11 +16,22 @@ influencer= Blueprint('influencer', __name__)
 @role_required('Influencer')
 @login_required
 def dashboard():
-    ad_requests = AdRequest.query.filter_by(influencer_id=Influencer.id).all()
-    campaignRequests = campaignRequest.query.filter_by(influencer_id=Influencer.id).all()
-
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
+    ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
+    campaignRequests = campaignRequest.query.filter_by(influencer_id=influencer.id).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaignRequests:
+        campaign=Campaign.query.get(campaign_request.campaign_id)
+        if campaign:
+            campaign_name=campaign.name
+            campaign_requests_with_details.append({
+            'campaign_request': campaign_request,
+            'campaign_name': campaign_name
+                })
+        else:flash('Campaign not found', category='error')
+
+  
 
     ad_requests_with_details = []
     for ad_request in ad_requests:
@@ -31,7 +42,7 @@ def dashboard():
             'campaign_name': campaign.name,
             'user_name': user.name
         })
-    return render_template("Influencer/dashboard.html",campaignRequests=campaignRequests, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+    return render_template("Influencer/dashboard.html",campaign_requests=campaign_requests_with_details, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
 
 @influencer.route('/activeCampaigns', methods=['GET'])
 @role_required('Influencer')
@@ -182,8 +193,32 @@ def viewRequest(ad_request_id):
         'campaign_name': campaign.name,
         'user_name': user.name
     }
-
     return render_template('Influencer/viewRequest.html', ad_request_details=ad_request_with_details)
+
+@influencer.route('/edit_campaign_request/<int:campaign_request_id>', methods=['GET', 'POST'])
+@role_required('Influencer')
+@login_required
+def edit_campaign_request(campaign_request_id):
+    campaign_request = campaignRequest.query.get_or_404(campaign_request_id)
+    if request.method == 'POST':
+        campaign_request.messages = request.form.get('messages')
+        campaign_request.requirements = request.form.get('requirements')
+        campaign_request.payment_amount = request.form.get('payment_amount')
+    
+        db.session.commit()
+        flash('Campaign request updated successfully.', category='success')
+        return redirect(url_for('influencer.dashboard'))
+    return render_template('Influencer/edit_sent_request.html', campaign_request=campaign_request)
+
+@influencer.route('/delete_campaign_request/<int:campaign_request_id>', methods=['POST'])
+@role_required('Influencer')
+@login_required
+def delete_campaign_request(campaign_request_id):
+    campaign_request = campaignRequest.query.get_or_404(campaign_request_id)
+    db.session.delete(campaign_request)
+    db.session.commit()
+    flash('Campaign request deleted successfully.', category='success')
+    return redirect(url_for('influencer.dashboard'))
 
 
 @influencer.route('/ad_request/<int:ad_request_id>/accept', methods=['POST'])
@@ -206,7 +241,7 @@ def reject_ad_request(ad_request_id):
     flash('Ad request rejected successfully.', category='success')
     return redirect(url_for('influencer.dashboard'))
 
-@influencer.route('/viewCampaigns')
+@influencer.route('/viewCampaigns', methods=['GET', 'POST'])
 @role_required('Influencer')
 @login_required
 def viewCampaigns():
@@ -287,4 +322,16 @@ def view_bookmarks():
     
     return render_template('Influencer/Bookmarks.html', bookmarked_campaigns=bookmarked_campaigns, campaigns=campaigns)
 
+
+@influencer.route('/search_campaigns', methods=['GET', 'POST'])
+@login_required
+@role_required('Influencer')
+def search_campaigns():
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        campaigns = Campaign.query.filter(Campaign.name.ilike(f'%{search_query}%')).all()
+        for campaign in campaigns:
+            campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first() is not None
+        return render_template('Influencer/searchResults.html', campaigns=campaigns, search_query=search_query)
+    return render_template('Influencer/viewCampaigns.html')
 

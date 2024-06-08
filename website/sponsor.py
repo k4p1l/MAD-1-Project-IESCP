@@ -96,8 +96,8 @@ def viewCampaign(campaign_id):
 @role_required('Sponsor')
 @login_required
 def viewCampaigns():
-    campaigns = Campaign.query.all()
-    return render_template('Sponsor/viewCampaigns.html', campaigns=campaigns)
+    active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
+    return render_template('Sponsor/viewCampaigns.html', campaigns=active_campaigns)
 
 @sponsor.route('/deleteCampaign/<int:campaign_id>', methods=['POST'])
 @role_required('Sponsor')
@@ -228,12 +228,13 @@ def browse_influencers(campaign_id):
     filtered_influencers = query.all()
     return render_template('Sponsor/browse_influencers.html', influencers=filtered_influencers,campaign=campaign)
 
-@sponsor.route('/view_all_influencers')
+@sponsor.route('/view_all_influencers/<int:campaign_id>')
 @role_required('Sponsor')
-def view_all_influencers():
+def view_all_influencers(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
     # Logic to retrieve and display all influencers without any filters applied
     influencers = Influencer.query.all()
-    return render_template('Sponsor/browse_influencers.html', influencers=influencers)
+    return render_template('Sponsor/browse_influencers.html', influencers=influencers,campaign=campaign)
 
 @sponsor.route('/ad_request/<int:ad_request_id>/delete', methods=['POST'])
 @role_required('Sponsor')
@@ -249,5 +250,3 @@ def delete_ad_request(ad_request_id):
     
     flash('Ad request deleted successfully.', category='success')
     return redirect(url_for('sponsor.dashboard'))
-
-

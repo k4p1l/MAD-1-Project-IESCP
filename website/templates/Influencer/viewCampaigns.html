@@ -19,39 +19,75 @@ block content %}
     >Find campaigns</a
   >
 </div>
-<p class="text-center cc">all Campaigns</p>
+<p class="text-center heading2">all Campaigns</p>
 
-<a href="{{url_for('influencer.view_bookmarks')}}" class="btn-sec">
-  <button class="heading3 heading3-lg">
-    <span class="text">Bookmarked Campaigns</span>
-    <span class="icon">
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        transform="rotate(45)"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M6 18L18 6M18 6H9M18 6V15"
-            stroke="#433e30"
-            stroke-width="1.5"
+<div class="hero hero-vc">
+  <form
+    class="search-form"
+    action="{{url_for('influencer.search_campaigns')}}"
+    method="POST"
+  >
+    <label class="heading3" for="search_query">Campaign Name:</label>
+    <div class="search-wrapper">
+      <input type="text" id="search_query" name="search_query" required />
+      <button type="submit">
+        <svg
+          class="icon"
+          width="36px"
+          height="36px"
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          stroke="#8d846c"
+          stroke-width="3.2"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
             stroke-linecap="round"
             stroke-linejoin="round"
-          ></path>
-        </g>
-      </svg>
-    </span>
-  </button>
-</a>
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <circle cx="24" cy="24" r="16"></circle>
+            <line x1="56" y1="56" x2="35.31" y2="35.31"></line>
+          </g>
+        </svg>
+      </button>
+    </div>
+  </form>
+
+  <a href="{{url_for('influencer.view_bookmarks')}}" class="btn-sec">
+    <button class="heading3 heading3-lg">
+      <span class="text">Bookmarked Campaigns</span>
+      <span class="icon">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          transform="rotate(45)"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              d="M6 18L18 6M18 6H9M18 6V15"
+              stroke="#433e30"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </g>
+        </svg>
+      </span>
+    </button>
+  </a>
+</div>
 
 <table class="prim-table">
   <thead>
