@@ -55,26 +55,31 @@ block title %}Home{% endblock %} {% block content %}
 
   <thead>
     <tr>
+      <th class="prim-row">Request Type</th>
       <th class="prim-row">Campaign</th>
       <th class="prim-row">Sponsor</th>
       <th class="prim-row">Payment Amount</th>
       <th class="prim-row">Requirements</th>
       <th class="prim-row">Message</th>
+      <th class="prim-row">Status</th>
     </tr>
   </thead>
   <tbody>
-    {% for ad_request_details in ad_requests %} {% if
-    ad_request_details.ad_request.status == "Accepted" %}
+    {% for request in ad_requests + campaign_requests %}{% if
+    request.request.status == "Accepted" %}
 
     <tr class="prim-row">
-      <td>{{ ad_request_details.campaign_name }}</td>
-      <td>{{ ad_request_details.user_name }}</td>
-      <td>{{ ad_request_details.ad_request.payment_amount }}</td>
-      <td>{{ ad_request_details.ad_request.requirements }}</td>
-      <td>{{ ad_request_details.ad_request.messages }}</td>
-      <td><a class="link" href="{{ url_for('influencer.viewRequest', ad_request_id=ad_request_details.ad_request.id)}}">View</a></td>
+      <td>{{ request.request_type }}</td>
+      <td>{{ request.campaign_name }}</td>
+      <td>{{ request.user_name }}</td>
+      <td>{{ request.request.payment_amount }}</td>
+      <td>{{ request.request.requirements }}</td>
+      <td>{{ request.request.messages }}</td>
+      <td>{{ request.request.status }}</td>
+      <!-- <td><a class="link" href="{{ url_for('influencer.viewRequest', ad_request_id=request.request.id)}}">View</a></td> -->
       <td>
-        <form method="POST" action="{{url_for('influencer.mark_completed', ad_request_id=ad_request_details.ad_request.id)}}">
+        <form method="POST" action="{{url_for('influencer.mark_completed', ad_request_id=request.request.id)}}">
+          <input type="text" name="request_type" value="{{ request.request_type }}" hidden>
           <button class="link" type="submit">Mark Completed</button>
         </form>
       </td>

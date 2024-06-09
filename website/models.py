@@ -26,7 +26,6 @@ class Campaign(db.Model):
     visibility = db.Column(db.String(10), nullable=False)  # 'public' or 'private'
     goals = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user_name= db.Column(db.String(150),db.ForeignKey('user.name'))
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
 
 
@@ -52,6 +51,7 @@ class AdRequest(db.Model):
     status = db.Column(db.String(20), nullable=False, default='Pending')
     completed = db.Column(db.Boolean, default=False)
     completion_confirmed = db.Column(db.Boolean, default=False)
+    payment_done=db.Column(db.Boolean, default=False)
 
 
 class campaignRequest(db.Model):
@@ -64,6 +64,7 @@ class campaignRequest(db.Model):
     status = db.Column(db.String(20), nullable=False, default='Pending')
     completed = db.Column(db.Boolean, default=False)
     completion_confirmed = db.Column(db.Boolean, default=False)
+    payment_done=db.Column(db.Boolean, default=False)
 
 class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -73,10 +74,12 @@ class Bookmark(db.Model):
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    ad_request_id= db.Column(db.Integer, db.ForeignKey('ad_request.id'), nullable=False)
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.id'), nullable=False)
-    amount_earned = db.Column(db.Float, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=func.now())
-    status=db.Column(db.boolean,nullable=False, default=False)
+    status=db.Column(db.Boolean,nullable=False, default=False)
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
     

@@ -24,6 +24,7 @@
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body class="{% block body_class %}guest{% endblock %}">
+ 
     {% block content %} {% endblock %} {% with messages =
     get_flashed_messages(with_categories=true) %} {% if messages %} {% for
     category, message in messages %} {% if category == 'error' %}

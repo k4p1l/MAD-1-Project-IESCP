@@ -6,6 +6,7 @@ content %}
   <p class="heading2 login-purple">The Dashboard</p>
   <div class="buttons">
     <a href="{{ url_for('sponsor.createCampaign') }}" class="Btn">Create +</a>
+    <a href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}" class="Btn">History</a>
     <a href="{{ url_for('sponsor.dashboard') }}" class="Btn">Back to Home</a>
     <a href="{{ url_for('views.logout') }}" class="Btn">Logout</a>
   </div>

@@ -51,19 +51,29 @@ def activeCampaigns():
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
     ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id, completed=False).all()
-
-
-    campaign_requests = campaignRequest.query.filter_by(influencer_id=influencer.id).all()
     ad_requests_with_details = []
     for ad_request in ad_requests:
         campaign = Campaign.query.get(ad_request.campaign_id)
         user = User.query.get(campaign.user_id)
         ad_requests_with_details.append({
-            'ad_request': ad_request,
+            'request': ad_request,
             'campaign_name': campaign.name,
-            'user_name': user.name
+            'user_name': user.name,
+            'request_type':'Invitation'
         })
-    return render_template("Influencer/activeCampaigns.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+
+    campaign_requests = campaignRequest.query.filter_by(influencer_id=influencer.id, completed=False).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaign_requests:
+        campaign=Campaign.query.get(campaign_request.campaign_id)
+        user=User.query.get(campaign.user_id)
+        campaign_requests_with_details.append({
+            'request': campaign_request,
+            'campaign_name': campaign.name,
+            'user_name': user.name,
+            'request_type':'Proposal'
+        })
+    return render_template("Influencer/activeCampaigns.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details, campaign_requests=campaign_requests_with_details)
 
 @influencer.route('/view_completed_requests', methods=['GET'])
 @role_required('Influencer')
@@ -357,9 +367,20 @@ def search_campaigns():
 @login_required
 @role_required('Influencer')
 def mark_completed(ad_request_id):
-    ad_request = AdRequest.query.get_or_404(ad_request_id)
-    ad_request.completed = True
-    db.session.commit()
-    flash('Ad request completed successfully.', category='success')
+    request_type = request.form.get('request_type')
+    if request_type == 'Invitation':
+        ad_request = AdRequest.query.get_or_404(ad_request_id)
+        if ad_request:
+            ad_request.completed = True
+            db.session.commit()
+            flash('Ad request completed successfully.', category='success')
+
+    if request_type == 'Proposal':
+        campaign_request=campaignRequest.query.get_or_404(ad_request_id)
+        if campaign_request:
+            campaign_request.completed = True
+            db.session.commit()
+            flash('Ad request completed successfully.', category='success')
+
     return redirect(url_for('influencer.dashboard'))
 

@@ -227,7 +227,7 @@ hr {
   text-align: center;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
@@ -363,7 +363,6 @@ th {
   margin-left: 0.4em; /* Adjust spacing between text and arrow */
 }
 
-
 .prim-table-home {
   height: fit-content;
   padding: 20px;
@@ -382,7 +381,6 @@ td {
   font-weight: 600;
   line-height: normal;
 }
-
 
 table {
   margin: 0 auto;
@@ -403,7 +401,6 @@ table.prim-table {
 th.prim-row {
   color: #5e5642;
 }
-
 
 th,
 td {
@@ -533,16 +530,17 @@ section ul li.active {
 }
 
 .influForm1 input,
-select,
-option {
-  font-family: Arial, Helvetica, sans-serif;
+.influForm1 select,
+.influForm1 option {
+  font-family: garamond;
+  font-weight: bold;
+  font-size: 18px;
 
-  letter-spacing: -0.5px;
   color: #544e37;
   font-size: 14px;
   width: 100%;
   margin-bottom: 20px;
-  padding: 10px; /* Add padding for better readability */
+  padding: 8px; /* Add padding for better readability */
   border-radius: 12px; /* Round the corners */
 }
 
@@ -767,7 +765,7 @@ textarea {
   letter-spacing: -0.5px;
   font-size: 14px;
   width: 100%;
-  background-color:#e3d8bc;
+  background-color: #e3d8bc;
 }
 
 #search_query:focus {
@@ -808,22 +806,22 @@ textarea {
 }
 
 .status-pending {
-  background-color: #fff3cd; 
-  color: #856404; 
+  background-color: #fff3cd;
+  color: #856404;
   border-radius: 40px;
   font-size: 16px;
 }
 
 .status-accepted {
   background-color: #d4f7dc;
-  color: #155724; 
+  color: #155724;
   border-radius: 40px;
   font-size: 16px;
 }
 
 .status-rejected {
-  background-color: #f8d7da; 
-  color: #721c24; 
+  background-color: #f8d7da;
+  color: #721c24;
   font-size: 16px;
   border-radius: 40px;
 }

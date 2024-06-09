@@ -1,60 +1,50 @@
 {% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
-    content %}
+content %}
 
-    <div class="ad-request-container">
-        <h1 class="cc cc-purple">ad Requests</h1>
-      
-        {% for ad_request in ad_requests %} 
-        {% if ad_request.ad_request.completion_confirmed == True %}
-        {% if loop.index0 % 4 == 0 %}
-        <div class="ad-request-row">
-          {% endif %}
-        <div class="ad-request-table">
-          <table>
-            <tr>
-              <th>Ad Request</th>
-              <th>Details</th>
-            </tr>
-            <tr>
-              <td>Influencer</td>
-              <td>{{ ad_request.influencer_name }}</td>
-            </tr>
-            <tr>
-              <td>Messages</td>
-              <td>{{ ad_request.ad_request.messages }}</td>
-            </tr>
-            <tr>
-              <td>Requirements</td>
-              <td>{{ ad_request.ad_request.requirements }}</td>
-            </tr>
-            <tr>
-              <td>Payment Amount</td>
-              <td>{{ ad_request.ad_request.payment_amount }}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td>{{ ad_request.ad_request.status }}</td>
-            </tr>
-            <tr>
-              <td>Completion Status</td>
-              <td>{{ ad_request.ad_request.completed }}</td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="{{url_for('sponsor.make_payment', ad_request_id=ad_request.ad_request.id)}}">Make Payment</a>
-                </td>
-            </tr>
-          </table>
-          </div>
-          {% if loop.index0 % 4 == 3 or loop.last %}
-          </div>
-          {% endif %}
-          {% endif %}
-          {% endfor %}
-        </div>
-      
+<a href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
+  >payment_history</a
+>
 
+<table>
+  <caption class="cc cc-purple">
+    Completed Ad Requests
+  </caption>
 
+  <thead>
+    <tr>
+      <th>Request Type</th>
+      <th>Influencer</th>
+      <th>Messages</th>
+      <th>Requirements</th>
+      <th>Payment Amount</th>
+      <th>Status</th>
+      <th>Completion Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in ad_requests + campaign_requests %} {% if
+    request.request.completion_confirmed==True %} 
+    {% if request.request.payment_done==False %}
 
+    <tr>
+      <td>{{ request.request_type }}</td>
+      <td>{{ request.influencer_name }}</td>
+      <td>{{ request.request.messages }}</td>
+      <td>{{ request.request.requirements }}</td>
+      <td>{{ request.request.payment_amount }}</td>
+      <td>{{ request.request.status }}</td>
+      <td>{{ request.request.completed }}</td>
+      <td>
+        <a
+          href="{{url_for('sponsor.make_payment', ad_request_id=request.request.id, request_type=request.request_type)}}"
+          >Make Payment</a
+        >
+      </td>
+    {% endif %}
+      {% endif %} {% endfor %}
+    </tr>
+  </tbody>
+</table>
 
 {% endblock %}
