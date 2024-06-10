@@ -1,43 +1,141 @@
-{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
-content %}
-<h1 class="cc text-center purple">Create ad Request for {{ campaign.name }}</h1>
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/create_ad_request.css') }}"
+/>
+{% endblock %} {% block content %}
 
-<form
-  action="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id) }}"
-  method="post"
-  class="influForm1 light-purple"
->
-  <input
-    type="hidden"
-    name="influencer_id"
-    value="{{ request.args.get('influencer_id') }}"
-  />
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      <a href="{{ url_for('sponsor.viewCampaigns') }}" class="view">
+        view <br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+  <div class="form-wrapper">
+    <form
+      action="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id) }}"
+      method="POST"
+    >
+      <div class="content-wrapper">
+        <div class="col col-1">
+          <div class="header-ad header">
+            <h1>Create ad Request for {{ campaign.name }}</h1>
+          </div>
+          <div class="numbers">
+            <p>xoxo</p>
+            <div class="hr"></div>
+            <p>xoxo</p>
+          </div>
+          <div class="form-fields">
+            <input
+              type="hidden"
+              name="influencer_id"
+              value="{{ request.args.get('influencer_id') }}"
+            />
 
-  <label for="messages" class="heading4 purple">Messages:</label>
-  <textarea
-    id="messages"
-    name="messages"
-    class="w-full mb-4 rounded-lg p-2 pe-12"
-  ></textarea>
+            <div>
+              <label class="cc-label" for="requirements">Requirements</label>
+              <div class="form-field">
+                <textarea
+                  class="cc-textarea"
+                  id="requirements"
+                  name="requirements"
+                  required
+                >
+                </textarea>
+              </div>
+            </div>
 
-  <label for="requirements" class="heading4 purple">Requirements:</label>
-  <textarea
-    id="requirements"
-    name="requirements"
-    class="w-full mb-4 rounded-lg p-2 pe-12"
-  ></textarea>
+            <div>
+              <label class="cc-label" for="messages">Messages</label>
 
-  <label for="payment_amount" class="heading4 purple">Payment Amount:</label>
-  <input
-    type="number"
-    id="payment_amount"
-    name="payment_amount"
-    class="w-full mb-4 rounded-lg p-2 pe-12"
-    step="0.01"
-  />
+              <div class="form-field">
+                <textarea
+                  class="cc-textarea"
+                  id="messages"
+                  name="messages"
+                  required
+                >
+                </textarea>
+              </div>
+            </div>
 
-  <button type="submit" class="Btn ">
-    Create Ad Request
-  </button>
-</form>
+            <div>
+              <div>
+                <label class="cc-label" for="payment_amount"
+                  >Payment Amount</label
+                >
+
+                <div class="form-field">
+                  <input
+                    type="number"
+                    class="cc-input"
+                    id="payment_amount"
+                    name="payment_amount"
+                    step="1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="button-wrapper" for="submit-button">
+                    <button type="submit" id="submit-button" class="submit-btn">
+                      Create
+                    </button>
+                    <ion-icon name="arrow-forward-sharp"></ion-icon>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <div class="circle">
+            <div class="arrow arrow1">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+            <div class="arrow2">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% endblock %}

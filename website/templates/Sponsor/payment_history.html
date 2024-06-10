@@ -6,16 +6,57 @@
     <title>Document</title>
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      a {
+        text-decoration: none;
+        color: inherit; /* Inherits the color from its parent */
+      }
+
+      a:visited {
+        color: inherit; /* Ensures visited links have the same color */
+      }
+
+      a:hover {
+        color: inherit;
+      }
+
+      a:active {
+        color: inherit;
+      }
+
+      a:focus {
+        outline: none; /* Remove the default outline on focus */
+      }
+
+      html,
+      body {
+        width: 100vw;
+        height: 100%;
+        font-family: "Arame";
+        overflow: hidden;
+      }
+      .table-wrapper {
+        padding-top: 10px;
+        width: 100vw;
+      }
+      .table-wrapper h1 {
+        text-align: center;
+        padding-bottom: 20px;
+      }
       table {
-        margin: 0 auto;
-        border-collapse: separate; /* Separate border spacing */
-        border-spacing: 8px; /* Add 8px gap between columns and rows */
-        max-width: 1200px;
-        margin-top: 40px;
-        background-color: #e1e5ff;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 8px;
+        background-color: #ffffff;
         border-radius: 12px;
-        padding: 10px;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: "Arame";
+      }
+      td {
+        border-bottom: 1px solid #000;
       }
 
       th,
@@ -25,37 +66,42 @@
       }
 
       th {
-        color: #333;
-        font-weight: 700;
+        color: #000000;
         letter-spacing: -0.4px;
+        border-bottom: 2px solid #000;
       }
     </style>
   </head>
 
   <body>
-    <table>
-        <caption>
-            <a href="{{ url_for('sponsor.download_transactions_pdf') }}" class="btn btn-primary"
-            > Payment History</a>
-        </caption>
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {%for transaction in transactions%}
-        <tr>
-          <td>{{transaction.user_id}}</td>
-          <td>{{transaction.amount}}</td>
-          <td>{{transaction.date}}</td>
-          <td>{{transaction.status}}</td>
-        </tr>
-        {%endfor%}
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <a href="{{ url_for('sponsor.download_transactions_pdf') }}"
+        ><h1>Payment History</h1></a
+      >
+      <table>
+        <thead>
+          <tr>
+            <th>Influencer Name</th>
+            <th>Platform</th>
+            <th>Campaign</th>
+            <th>Amount (in Rs.)</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for transaction in transactions%}
+          <tr>
+            <td>{{transaction.influencer_name}}</td>
+            <td>{{transaction.influencer_platform}}</td>
+            <td>{{transaction.campaign_name}}</td>
+            <td>{{transaction.transaction.amount}}</td>
+            <td>{{transaction.transaction.date}}</td>
+            <td>{{transaction.transaction.status}}</td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

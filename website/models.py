@@ -39,6 +39,7 @@ class Influencer(db.Model, UserMixin):
     reach = db.Column(db.Integer, nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     platform= db.Column(db.String(100), nullable=False)
+    bank_account_balance = db.Column(db.Float, default=0.0)
 
 
 class AdRequest(db.Model):

@@ -1,0 +1,296 @@
+:root {
+  --black: #000;
+  --primary: #fff;
+}
+
+@font-face {
+  font-family: aux;
+  src: url(../../upheavtt.otf);
+}
+@font-face {
+  font-family: sk;
+  src: url(../../SKCuber-Expanded.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100%;
+  background-color: var(--black);
+  font-family: "Arame";
+  overflow: hidden;
+}
+
+p {
+  text-transform: uppercase;
+}
+.x {
+  font-family: sk;
+  margin-top: -10px;
+  font-size: 14px;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+nav {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  gap: 0.25em;
+  padding: 0.25em 0 0 0;
+  background-color: var(--black);
+}
+nav > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+  background: var(--primary);
+  color: var(--black);
+  border-radius: 10px;
+}
+
+.nav-1 {
+  flex: 3;
+}
+
+.nav-2 {
+  flex: 2;
+}
+
+.nav-3 {
+  flex: 3;
+}
+
+.content-wrapper {
+  flex: 12;
+  width: 100%0;
+  height: 100%;
+  display: flex;
+  padding: 0 0 0.5em 0;
+  background-color: var(--black);
+  gap: 0.25em;
+  overflow: hidden;
+}
+
+.content-wrapper .col {
+  border-radius: 10px;
+  background: var(--primary);
+  padding: 3em 2em;
+}
+
+.col-1 {
+  flex: 5.43;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.col-2 {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+.col-1 p {
+  font-size: 12px;
+  line-height: 1;
+}
+.col-1 h1 {
+  font-size: 68px;
+  margin-top: -20px;
+  /* letter-spacing: -2px; */
+  text-align: center;
+  font-family: aux;
+}
+.numbers {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.numbers p {
+  flex: 1;
+}
+
+.numbers p:nth-child(3) {
+  text-align: right;
+}
+.numbers .hr {
+  flex: 5;
+  width: 100%;
+  height: 1.2px;
+  background: var(--black);
+  margin-bottom: 40px;
+}
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  /* height: 100vh; */
+  display: flex;
+  justify-content: center;
+}
+
+.first-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.first-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--primary);
+  padding: 0.5em 0.2em;
+  border-bottom: 2px solid var(--black);
+  text-align: left;
+}
+.first-table td {
+  padding: 0.5em 0.5em;
+  border-bottom: 1px solid var(--black);
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
+}
+
+tr:hover {
+  background-color: #f6fbff;
+}
+
+.danger {
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  font-family: "Arame";
+}
+
+.approve {
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  font-family: "Arame";
+}
+.view {
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  font-family: "Arame";
+}
+
+.danger:hover {
+  color: red;
+}
+.approve:hover {
+  color: green;
+}
+.view:hover {
+  color: blue;
+}
+
+.col-2 h1 {
+  font-family: aux;
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.table-wrapper-2 {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.second-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.second-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--primary);
+  padding: 0.5em 0.2em;
+  border-bottom: 2px solid var(--black);
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal;
+  font-size: 14px;
+}
+
+.second-table td {
+  padding: 0.5em 0.5em;
+  border-bottom: 1px solid var(--black);
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
+  font-size: 14px;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+a {
+  text-decoration: none;
+  color: var(--black);
+}
+
+.link {
+  width: 75px;
+}
+.second-table td.status-pending::before,
+.second-table td.status-accepted::before,
+.second-table td.status-rejected::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.second-table td.status-pending::before {
+  background-color: #ffcc00;
+}
+
+.second-table td.status-accepted::before {
+  background-color: #4caf50;
+}
+
+.second-table td.status-rejected::before {
+  background-color: #f44336;
+}
+
+.status-pending {
+  color: #ffcc00;
+
+  font-size: 16px;
+}
+
+.status-accepted {
+  color: #4caf50;
+
+  font-size: 16px;
+}
+
+.status-rejected {
+  color: #f44336;
+  font-size: 16px;
+}

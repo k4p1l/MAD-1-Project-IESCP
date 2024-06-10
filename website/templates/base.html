@@ -12,6 +12,14 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='src/input.css') }}"
     />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,11 +28,9 @@
     />
     {% block head %}{% endblock %}
 
-
     <title>{% block title %}Home{% endblock %}</title>
   </head>
-  <body class="{% block body_class %}guest{% endblock %}">
- 
+  <body>
     {% block content %} {% endblock %} {% with messages =
     get_flashed_messages(with_categories=true) %} {% if messages %} {% for
     category, message in messages %} {% if category == 'error' %}

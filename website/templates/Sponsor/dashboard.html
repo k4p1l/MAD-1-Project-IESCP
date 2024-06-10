@@ -1,111 +1,141 @@
-{% extends "base.html" %} {% block title %}{{ 'Edit' if campaign else 'Create'
-}} Campaign{% endblock %} {% block body_class %}sponsor{% endblock %} {% block
-content %}
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/sponsor_dashboard.css') }}"
+/>
+{% endblock %}
+{% block title %}{{ 'Edit' if campaign else 'Create' }} Campaign{% endblock %}
+{% block body_class %}sponsor{% endblock %} {% block content %}
+  
+    <div class="container">
+      <nav>
+        <div class="nav-1">
+          <p>
+            AD <br />
+            FL
+          </p>
+          <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+        </div>
+        <div class="nav-2">
+          <p class="menu-button">the</p>
+          <p class="x">v</p>
+          <p class="menu-button">dashboard</p>
+        </div>
+        <div class="nav-3">
+          <a class="view" href="{{ url_for('sponsor.createCampaign') }}">create+</a>
+          <a href="viewCampaigns" class="view">
+            view <br />
+            campaigns
+          </a>
+        </div>
+      </nav>
 
-<div class="header">
-  <p class="heading2 login-purple"></p>
-  <div class="buttons">
-    <a href="{{ url_for('sponsor.createCampaign') }}" class="Btn">Create +</a>
-    <a href="viewCampaigns" class="Btn">View campaigns</a>
-    <a href="{{ url_for('views.logout') }}" class="Btn">Logout</a>
- 
-  </div>
-</div>
-
-<table>
-  <caption class="heading2-sm">
-    Influencer Requests
-  </caption>
-
-  <thead>
-    <tr>
-      <th>Campaign</th>
-      <th>Influencer</th>
-      <th>Task</th>
-      <th>Message</th>
-      <th>Asked Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for request in campaign_requests %}
-    {% if request.campaign_request.status == 'Pending' %}
-    <tr>
-      <td>{{ request.campaign_name }}</td>
-      <td>{{ request.influencer_name }}</td>
-      <td>{{ request.campaign_request.requirements }}</td>
-      <td>{{ request.campaign_request.messages }}</td>
-      <td>Rs. {{ request.campaign_request.payment_amount }}</td>
-      <td>
-        <form
-          action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='reject') }}"
-          method="post"
-        >
-          <button type="submit" class="view link link-purple">Reject</button>
-        </form>
-      </td>
-      <td>
-        <form
-          action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='accept') }}"
-          method="post"
-        >
-          <button type="submit" class="view link link-purple">Accept</button>
-        </form>
-      </td>
-    </tr>
-  </tbody>
-  {% endif %}
-  {% endfor %}
-</table>
-
-<table>
-  <caption class="heading2-sm">
-    Sent Requests
-  </caption>
-
-  <thead>
-    <tr>
-      <th>Campaign</th>
-      <th>Influencer</th>
-      <th>Status</th>
-      <th>Payment Amount</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    {% for request in sent_requests %}
-    <tr>
-      <td>{{ request.ad_request.campaign.name }}</td>
-      <td>{{ request.influencer_name }}</td>
-      <td
-        class="{% if request.ad_request.status == 'Pending' %} status-pending {% elif request.ad_request.status == 'Accepted' %} status-accepted {% elif request.ad_request.status == 'Rejected' %} status-rejected {% endif %}"
-      >
-        {{ request.ad_request.status }}
-      </td>
-      <td>Rs. {{ request.ad_request.payment_amount }}</td>
-      <td>
-        <form
-          action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}"
-          method="POST"
-        >
-          <button
-            type="submit"
-            class="view link link-purple"
-            onclick="return confirm('Are you sure you want to delete this ad request?');"
-          >
-            Delete
-          </button>
-        </form>
-      </td>
-      <td>
-        <a
-          href="{{ url_for('sponsor.viewCampaign', campaign_id=request.ad_request.campaign_id) }}"
-          class="view link link-purple"
-          >View</a
-        >
-      </td>
-    </tr>
-  </tbody>
-  {% endfor %}
-</table>
-
+      <div class="content-wrapper">
+        <div class="col-1 col">
+          <div class="header">
+            <h1>Influencer Requests</h1>
+          </div>
+          <div class="numbers">
+            <p>xoxo</p>
+            <div class="hr"></div>
+            <p>xoxo</p>
+          </div>
+          <div class="table-wrapper">
+            <table class="first-table">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Influencer</th>
+                  <th>Task</th>
+                  <th>Message</th>
+                  <th>Asked Amount</th>
+                  <th class="link"></th>
+                  <th class="link"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for request in campaign_requests %} {% if
+                request.campaign_request.status == 'Pending' %}
+                <tr>
+                  <td>{{ request.campaign_name }}</td>
+                  <td>{{ request.influencer_name }}</td>
+                  <td>{{ request.campaign_request.requirements }}</td>
+                  <td>{{ request.campaign_request.messages }}</td>
+                  <td>Rs. {{ request.campaign_request.payment_amount }}</td>
+                  <td class="link">
+                    <form
+                      action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='reject') }}"
+                      method="post"
+                    >
+                      <button type="submit" class="danger">Reject</button>
+                    </form>
+                  </td>
+                  <td class="link">
+                    <form
+                      action="{{ url_for('sponsor.request_action', request_id=request.campaign_request.id, action='accept') }}"
+                      method="post"
+                    >
+                      <button type="submit" class="approve">Approve</button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+              {% endif %} {% endfor %}
+            </table>
+          </div>
+        </div>
+        <div class="col-2 col">
+          <h1>Sent Requests</h1>
+          <div class="table-wrapper-2">
+            <table class="second-table">
+              <thead>
+                <tr>
+                  <th >Campaign</th>
+                  <th>Influencer</th>
+                  <th>Status</th>
+                  <th>Payment Amount</th>
+                  <th class="link"></th>
+                  <th class="link"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for request in sent_requests %}
+                <tr>
+                  <td>{{ request.ad_request.campaign.name }}</td>
+                  <td>{{ request.influencer_name }}</td>
+                  <td
+                    class="{% if request.ad_request.status == 'Pending' %} status-pending {% elif request.ad_request.status == 'Accepted' %} status-accepted {% elif request.ad_request.status == 'Rejected' %} status-rejected {% endif %}"
+                  >
+                    {{ request.ad_request.status }}
+                  </td>
+                  <td>Rs. {{ request.ad_request.payment_amount }}</td>
+                  <td class="link">
+                    <form
+                      action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}"
+                      method="POST"
+                    >
+                      <button
+                        type="submit"
+                        class="danger"
+                        onclick="return confirm('Are you sure you want to delete this ad request?');"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  </td>
+                  <td class="link">
+                    <a
+                      href="{{ url_for('sponsor.viewCampaign', campaign_id=request.ad_request.campaign_id) }}"
+                      class="view"
+                      >View</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

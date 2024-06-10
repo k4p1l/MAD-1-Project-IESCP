@@ -13,22 +13,7 @@ import os
 
 sponsor = Blueprint('sponsor', __name__)
 
-path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'  # Update this path based on your installation
-config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
-DOWNLOAD_DIRECTORY = r'C:\Users\kapil\Downloads'
 
-
-@sponsor.route('/download_transactions_pdf')
-@role_required('Sponsor')
-@login_required
-def download_transactions_pdf():
-    transactions = Transaction.query.all()
-    html = render_template('Sponsor/payment_history.html', transactions=transactions)
-    
-    # Convert the HTML to PDF
-    pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
-    
-    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
 
 
 @sponsor.route('/dashboard', methods=['GET', 'POST'])
@@ -343,7 +328,22 @@ def view_completed_ad_requests(campaign_id):
 @login_required
 def payment_history(user_id):
     transactions = Transaction.query.filter_by(user_id=user_id).all()
-    return render_template('sponsor/payment_history.html', transactions=transactions)
+    transaction_with_details=[]
+    for transaction in transactions:
+        influencer = Influencer.query.get(transaction.influencer_id)
+        influencer_name=influencer.name
+        influencer_platform=influencer.platform
+        ad_request=AdRequest.query.get(transaction.ad_request_id)
+        campaign_id=ad_request.campaign_id
+        campaign=Campaign.query.get(campaign_id)
+        campaign_name=campaign.name
+        transaction_with_details.append({
+            'transaction': transaction,
+            'influencer_name':influencer_name,
+            'influencer_platform':influencer_platform,
+            'campaign_name':campaign_name
+        })
+    return render_template('sponsor/payment_history.html', transactions=transaction_with_details)
 
 
 @sponsor.route('/make_payment/<int:ad_request_id>', methods=['GET', 'POST'])
@@ -352,10 +352,22 @@ def payment_history(user_id):
 def make_payment(ad_request_id):
     request_type = request.args.get('request_type')
     print(request_type)
+    
     if request_type == 'Sent':
         ad_request=AdRequest.query.get_or_404(ad_request_id)
     if request_type == 'Received':
         ad_request=campaignRequest.query.get_or_404(ad_request_id)
+
+    influencer_id = ad_request.influencer_id
+    influencer = Influencer.query.get_or_404(influencer_id)
+    print(influencer.name)
+    adrequest_with_details = {
+        'request': ad_request,
+        'influencer_name': influencer.name
+    }
+
+    if request.method == 'GET':
+        return render_template('sponsor/make_payment.html', ad_request=adrequest_with_details)
 
     if request.method == 'POST':
             card_number = request.form.get('card_number')
@@ -375,15 +387,48 @@ def make_payment(ad_request_id):
                 date=func.now(),
                 status=True
             )
-            ad_request.payment_done = True
             db.session.add(transaction)
             db.session.commit()
             print(ad_request.payment_done)
+            ad_request.payment_done = True
 
+            influencer = Influencer.query.get_or_404(influencer_id)
+            influencer.bank_account_balance += ad_request.payment_amount
+            db.session.commit()
             
             flash('Payment successful!', category='success')
             return redirect(url_for('sponsor.viewCampaigns'))
-    return render_template('sponsor/make_payment.html', ad_request=ad_request)
+    return render_template('sponsor/make_payment.html', ad_request=adrequest_with_details)
+
+path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'  # Update this path based on your installation
+config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+
+@sponsor.route('/download_transactions_pdf')
+@role_required('Sponsor')
+@login_required
+def download_transactions_pdf():
+    transactions = Transaction.query.all()
+    transaction_with_details=[]
+    for transaction in transactions:
+        influencer = Influencer.query.get(transaction.influencer_id)
+        influencer_name=influencer.name
+        influencer_platform=influencer.platform
+        ad_request=AdRequest.query.get(transaction.ad_request_id)
+        campaign_id=ad_request.campaign_id
+        campaign=Campaign.query.get(campaign_id)
+        campaign_name=campaign.name
+        transaction_with_details.append({
+            'transaction': transaction,
+            'influencer_name':influencer_name,
+            'influencer_platform':influencer_platform,
+            'campaign_name':campaign_name
+        })
+    html = render_template('Sponsor/payment_history.html', transactions=transaction_with_details)
+    
+    # Convert the HTML to PDF
+    pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
+    
+    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
     
 
 

@@ -1,110 +1,143 @@
-{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
-content %}
-<div class="navbar">
-  <div></div>
-  <div class="buttons">
-    <a
-      href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
-      class="btn btn-purple cc cc-purple"
-      >Find Influencer
-    </a>
-    <a
-      href="{{ url_for('sponsor.dashboard') }}"
-      class="btn btn-purple cc cc-purple"
-      >Back</a
-    >
-    <a
-      class="btn btn-purple cc cc-purple"
-      href="{{url_for('sponsor.view_completed_ad_requests', campaign_id=campaign.id)}}"
-      >Completed Ad requests</a
-    >
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/view_campaign.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <p class="view">logout</p>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a
+        href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
+        class="create view"
+      >
+        find <ion-icon name="arrow-forward-sharp"></ion-icon> <br />
+        Influencers
+      </a>
+      <a
+        href="{{url_for('sponsor.view_completed_ad_requests', campaign_id=campaign.id)}}"
+        class="pattern-2 view"
+      >
+        completed<br />
+        requests
+      </a>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="col-1 col">
+      <div class="header">
+        <h1>Campaign</h1>
+      </div>
+      <div class="numbers">
+        <p>xoxo</p>
+        <div class="hr"></div>
+        <p>xoxo</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="first-table">
+          <tbody>
+            <tr>
+              <th>Campaign Detail</th>
+              <th>Information</th>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{ campaign.name }}</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>{{ campaign.description }}</td>
+            </tr>
+            <tr>
+              <td>Start Date</td>
+              <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+            </tr>
+            <tr>
+              <td>End Date</td>
+              <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+            </tr>
+            <tr>
+              <td>Budget</td>
+              <td>{{ campaign.budget }}</td>
+            </tr>
+            <tr>
+              <td>Visibility</td>
+              <td>{{ campaign.visibility }}</td>
+            </tr>
+            <tr>
+              <td>Goals</td>
+              <td>{{ campaign.goals }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-2 col">
+      <h1>Ad requests</h1>
+      <div class="table-wrapper-2">
+        <table class="second-table">
+          <thead>
+            <tr>
+              <th>Request Type</th>
+              <th>Influencer</th>
+              <th>Messages</th>
+              <th>Requirements</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Completion Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for request in ad_requests + campaign_requests %} {% if not
+            request.request.completion_confirmed %}
+
+            <tr>
+              <td>{{ request.request_type }}</td>
+              <td>{{ request.influencer_name }}</td>
+              <td>{{ request.request.messages }}</td>
+              <td>{{ request.request.requirements }}</td>
+              <td>{{ request.request.payment_amount }}</td>
+              <td
+                class="{% if request.request.status == 'Pending' %} status-pending {% elif request.request.status == 'Accepted' %} status-accepted {% elif request.request.status == 'Rejected' %} status-rejected {% endif %}"
+              >
+                {{ request.request.status }}
+              </td>
+              <td>{{ request.request.completed }}</td>
+              {% if request.request.completed == True %}
+              <td>
+                <form
+                  action="{{ url_for('sponsor.confirm_completion', campaign_id=campaign.id, ad_request_id=request.request.id) }}"
+                  method="post"
+                >
+                  <input
+                    type="text"
+                    name="request_type"
+                    value="{{ request.request_type }}"
+                    hidden
+                  />
+                  <button class="view" type="submit">Confirm</button>
+                </form>
+              </td>
+              {% endif %} {% endif %} {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
-
-<div class="campaignContainer">
-  <h1 class="cc cc-purple text-center">Campaign</h1>
-  <table>
-    <tr>
-      <th>Campaign Detail</th>
-      <th>Information</th>
-    </tr>
-    <tr>
-      <td>Name</td>
-      <td>{{ campaign.name }}</td>
-    </tr>
-    <tr>
-      <td>Description</td>
-      <td>{{ campaign.description }}</td>
-    </tr>
-    <tr>
-      <td>Start Date</td>
-      <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
-    </tr>
-    <tr>
-      <td>End Date</td>
-      <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
-    </tr>
-    <tr>
-      <td>Budget</td>
-      <td>{{ campaign.budget }}</td>
-    </tr>
-    <tr>
-      <td>Visibility</td>
-      <td>{{ campaign.visibility }}</td>
-    </tr>
-    <tr>
-      <td>Goals</td>
-      <td>{{ campaign.goals }}</td>
-    </tr>
-  </table>
-</div>
-
-<table>
-  <caption class="cc cc-purple">
-    Ad Requests
-  </caption>
-
-  <thead>
-    <tr>
-      <th>Request Type</th>
-      <th>Influencer</th>
-      <th>Messages</th>
-      <th>Requirements</th>
-      <th>Payment Amount</th>
-      <th>Status</th>
-      <th>Completion Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for request in ad_requests + campaign_requests %} {% if not
-    request.request.completion_confirmed %}
-
-    <tr>
-      <td>{{ request.request_type }}</td>
-      <td>{{ request.influencer_name }}</td>
-      <td>{{ request.request.messages }}</td>
-      <td>{{ request.request.requirements }}</td>
-      <td>{{ request.request.payment_amount }}</td>
-      <td>{{ request.request.status }}</td>
-      <td>{{ request.request.completed }}</td>
-      {% if request.request.completed == True %}
-      <td>
-        <form
-          action="{{ url_for('sponsor.confirm_completion', campaign_id=campaign.id, ad_request_id=request.request.id) }}"
-          method="post"
-        >
-          <input
-            type="text"
-            name="request_type"
-            value="{{ request.request_type }}"
-            hidden
-          />
-          <button type="submit">Confirm Completion</button>
-        </form>
-      </td>
-      {% endif %} {% endif %} {% endfor %}
-    </tr>
-  </tbody>
-</table>
 
 {% endblock %}

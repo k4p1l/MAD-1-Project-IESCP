@@ -24,8 +24,7 @@ block title %}Home{% endblock %} {% block content %}
   </a>
 </div>
 
-{% endif %} 
-{% if influencer %}
+{% endif %} {% if influencer %}
 <div class="hero">
   <div class="square square2">
     <div class="pfp-wrapper">
@@ -40,6 +39,7 @@ block title %}Home{% endblock %} {% block content %}
     <div class="attri">
       <p>{{ influencer.niche }}</p>
       <p>{{ influencer.reach }}</p>
+      <p>{{total_earnings}}</p>
     </div>
 
     <div class="more-info">
@@ -73,7 +73,7 @@ block title %}Home{% endblock %} {% block content %}
       <tbody>
         {% for ad_request_details in ad_requests %} {% if
         ad_request_details.ad_request.status == "Pending" %}
-  
+
         <tr class="prim-row">
           <td>{{ ad_request_details.campaign_name }}</td>
           <td>{{ ad_request_details.user_name }}</td>
@@ -120,7 +120,7 @@ block title %}Home{% endblock %} {% block content %}
       <tbody>
         {% for campaignRequest in campaign_requests %} {% if
         campaignRequest.campaign_request.status == "Pending" %}
-    
+
         <tr class="prim-row">
           <td>{{campaignRequest.campaign_name}}</td>
           <td>{{ campaignRequest.campaign_request.requirements }}</td>
@@ -147,8 +147,6 @@ block title %}Home{% endblock %} {% block content %}
       </tbody>
     </table>
   </div>
-
-
 </div>
 
 {% endif %} {% endblock %}

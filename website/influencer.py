@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app,abort
 from .models import User
-from .models import Influencer,AdRequest,Campaign,campaignRequest,Bookmark
+from .models import Influencer,AdRequest,Campaign,campaignRequest,Bookmark,Transaction
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -31,8 +31,6 @@ def dashboard():
                 })
         else:flash('Campaign not found', category='error')
 
-  
-
     ad_requests_with_details = []
     for ad_request in ad_requests:
         campaign = Campaign.query.get(ad_request.campaign_id)
@@ -42,7 +40,12 @@ def dashboard():
             'campaign_name': campaign.name,
             'user_name': user.name
         })
-    return render_template("Influencer/dashboard.html",campaign_requests=campaign_requests_with_details, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+
+    transactions = Transaction.query.filter_by(influencer_id=influencer.id).all()
+    
+    # Calculate total earnings
+    total_earnings = sum(transaction.amount for transaction in transactions)
+    return render_template("Influencer/dashboard.html",campaign_requests=campaign_requests_with_details, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details,total_earnings=total_earnings)
 
 @influencer.route('/activeCampaigns', methods=['GET'])
 @role_required('Influencer')
@@ -59,7 +62,7 @@ def activeCampaigns():
             'request': ad_request,
             'campaign_name': campaign.name,
             'user_name': user.name,
-            'request_type':'Invitation'
+            'request_type':'Received'
         })
 
     campaign_requests = campaignRequest.query.filter_by(influencer_id=influencer.id, completed=False).all()
@@ -71,7 +74,7 @@ def activeCampaigns():
             'request': campaign_request,
             'campaign_name': campaign.name,
             'user_name': user.name,
-            'request_type':'Proposal'
+            'request_type':'Sent'
         })
     return render_template("Influencer/activeCampaigns.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details, campaign_requests=campaign_requests_with_details)
 
@@ -368,14 +371,14 @@ def search_campaigns():
 @role_required('Influencer')
 def mark_completed(ad_request_id):
     request_type = request.form.get('request_type')
-    if request_type == 'Invitation':
+    if request_type == 'Received':
         ad_request = AdRequest.query.get_or_404(ad_request_id)
         if ad_request:
             ad_request.completed = True
             db.session.commit()
             flash('Ad request completed successfully.', category='success')
 
-    if request_type == 'Proposal':
+    if request_type == 'Sent':
         campaign_request=campaignRequest.query.get_or_404(ad_request_id)
         if campaign_request:
             campaign_request.completed = True
@@ -383,4 +386,6 @@ def mark_completed(ad_request_id):
             flash('Ad request completed successfully.', category='success')
 
     return redirect(url_for('influencer.dashboard'))
+
+
 

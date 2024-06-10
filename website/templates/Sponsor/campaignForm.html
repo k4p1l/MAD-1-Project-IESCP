@@ -1,115 +1,178 @@
-{% extends "base.html" %} {% block title %}{{ 'Edit' if campaign else 'Create'
-}} Campaign{% endblock %}
-{% block body_class %}sponsor{% endblock %} {% block content %}
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/create_campaign_form.css') }}"
+/>
+{% endblock %} {% block content %}
 
-<div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
-  <div class="mx-auto max-w-lg text-center ">
-    <h1 class="heading">Create campaign</h1>
-  </div>
-
-  <form method="POST" class="mx-auto max-w-lg">
-    <div class="space-y-4">
-      <div>
-        <label for="name" class="cc-label">Name of Campaign</label>
-
-        <div class="relative">
-          <input
-            type="text"
-            class="w-full mb-4 rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-            id="name"
-            name="name"
-            required
-          />
-        </div>
-      </div>
-
-      <div >
-        <label class="cc-label" for="description">Description</label>
-        <div class="relative">
-          <textarea
-            class="w-full rounded-lg border-gray-200 p-2 shadow-sm"
-            id="description"
-            name="description"
-            required
-          >
-          </textarea>
-        </div>
-      </div>
-
-      <div>
-        <label class="cc-label" for="start_date">Start Date</label>
-
-        <div class="relative">
-          <input
-            type="date"
-            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-            id="start_date"
-            name="start_date"
-            required
-          />
-        </div>
-      </div>
-
-      <div>
-        <label class="cc-label" for="end_date">End Date</label>
-
-        <div class="relative">
-          <input
-            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-            type="date"
-            id="end_date"
-            name="end_date"
-            required
-          />
-        </div>
-      </div>
-
-      <div>
-        <label class="cc-label" for="budget">Budget</label>
-
-        <div class="relative">
-          <input
-            type="number"
-            class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-            placeholder="Enter Budget"
-            id="budget"
-            step="1"
-            name="budget"
-            required
-          />
-        </div>
-      </div>
-
-      <div>
-        <label class="cc-label" for="visibility">Visibility:</label>
-        <select
-          class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-          id="visibility"
-          name="visibility"
-          required
-        >
-          <option value="public">Public</option>
-          <option value="private">Private</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="cc-label" for="goals">Goals:</label>
-        <textarea
-          class="w-full rounded-lg border-gray-200 p-4 pe-12  shadow-sm"
-          id="goals"
-          name="goals"
-          required
-        ></textarea>
-      </div>
-
-      <button
-        type="submit"
-        class="Btn"
-      >
-        Create
-      </button>
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
     </div>
-  </form>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      <a href="viewCampaigns" class="view">
+        view <br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+  <div class="form-wrapper">
+    <form method="POST">
+      <div class="content-wrapper">
+        <div class="col col-1">
+          <div class="header">
+            <h1>Create new campaign</h1>
+            <div class="circle">
+              <div class="arrow arrow1">
+                <svg
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 40 31"
+                >
+                  <path
+                    d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                    fill="#fff"
+                  ></path>
+                </svg>
+              </div>
+              <div class="arrow2">
+                <svg
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 40 31"
+                >
+                  <path
+                    d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                    fill="#fff"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="numbers">
+            <p>xoxo</p>
+            <div class="hr"></div>
+            <p>xoxo</p>
+          </div>
+          <div class="form-fields">
+            <div>
+              <label for="name" class="cc-label">Name of Campaign</label>
+
+              <div class="form-field">
+                <input
+                  type="text"
+                  class="cc-input"
+                  id="name"
+                  name="name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="cc-label" for="description">Description</label>
+              <div class="form-field">
+                <textarea
+                  class="cc-textarea"
+                  id="description"
+                  name="description"
+                  required
+                >
+                </textarea>
+              </div>
+            </div>
+
+            <div>
+              <label class="cc-label" for="start_date">Start Date</label>
+
+              <div class="form-field">
+                <input
+                  type="date"
+                  class="cc-input"
+                  id="start_date"
+                  name="start_date"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="cc-label" for="end_date">End Date</label>
+
+              <div class="form-field">
+                <input
+                  class="cc-input"
+                  type="date"
+                  id="end_date"
+                  name="end_date"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-2">
+          <div class="form-fields">
+            <div>
+              <label class="cc-label" for="budget">Budget</label>
+
+              <div class="form-field">
+                <input
+                  type="number"
+                  class="cc-input"
+                  placeholder="Enter Budget"
+                  id="budget"
+                  step="1"
+                  name="budget"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="cc-label" for="visibility">Visibility:</label>
+              <select
+                class="cc-input"
+                id="visibility"
+                name="visibility"
+                required
+              >
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="cc-label" for="goals">Goals:</label>
+              <textarea
+                class="cc-input"
+                id="goals"
+                name="goals"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <label class="button-wrapper" for="submit-button">
+            <button type="submit" id="submit-button" class="submit-btn">Create</button>
+            <ion-icon name="arrow-forward-sharp"></ion-icon>
+            </label>  
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+
 {% endblock %}

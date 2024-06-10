@@ -1,50 +1,79 @@
-{% extends "base.html" %} {% block body_class %}sponsor{% endblock %} {% block
-content %}
-
-<a href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
-  >payment_history</a
->
-
-<table>
-  <caption class="cc cc-purple">
-    Completed Ad Requests
-  </caption>
-
-  <thead>
-    <tr>
-      <th>Request Type</th>
-      <th>Influencer</th>
-      <th>Messages</th>
-      <th>Requirements</th>
-      <th>Payment Amount</th>
-      <th>Status</th>
-      <th>Completion Status</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for request in ad_requests + campaign_requests %} {% if
-    request.request.completion_confirmed==True %} 
-    {% if request.request.payment_done==False %}
-
-    <tr>
-      <td>{{ request.request_type }}</td>
-      <td>{{ request.influencer_name }}</td>
-      <td>{{ request.request.messages }}</td>
-      <td>{{ request.request.requirements }}</td>
-      <td>{{ request.request.payment_amount }}</td>
-      <td>{{ request.request.status }}</td>
-      <td>{{ request.request.completed }}</td>
-      <td>
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/view_campaigns.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button view">the</p>
+      <p class="x">v</p>
+      <p class="menu-button view">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      
         <a
-          href="{{url_for('sponsor.make_payment', ad_request_id=request.request.id, request_type=request.request_type)}}"
-          >Make Payment</a
+          href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
+          class="view"
         >
-      </td>
-    {% endif %}
-      {% endif %} {% endfor %}
-    </tr>
-  </tbody>
-</table>
+          view <br />
+          history
+        </a>
+      
+    </div>
+  </nav>
 
+  <div class="content-wrapper">
+    <div class="header">
+      <h1>Completed ad requests</h1>
+    </div>
+    <div class="table-wrapper">
+      <table class="first-table">
+        <thead>
+          <tr>
+            <th>Request Type</th>
+            <th>Influencer</th>
+            <th>Messages</th>
+            <th>Requirements</th>
+            <th>Payment Amount</th>
+            <th>Status</th>
+            <th>Completion Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in ad_requests + campaign_requests %} {% if
+          request.request.completion_confirmed==True %} {% if
+          request.request.payment_done==False %}
+
+          <tr>
+            <td>{{ request.request_type }}</td>
+            <td>{{ request.influencer_name }}</td>
+            <td>{{ request.request.messages }}</td>
+            <td>{{ request.request.requirements }}</td>
+            <td>{{ request.request.payment_amount }}</td>
+            <td>{{ request.request.status }}</td>
+            <td>{{ request.request.completed }}</td>
+            <td>
+              <a class="view"
+                href="{{url_for('sponsor.make_payment', ad_request_id=request.request.id, request_type=request.request_type)}}"
+                >Make Payment</a
+              >
+            </td>
+            {% endif %} {% endif %} {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}
