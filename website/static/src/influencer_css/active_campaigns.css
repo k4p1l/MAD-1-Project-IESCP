@@ -94,20 +94,6 @@ nav > div {
   gap: 0.25em;
 }
 
-.header{
-  flex: 8;
-  background-color: #fff;
-  color: #000;
-  border-radius: 10px;
-  text-align: left;
-  padding: 0.8em 2em;
-}
-.header h1{
-  font-family: up;
-  font-size: 50px;
-  letter-spacing: 1px;
-}
-
 .header-1 {
   flex: 8;
   background-color: #fff;
@@ -124,9 +110,52 @@ nav > div {
 }
 
 .header-2 {
-  flex: 2;
+  flex: 3;
   background-color: #fff;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease-out;
+}
+.header-2:hover{
+  background-color: #d3dada;
+}
+
+.marquee{
+  width: 100%;
+  position: absolute;
+  padding: 1em 0;
+  overflow: hidden;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 0 auto;
+  bottom: 10px;
+
+}
+
+.marquee span {
+  font-family: up;
+  font-size: 32px;
+  transform: translateX(30px);
+  transition: transform 0.5s ease-in-out;
+  cursor: pointer;
+}
+.marquee a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.marquee:hover span {
+  animation: marquee-animation 40s linear infinite;
+  color: #384243;
+}
+
+@keyframes marquee-animation {
+  0% { transform: translateX(30px); }
+  100% { transform: translateX(-100%); }
 }
 
 .table-wrapper {
@@ -182,42 +211,4 @@ tr:hover {
 .danger:hover {
   color: red;
 }
-.first-table td.status-pending::before,
-.first-table td.status-accepted::before,
-.first-table td.status-rejected::before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
 
-.first-table td.status-pending::before {
-  background-color: #ffcc00;
-}
-
-.first-table td.status-accepted::before {
-  background-color: #4caf50;
-}
-
-.first-table td.status-rejected::before {
-  background-color: #f44336;
-}
-
-.status-pending {
-  color: #ffcc00;
-
-  font-size: 16px;
-}
-
-.status-accepted {
-  color: #4caf50;
-
-  font-size: 16px;
-}
-
-.status-rejected {
-  color: #f44336;
-  font-size: 16px;
-}

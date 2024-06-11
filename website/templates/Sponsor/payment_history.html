@@ -86,7 +86,7 @@
             <th>Campaign</th>
             <th>Amount (in Rs.)</th>
             <th>Date</th>
-            <th>Status</th>
+            <th>Request Type</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@
             <td>{{transaction.campaign_name}}</td>
             <td>{{transaction.transaction.amount}}</td>
             <td>{{transaction.transaction.date}}</td>
-            <td>{{transaction.transaction.status}}</td>
+            <td>{{transaction.transaction.request_type}}</td>
           </tr>
           {%endfor%}
         </tbody>

@@ -1,10 +1,5 @@
-:root {
-  --black: #000;
-  --primary: #fff;
-}
-
 @font-face {
-  font-family: aux;
+  font-family: up;
   src: url(../../upheavtt.otf);
 }
 @font-face {
@@ -22,7 +17,8 @@ html,
 body {
   width: 100vw;
   height: 100%;
-  background-color: var(--black);
+  background-color: #000;
+  color: #000;
   font-family: "Arame";
   overflow: hidden;
 }
@@ -31,8 +27,6 @@ p {
   text-transform: uppercase;
 }
 .x {
-  font-family: sk;
-  margin-top: -10px;
   font-size: 14px;
 }
 
@@ -50,15 +44,15 @@ nav {
   display: flex;
   gap: 0.25em;
   padding: 0.25em 0 0 0;
-  background-color: var(--black);
+  background-color: #000;
 }
 nav > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1em 2em;
-  background: var(--primary);
-  color: var(--black);
+  background: #fff;
+  color: #000;
   border-radius: 10px;
 }
 
@@ -67,7 +61,7 @@ nav > div {
 }
 
 .nav-2 {
-  flex: 2.04;
+  flex: 2;
 }
 
 .nav-3 {
@@ -80,26 +74,30 @@ nav > div {
   height: 100%;
   display: flex;
   padding: 0 0 0.5em 0;
-  background-color: var(--black);
+  background-color: #000;
   gap: 0.25em;
   overflow: hidden;
 }
 
 .content-wrapper .col {
   border-radius: 10px;
-  background: var(--primary);
+  background: #ffffff;
   padding: 3em 2em;
+  position: relative;
 }
 
-.col-1 {
-  flex: 5.45;
+.content-wrapper .col-1 {
+  background-color: #d3dada;
+  flex: 3;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 0.25em;
+  position: relative;
+  cursor: pointer;
 }
 
 .col-2 {
-  flex: 3;
+  flex: 9;
   display: flex;
   flex-direction: column;
 }
@@ -107,60 +105,24 @@ nav > div {
   font-size: 12px;
   line-height: 1;
 }
-.col-1 h1 {
-  font-size: 68px;
-  margin-top: -20px;
-  /* letter-spacing: -2px; */
-  text-align: center;
-  font-family: aux;
-}
-.numbers {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.numbers p {
-  flex: 1;
-}
-
-.numbers p:nth-child(3) {
-  text-align: right;
-}
-.numbers .hr {
-  flex: 5;
-  width: 100%;
-  height: 1.2px;
-  background: var(--black);
-  margin-bottom: 40px;
-}
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: auto;
-  /* height: 100vh; */
-  display: flex;
-  justify-content: center;
-}
 
 .first-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  color: #384243;
 }
 .first-table th {
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: var(--primary);
+  background-color: #d3dada;
   padding: 0.5em 0.2em;
-  border-bottom: 2px solid var(--black);
+  border-bottom: 2px solid #384243;
   text-align: left;
 }
 .first-table td {
   padding: 0.5em 0.5em;
-  border-bottom: 1px solid var(--black);
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
@@ -168,24 +130,21 @@ nav > div {
 }
 
 tr:hover {
-  background-color: #f6fbff;
+  background-color: #f8f9fa;
 }
 
 .danger {
   cursor: pointer;
   transition: all 0.2s ease-out;
-  font-family: "Arame";
 }
 
 .approve {
   cursor: pointer;
   transition: all 0.2s ease-out;
-  font-family: "Arame";
 }
 .view {
   cursor: pointer;
   transition: all 0.2s ease-out;
-  font-family: "Arame";
 }
 
 .danger:hover {
@@ -199,8 +158,9 @@ tr:hover {
 }
 
 .col-2 h1 {
-  font-family: aux;
-  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  font-size: 46px;
   margin-bottom: 12px;
 }
 
@@ -208,6 +168,7 @@ tr:hover {
   width: 100%;
   overflow-x: auto;
   overflow-y: auto;
+  /* height: 100vh; */
   display: flex;
   justify-content: center;
 }
@@ -222,9 +183,9 @@ tr:hover {
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: var(--primary);
+  background-color: #fff;
   padding: 0.5em 0.2em;
-  border-bottom: 2px solid var(--black);
+  border-bottom: 2px solid #000;
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
@@ -234,7 +195,7 @@ tr:hover {
 
 .second-table td {
   padding: 0.5em 0.5em;
-  border-bottom: 1px solid var(--black);
+  border-bottom: 1px solid #000;
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
@@ -242,56 +203,107 @@ tr:hover {
   font-size: 14px;
 }
 
-button {
-  border: none;
+.pfp-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  /* margin-top: -20px; */
+  padding: 0.5em 0.5em;
+  transition: opacity 0.3s ease;
+}
+
+.pfp {
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.name {
+  color: rgb(56, 66, 67);
+  font-weight: bold;
+  letter-spacing: -2px;
+  font-size: 52px;
+  transition: all 0.3s ease;
+  padding: 4px;
+}
+.arrow {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  top: -30px;
+  right: -36px;
+  /* width: 240px; */
+  width: 80%;
+  height: auto;
+  transition: all 0.3s ease;
+}
+.more-info {
+  position: absolute;
+  top: 340px;
+  display: flex;
+  visibility: hidden;
+  flex-direction: column;
+  opacity: 0;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
+}
+.more-info .info {
+  font-size: 22px;
+  margin: 20px 0px;
+  color: #384243;
+}
+
+.table-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.col-1:hover .more-info,
+.col-1:hover .arrow {
+  visibility: visible;
+  opacity: 1;
+}
+
+.col-1:hover .pfp-wrapper,
+.col-1:hover .table-wrapper,
+.col-1:hover .name {
+  opacity: 0;
+}
+
+.m-xl {
+  margin-bottom: 20px;
+}
+a{
+text-decoration: none;
+color: inherit; /* Inherits the color from its parent */
+}
+
+a:visited {
+color: inherit; /* Ensures visited links have the same color */
+}
+
+a:hover {
+color: inherit;
+}
+
+a:active {
+color: inherit;
+}
+
+a:focus {
+outline: none; /* Remove the default outline on focus */
+}
+
+button{
   background-color: transparent;
-}
-
-a {
-  text-decoration: none;
-  color: var(--black);
-}
-
-.link {
-  width: 75px;
-}
-
-.second-table td.status-pending::before,
-.second-table td.status-accepted::before,
-.second-table td.status-rejected::before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.second-table td.status-pending::before {
-  background-color: #ffcc00;
-}
-
-.second-table td.status-accepted::before {
-  background-color: #4caf50;
-}
-
-.second-table td.status-rejected::before {
-  background-color: #f44336;
-}
-
-.status-pending {
-  color: #ffcc00;
-
-  font-size: 16px;
-}
-
-.status-accepted {
-  color: #4caf50;
-
-  font-size: 16px;
-}
-
-.status-rejected {
-  color: #f44336;
-  font-size: 16px;
+  border: none;
+  font: inherit;
 }

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app,abort
 from .models import User
-from .models import Influencer,AdRequest,Campaign,campaignRequest,Bookmark,Transaction
+from .models import Influencer,AdRequest,Campaign,campaignRequest,Bookmark,Transaction,Rating
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -90,11 +90,24 @@ def view_completed_requests():
         campaign = Campaign.query.get(ad_request.campaign_id)
         user = User.query.get(campaign.user_id)
         ad_requests_with_details.append({
-            'ad_request': ad_request,
+            'request': ad_request,
             'campaign_name': campaign.name,
-            'user_name': user.name
+            'user_name': user.name,
+            'request_type':'Received'
         })
-    return render_template("Influencer/view_completed_requests.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details)
+
+    campaign_requests = campaignRequest.query.filter_by(influencer_id=influencer.id, completed=True).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaign_requests:
+        campaign=Campaign.query.get(campaign_request.campaign_id)
+        user=User.query.get(campaign.user_id)
+        campaign_requests_with_details.append({
+            'request': campaign_request,
+            'campaign_name': campaign.name,
+            'user_name': user.name,
+            'request_type':'Sent'
+        })
+    return render_template("Influencer/view_completed_requests.html", user=current_user, influencer=influencer, ad_requests=ad_requests_with_details,campaign_requests=campaign_requests_with_details)
 
     
 @influencer.route('/addInfluencer', methods=['GET', 'POST'])
@@ -386,6 +399,39 @@ def mark_completed(ad_request_id):
             flash('Ad request completed successfully.', category='success')
 
     return redirect(url_for('influencer.dashboard'))
+
+
+@influencer.route('/rate_sponsor/<int:ad_request_id>', methods=['GET', 'POST'])
+@login_required
+@role_required('Influencer')
+def rate_sponsor(ad_request_id): 
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    transaction = Transaction.query.get_or_404(ad_request_id)
+    
+    
+    # Ensure that the current user is the influencer in the transaction
+    if transaction.influencer_id != influencer.id:
+        flash('You are not authorized to rate this transaction.', 'danger')
+        return redirect(url_for('influencer.dashboard'))
+    
+    if request.method == 'POST':
+        rating_value = request.form.get('rating')
+        review = request.form.get('review')
+        
+        new_rating = Rating(
+            transaction_id=transaction.id,
+            rater_id=influencer.id,
+            ratee_id=transaction.user_id,
+            rating=rating_value,
+            review=review
+        )
+        db.session.add(new_rating)
+        db.session.commit()
+        flash('Rating submitted successfully.', 'success')
+        return redirect(url_for('influencer.dashboard'))
+    
+    return render_template('Influencer/rate_sponsor.html', transaction=transaction)
 
 
 

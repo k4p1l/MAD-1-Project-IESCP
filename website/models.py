@@ -53,6 +53,7 @@ class AdRequest(db.Model):
     completed = db.Column(db.Boolean, default=False)
     completion_confirmed = db.Column(db.Boolean, default=False)
     payment_done=db.Column(db.Boolean, default=False)
+    rating_done=db.Column(db.Boolean, default=False)
 
 
 class campaignRequest(db.Model):
@@ -66,6 +67,7 @@ class campaignRequest(db.Model):
     completed = db.Column(db.Boolean, default=False)
     completion_confirmed = db.Column(db.Boolean, default=False)
     payment_done=db.Column(db.Boolean, default=False)
+    rating_done=db.Column(db.Boolean, default=False)
 
 class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,7 +83,15 @@ class Transaction(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=func.now())
     status=db.Column(db.Boolean,nullable=False, default=False)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-
-    
+    request_type=db.Column(db.String(150), nullable=False)
     influencer = relationship('Influencer', backref='transactions')
+    ratings = db.relationship('Rating', backref='transaction', lazy=True)
+
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
+    rater_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    ratee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    rating = db.Column(db.Float, nullable=False)
+    review = db.Column(db.Text, nullable=True)
+    date = db.Column(db.DateTime, nullable=False, default=func.now())

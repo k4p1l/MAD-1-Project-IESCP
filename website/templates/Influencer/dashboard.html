@@ -1,151 +1,184 @@
-{% extends "base.html" %}{% block body_class %} influencer {% endblock %} {%
-block title %}Home{% endblock %} {% block content %}
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/influencer_css/influencer_dashboard.css') }}"
+/>
+{% endblock %} {% block content %}
 
-<div class="navbar">
-  <a class="mb-8 heading1 link" href="{{ url_for('views.logout') }}">LOGOUT</a>
-  <div></div>
-  <div></div>
-  <div></div>
-  <a href="{{ url_for('influencer.viewInfluencers') }}">
-    <h1 class="text-center mb-8 heading1 link">Influencers</h1>
-  </a>
-  <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}"
-    >aCTIVE Campaigns</a
-  >
-  <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
-    >Find campaigns</a
-  >
-</div>
-
-{% if not current_user.influencers %}
-<div class="text-center">
-  <a href="{{ url_for('influencer.addInfluencer') }}" class="cta link">
-    COMPLETE YOUR PROFILE
-  </a>
-</div>
-
-{% endif %} {% if influencer %}
-<div class="hero">
-  <div class="square square2">
-    <div class="pfp-wrapper">
-      <img
-        src="{{ url_for('static', filename='uploads/' + influencer.profile_picture) }}"
-        alt="{{ influencer.name }}'s profile picture"
-        class="pfp"
-      />
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <p class="logo view">
+        AD <br />
+        FL
+      </p>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
     </div>
-    <div class="name">{{ influencer.name }}</div>
-    <hr />
-    <div class="attri">
-      <p>{{ influencer.niche }}</p>
-      <p>{{ influencer.reach }}</p>
-      <p>{{total_earnings}}</p>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">x</p>
+      <p class="menu-button">dashboard</p>
     </div>
-
-    <div class="more-info">
-      <a
-        href="{{ url_for('influencer.editInfluencer', influencer_id=influencer.id) }}"
-      >
-        <img
-          src="{{ url_for('static', filename='Arrow.png') }}"
-          class="arrow"
-          alt="Arrow"
-        />
+    <div class="nav-3">
+      <a href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
+        Find <br />
+        campaigns
       </a>
-      <p class="info">{{ influencer.email }}</p>
-      <p class="info">Platform: {{ influencer.platform }}</p>
-      <p class="info">Reach/ Followers: {{ influencer.reach }}</p>
+      <a
+        href="{{ url_for('influencer.activeCampaigns') }}"
+        class="pattern-2 view"
+      >
+        active <br />
+        campaigns
+      </a>
     </div>
+  </nav>
+
+  {% if not current_user.influencers %}
+  <div class="text-center">
+    <a href="{{ url_for('influencer.addInfluencer') }}" class="cta link">
+      COMPLETE YOUR PROFILE
+    </a>
   </div>
 
-  <div class="table-container">
-    <table class="prim-table prim-table-home">
-      <caption class="heading2">
-        Pending Requests
-      </caption>
-      <thead>
-        <tr>
-          <th class="prim-row">Campaign</th>
-          <th class="prim-row">Sponsor</th>
-          <th class="prim-row">Payment Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ad_request_details in ad_requests %} {% if
-        ad_request_details.ad_request.status == "Pending" %}
+  {% endif %} {% if influencer %}
+  <div class="content-wrapper">
+    <div class="col-1 col">
+      <div class="pfp-wrapper">
+        <img
+          src="{{ url_for('static', filename='uploads/' + influencer.profile_picture) }}"
+          alt="{{ influencer.name }}'s profile picture"
+          class="pfp"
+        />
+      </div>
+      <div class="name">{{ influencer.name }}</div>
+      <div class="table-wrapper">
+        <table class="first-table">
+          <thead>
+            <tr>
+              <th>Niche</th>
+              <th>Reach</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ influencer.niche }}</td>
+              <td>{{ influencer.reach }}</td>
+              <td>4.8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="{{ url_for('influencer.editInfluencer', influencer_id=influencer.id) }}">
+        <img
+          class="arrow"
+          src="../../static/arrow_outward_48dp_FILL0_wght700_GRAD200_opsz48.png"
+          alt=""
+        />
+      </a>
 
-        <tr class="prim-row">
-          <td>{{ ad_request_details.campaign_name }}</td>
-          <td>{{ ad_request_details.user_name }}</td>
-          <td>{{ ad_request_details.ad_request.payment_amount }}</td>
-          <td>
-            <a
-              class="link"
-              href="{{ url_for('influencer.viewRequest', ad_request_id=ad_request_details.ad_request.id) }}"
-              >View</a
-            >
-          </td>
-          <td>
-            <form
-              action="{{ url_for('influencer.accept_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
-              method="post"
-            >
-              <button class="link" type="submit">Accept</button>
-            </form>
-          </td>
-          <td>
-            <form
-              action="{{ url_for('influencer.reject_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
-              method="post"
-            >
-              <button class="link" type="submit">Reject</button>
-            </form>
-          </td>
-          {% endif %} {% endfor %}
-        </tr>
-      </tbody>
-    </table>
-    <table class="prim-table prim-table-home">
-      <caption class="heading2">
-        sent Requests
-      </caption>
-      <thead>
-        <tr>
-          <th class="prim-row">Campaign Name</th>
-          <th class="prim-row">Requirements</th>
-          <th class="prim-row">Message</th>
-          <th class="prim-row">Requested Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for campaignRequest in campaign_requests %} {% if
-        campaignRequest.campaign_request.status == "Pending" %}
+      <div class="more-info">
+        <p class="info">Email: {{ influencer.email }}</p>
+        <p class="info">Platform: {{ influencer.platform }}</p>
+        <p class="info">Reach: {{ influencer.reach }}</p>
+      </div>
+    </div>
+    <div class="col-2 col">
+      <h1>Pending Requests</h1>
+      <div class="table-wrapper-2 m-xl">
+        <table class="second-table">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Sponsor</th>
+              <th>Payment Amount</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ad_request_details in ad_requests %} {% if
+            ad_request_details.ad_request.status == "Pending" %}
 
-        <tr class="prim-row">
-          <td>{{campaignRequest.campaign_name}}</td>
-          <td>{{ campaignRequest.campaign_request.requirements }}</td>
-          <td>{{ campaignRequest.campaign_request.messages }}</td>
-          <td>{{ campaignRequest.campaign_request.payment_amount }}</td>
-          <td>
-            <a
-              href="{{ url_for('influencer.edit_campaign_request', campaign_request_id=campaignRequest.campaign_request.id)}}"
-              class="link"
-              >Edit</a
-            >
-          </td>
-          <td>
-            <form
-              action="{{ url_for('influencer.delete_campaign_request', campaign_request_id=campaignRequest.campaign_request.id) }}"
-              method="POST"
-              onsubmit="return confirm('Are you sure you want to delete the request?');"
-            >
-              <button class="link" type="submit">Delete</button>
-            </form>
-          </td>
-          {% endif %} {% endfor %}
-        </tr>
-      </tbody>
-    </table>
+            <tr>
+              <td>{{ ad_request_details.campaign_name }}</td>
+              <td>{{ ad_request_details.user_name }}</td>
+              <td>{{ ad_request_details.ad_request.payment_amount }}</td>
+              <td>
+                <a
+                  class="link view"
+                  href="{{ url_for('influencer.viewRequest', ad_request_id=ad_request_details.ad_request.id) }}"
+                  >View</a
+                >
+              </td>
+              <td>
+                <form
+                  action="{{ url_for('influencer.accept_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
+                  method="post"
+                >
+                  <button class="link approve" type="submit">Approve</button>
+                </form>
+              </td>
+              <td>
+                <form
+                  action="{{ url_for('influencer.reject_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
+                  method="post"
+                >
+                  <button class="link danger" type="submit">Reject</button>
+                </form>
+              </td>
+              {% endif %} {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h1>Sent Requests</h1>
+      <div class="table-wrapper-2">
+        <table class="second-table">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Requirements</th>
+              <th>Message</th>
+              <th>Requested Amount</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for campaignRequest in campaign_requests %} {% if
+            campaignRequest.campaign_request.status == "Pending" %}
+
+            <tr>
+              <td>{{campaignRequest.campaign_name}}</td>
+              <td>{{ campaignRequest.campaign_request.requirements }}</td>
+              <td>{{ campaignRequest.campaign_request.messages }}</td>
+              <td>{{ campaignRequest.campaign_request.payment_amount }}</td>
+              <td>
+                <a
+                  href="{{ url_for('influencer.edit_campaign_request', campaign_request_id=campaignRequest.campaign_request.id)}}"
+                  class="link view"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <form
+                  action="{{ url_for('influencer.delete_campaign_request', campaign_request_id=campaignRequest.campaign_request.id) }}"
+                  method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete the request?');"
+                >
+                  <button class="link danger" type="submit">Delete</button>
+                </form>
+              </td>
+              {% endif %} {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 

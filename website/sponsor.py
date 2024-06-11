@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,abort,send_file,Response
-from .models import Campaign,AdRequest,User,Influencer,campaignRequest,Transaction
+from .models import Campaign,AdRequest,User,Influencer,campaignRequest,Transaction,Rating
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -260,7 +260,10 @@ def view_all_influencers(campaign_id):
 @role_required('Sponsor')
 @login_required
 def delete_ad_request(ad_request_id):
+    
     ad_request = AdRequest.query.get_or_404(ad_request_id)
+    if not ad_request:
+        ad_request=campaignRequest.query.get_or_404(ad_request_id)
 
     if ad_request.campaign.user_id != current_user.id:
         abort(403)
@@ -333,7 +336,12 @@ def payment_history(user_id):
         influencer = Influencer.query.get(transaction.influencer_id)
         influencer_name=influencer.name
         influencer_platform=influencer.platform
-        ad_request=AdRequest.query.get(transaction.ad_request_id)
+        request_type=transaction.request_type
+        if request_type=='Sent':
+            ad_request=AdRequest.query.get(transaction.ad_request_id)
+        elif request_type=='Received':
+            ad_request=campaignRequest.query.get(transaction.ad_request_id)
+
         campaign_id=ad_request.campaign_id
         campaign=Campaign.query.get(campaign_id)
         campaign_name=campaign.name
@@ -375,14 +383,13 @@ def make_payment(ad_request_id):
             cvv = request.form.get('cvv')
 
             influencer_id = ad_request.influencer_id
-            print(ad_request.payment_done)
             
             # Dummy payment processing
             transaction = Transaction(
                 ad_request_id=ad_request.id,
                 influencer_id=influencer_id,
                 user_id=current_user.id,
-                
+                request_type=request_type,
                 amount=ad_request.payment_amount,
                 date=func.now(),
                 status=True
@@ -430,5 +437,47 @@ def download_transactions_pdf():
     
     return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
     
+@sponsor.route('/view_ratings')
+@role_required('Sponsor')
+@login_required
+def view_ratings():
+    ratee_id=current_user.id
+    ratings = Rating.query.filter_by(ratee_id=ratee_id).all()
+    return render_template('sponsor/view_ratings.html', ratings=ratings)
 
+@sponsor.route('rate_influencer/<int:ad_request_id>/<string:request_type>', methods=['GET','POST'])
+@role_required('Sponsor')
+@login_required 
+def rate_influencer(ad_request_id, request_type):
+    transaction=Transaction.query.get_or_404(ad_request_id,)
+    if request_type=='Sent':
+        ad_request=AdRequest.query.get_or_404(ad_request_id)
+    else:
+        ad_request=None
+
+    if request_type=='Received':
+        ad_request=campaignRequest.query.get_or_404(ad_request_id)
+
+    if transaction.user_id != current_user.id:
+        flash('You are not authorized to rate this transaction.', 'danger')
+        return redirect(url_for('sponsor.dashboard'))
+
+    if request.method == 'POST':
+        rating_value = request.form.get('rating')
+        review = request.form.get('review')
+        
+        new_rating = Rating(
+            transaction_id=transaction.id,
+            rater_id=current_user.id,
+            ratee_id=transaction.influencer_id,
+            rating=rating_value,
+            review=review
+        )
+        db.session.add(new_rating)
+        ad_request.rating_done=True
+        db.session.commit() 
+        flash('Rating submitted successfully.', 'success')
+        return redirect(url_for('sponsor.dashboard'))
+
+    return render_template('sponsor/rate_influencer.html', transaction=transaction)
 

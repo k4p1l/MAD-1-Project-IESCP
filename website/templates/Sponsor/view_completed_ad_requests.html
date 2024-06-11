@@ -20,15 +20,14 @@
     </div>
     <div class="nav-3">
       <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
-      
-        <a
-          href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
-          class="view"
-        >
-          view <br />
-          history
-        </a>
-      
+
+      <a
+        href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
+        class="view"
+      >
+        view <br />
+        history
+      </a>
     </div>
   </nav>
 
@@ -42,34 +41,58 @@
           <tr>
             <th>Request Type</th>
             <th>Influencer</th>
-            <th>Messages</th>
             <th>Requirements</th>
             <th>Payment Amount</th>
-            <th>Status</th>
             <th>Completion Status</th>
-            <th>Action</th>
+            <th class="link"></th>
+            <th class="link"></th>
+            <th class="link"></th>
           </tr>
         </thead>
         <tbody>
           {% for request in ad_requests + campaign_requests %} {% if
-          request.request.completion_confirmed==True %} {% if
-          request.request.payment_done==False %}
-
+          request.request.completion_confirmed==True %}
           <tr>
             <td>{{ request.request_type }}</td>
             <td>{{ request.influencer_name }}</td>
-            <td>{{ request.request.messages }}</td>
             <td>{{ request.request.requirements }}</td>
             <td>{{ request.request.payment_amount }}</td>
-            <td>{{ request.request.status }}</td>
             <td>{{ request.request.completed }}</td>
-            <td>
-              <a class="view"
+            <td class="link">
+              {% if request.request.payment_done==True %}
+              <span class="status-accepted">Payment done </span>{% else %}
+              <a
+                class="view"
                 href="{{url_for('sponsor.make_payment', ad_request_id=request.request.id, request_type=request.request_type)}}"
                 >Make Payment</a
               >
+              {%endif%}
             </td>
-            {% endif %} {% endif %} {% endfor %}
+            {% if request.request.payment_done==True %}
+            <td class="link view">
+              {% if request.request.rating_done == True %} Rated {% else %}
+              <a
+                href="{{url_for('sponsor.rate_influencer', ad_request_id=request.request.id, request_type=request.request_type)}}"
+                >Give Rating</a
+              >
+              {% endif %}
+            </td>
+            {% if request.request.rating_done == True %}
+            <td class="link danger">
+              <form
+                action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.request.id) }}"
+                method="post"
+              >
+                <button
+                  type="submit"
+                  class="danger"
+                  onclick="return confirm('Are you sure you want to delete this ad request?');"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+            {%endif%} {% endif %} {% endif %} {% endfor %}
           </tr>
         </tbody>
       </table>

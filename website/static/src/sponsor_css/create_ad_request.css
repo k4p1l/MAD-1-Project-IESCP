@@ -233,22 +233,17 @@
     overflow: hidden;
   }
   .arrow {
-    width: 300px;
+    width: 250px;
     height: auto;
     position: absolute;
-    margin-top: 220px;
-    margin-right: 36px;
     transform: translate(0, 0);
   }
   
   .arrow2 {
-    width: 300px;
+    width: 250px;
     height: auto;
     position: absolute;
-    margin-right: 36px;
-
-    /* margin-top: calc(var(--circle-size) / 20); */
-    transform: translate(-200%, 200%);
+    transform: translate(-300%, 300%);
   }
   
   .circle:hover .arrow2 {
