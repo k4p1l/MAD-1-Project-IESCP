@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     name = db.Column(db.String(150))
     role=  db.Column(db.String(20), nullable=True)
+    niche= db.Column(db.String(100), nullable=True)
     influencers = relationship('Influencer', backref='user', lazy=True)
 
 
@@ -25,6 +26,7 @@ class Campaign(db.Model):
     budget = db.Column(db.Integer , nullable=False) 
     visibility = db.Column(db.String(10), nullable=False)  # 'public' or 'private'
     goals = db.Column(db.Text, nullable=False)
+    niche= db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
 

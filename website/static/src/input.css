@@ -132,17 +132,7 @@ body.grey {
   gap: 6px;
 }
 
-.icon {
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  margin-left: 5px; /* Initial margin to give some space between text and icon */
-}
 
-.btn-sec:hover .icon {
-  opacity: 1;
-  transform: translateX(0); /* Move the icon to its normal position */
-}
 .heading4 {
   color: #544e37;
   font-size: 24px;
@@ -482,24 +472,6 @@ input#profile_picture {
 
 .light-purple {
   background-color: #e1e5ff;
-}
-
-#search_query {
-  padding: 6px 8px;
-  border-radius: 6px;
-  margin-bottom: 14px;
-  color: #433e30;
-  font-family: inter;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  font-size: 14px;
-  width: 100%;
-  background-color: #e3d8bc;
-}
-
-#search_query:focus {
-  outline: none;
-  border: 1px solid #8d846c;
 }
 
 .search-form {

@@ -1,14 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% for rating in ratings %}
-        <p>Rating: {{ rating.rating }}</p>
-        <p>Review: {{ rating.review }}</p>
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/create_ad_request.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      <a href="{{ url_for('sponsor.viewCampaigns') }}" class="view">
+        view <br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+  <div class="form-wrapper">
+    <form method="POST">
+      <div class="content-wrapper">
+        <div class="col col-1">
+          <div class="header-ad header">
+            <h1>Your Ratings</h1>
+          </div>
+          <div class="numbers">
+            <p>xoxo</p>
+            <div class="hr"></div>
+            <p>xoxo</p>
+          </div>
+
+          <div class="table-wrapper">
+            <div class="first-table">
+              <table>
+                <tr>
+                  <th>Rating</th>
+                  <th>Review</th>
+                </tr>
+                {% for rating in ratings %}
+                <tr>
+                  <td>{{rating.rating}}</td>
+                  <td>{{rating.review}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <div class="circle">
+            <div class="arrow arrow1">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+            <div class="arrow2">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

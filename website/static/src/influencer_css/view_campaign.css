@@ -1,14 +1,10 @@
 @font-face {
-  font-family: up;
+  font-family: aux;
   src: url(../../upheavtt.otf);
 }
 @font-face {
   font-family: sk;
   src: url(../../SKCuber-Expanded.ttf);
-}
-@font-face {
-  font-family: Ultra;
-  src: url(../../UltraHyper-Regular.otf);
 }
 
 * {
@@ -22,7 +18,6 @@ body {
   width: 100vw;
   height: 100%;
   background-color: #000;
-  color: #000;
   font-family: "Arame";
   overflow: hidden;
 }
@@ -31,6 +26,8 @@ p {
   text-transform: uppercase;
 }
 .x {
+  font-family: sk;
+  margin-top: -10px;
   font-size: 14px;
 }
 
@@ -85,47 +82,82 @@ nav > div {
 
 .content-wrapper .col {
   border-radius: 10px;
-  background: #ffffff;
+  background: #fff;
   padding: 3em 2em;
-  position: relative;
 }
 
-.content-wrapper .col-1 {
-  background-color: #d3dada;
-  flex: 3;
+.col-1 {
+  flex: 7;
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
-  position: relative;
+  gap: 2em;
 }
 
 .col-2 {
-  flex: 9;
+  flex: 8;
   display: flex;
   flex-direction: column;
 }
+
 .col-1 p {
   font-size: 12px;
   line-height: 1;
+}
+
+.col-1 h1 {
+  font-size: 38px;
+  margin-top: -20px;
+  /* letter-spacing: -2px; */
+  text-align: center;
+  font-family: aux;
+}
+
+.numbers {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.numbers p {
+  flex: 1;
+}
+
+.numbers p:nth-child(3) {
+  text-align: right;
+}
+.numbers .hr {
+  flex: 5;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  /* height: 100vh; */
+  display: flex;
+  justify-content: center;
 }
 
 .first-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  color: #384243;
 }
 .first-table th {
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: #d3dada;
+  background-color: #fff;
   padding: 0.5em 0.2em;
-  border-bottom: 2px solid #384243;
+  border-bottom: 1px solid #000;
   text-align: left;
 }
 .first-table td {
   padding: 0.5em 0.5em;
+  border-bottom: 1px solid #000;
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
@@ -161,11 +193,9 @@ tr:hover {
 }
 
 .col-2 h1 {
-  font-weight: bold;
-  letter-spacing: -2px;
-  font-size: 46px;
+  font-family: aux;
+  font-size: 36px;
   margin-bottom: 12px;
-  margin-top: -24px;
 }
 
 .table-wrapper-2 {
@@ -175,8 +205,6 @@ tr:hover {
   /* height: 100vh; */
   display: flex;
   justify-content: center;
-  margin-bottom: 12px;
-
 }
 
 .second-table {
@@ -191,7 +219,7 @@ tr:hover {
   z-index: 1;
   background-color: #fff;
   padding: 0.5em 0.2em;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid #000;
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
@@ -209,145 +237,68 @@ tr:hover {
   font-size: 14px;
 }
 
-.pfp-wrapper {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  /* margin-top: -20px; */
-  padding: 0.5em 0.5em;
-  transition: opacity 0.3s ease;
+.create ion-icon {
+  margin-top: 10.8px;
+  font-size: 20px;
 }
 
-.pfp {
-  width: 100%;
-  max-height: 380px;
-  object-fit: cover;
-  border-radius: 20px;
+.create {
+  position: relative;
 }
 
-.name {
-  color: rgb(56, 66, 67);
-  font-weight: bold;
-  font-size: 56px;
-  transition: all 0.3s ease;
-  padding: 4px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  letter-spacing: -2.4px;
-
-}
-.arrow {
+.create ion-icon {
   position: absolute;
-  visibility: hidden;
+  left: 36px;
+  transform: translateY(-50%);
   opacity: 0;
-  top: -30px;
-  right: -36px;
-  /* width: 240px; */
-  width: 80%;
-  height: auto;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-.more-info {
-  position: absolute;
-  top: 340px;
-  display: flex;
-  visibility: hidden;
-  flex-direction: column;
-  opacity: 0;
-  transition: all 0.3s ease;
-  width: 100%;
-  height: 100%;
-}
-.more-info .info {
-  font-size: 22px;
-  margin: 20px 0px;
-  color: #384243;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.table-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.col-1:hover .more-info,
-.col-1:hover .arrow {
-  visibility: visible;
+.create:hover ion-icon {
+  transform: translateY(-50%) translateX(0);
   opacity: 1;
 }
 
-.col-1:hover .pfp-wrapper,
-.col-1:hover .table-wrapper,
-.col-1:hover .name {
-  opacity: 0;
+.create ion-icon {
+  transform: translateY(-50%) translateX(20px);
 }
 
-.m-xl {
-  margin-bottom: 30px;
-}
-a {
-  text-decoration: none;
-  color: inherit; /* Inherits the color from its parent */
-}
-
-a:visited {
-  color: inherit; /* Ensures visited links have the same color */
-}
-
-a:hover {
-  color: inherit;
+.second-table td.status-pending::before,
+.second-table td.status-accepted::before,
+.second-table td.status-rejected::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
-a:active {
-  color: inherit;
+.second-table td.status-pending::before {
+  background-color: #ffcc00;
 }
 
-a:focus {
-  outline: none; /* Remove the default outline on focus */
+.second-table td.status-accepted::before {
+  background-color: #4caf50;
 }
 
-button {
-  background-color: transparent;
-  border: none;
-  font: inherit;
+.second-table td.status-rejected::before {
+  background-color: #f44336;
 }
 
-.cyp-wrapper {
-  width: 100%;
-  height: 100%;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.cyp-btn {
-  color: #384243;
-  font-size: 72px;
-  transition: all 0.3s ease;
-  font-family: Ultra;
-  font-style: normal;
-  margin-top: -80px;
-}
-.cyp-btn:hover {
-  color: #092124;
+.status-pending {
+  color: #ffcc00;
+
+  font-size: 16px;
 }
 
-.icon {
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  margin-left: 5px; 
-  margin-top: 15px;
+.status-accepted {
+  color: #4caf50;
+
+  font-size: 16px;
 }
 
-.btn-sec:hover .icon {
-  opacity: 1;
-  transform: translateX(0); /* Move the icon to its normal position */
+.status-rejected {
+  color: #f44336;
+  font-size: 16px;
 }

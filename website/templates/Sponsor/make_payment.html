@@ -53,6 +53,8 @@
                   type="text"
                   id="card_number"
                   name="card_number"
+                  minlength="16"
+                  maxlength="16"
                 />
               </div>
             </div>
@@ -74,12 +76,14 @@
                 <label class="cc-label" for="cvv"> CVV:</label>
                 <div class="form-field">
                   <input
-                    type="number"
-                    class="cc-input"
-                    id="cvv"
-                    name="cvv"
-                    step="1"
-                    required
+                  type="number"
+                  class="cc-input"
+                  id="cvv"
+                  name="cvv"
+                  step="1"
+                  required
+                  minlength="3"
+                  maxlength="4"
                   />
                 </div>
                 <label class="button-wrapper" for="submit-button">

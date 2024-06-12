@@ -1,51 +1,84 @@
-{% extends "base.html" %} {% block body_class %} influencer {% endblock %} {%
-block content %}
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/influencer_css/view_request.css') }}"
+/>
+{% endblock %} {% block content %}
 
-<div class="navbar">
-    <a class="mb-8 heading1 link" href="{{ url_for('influencer.dashboard') }}">HOME</a>
-    <div></div>
-    <div></div>
-    <div></div>
-    <a href="{{ url_for('influencer.viewInfluencers') }}">
-      <h1 class="text-center mb-8 heading1 link">Influencers</h1>
-    </a>
-    <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}">aCTIVE Campaigns</a>
-    <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
-      >Find campaigns</a>
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('influencer.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a  href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
+        find <ion-icon name="arrow-forward-sharp"></ion-icon> <br />
+        campaigns
+      </a>
+      <a
+      href="{{ url_for('influencer.activeCampaigns') }}"
+        class="pattern-2 view"
+      >
+        active<br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="col-1 col">
+      <div class="header">
+        <h1>Ad request</h1>
+      </div>
+      <div class="numbers">
+        <p>xoxo</p>
+        <div class="hr"></div>
+        <p>xoxo</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="first-table">
+          <tr>
+            <th>Ad Request Details</th>
+            <th>Information</th>
+          </tr>
+          <tr>
+            <td>Campaign</td>
+            <td>{{ ad_request_details.campaign_name }}</td>
+          </tr>
+          <tr>
+            <td>Sponsor</td>
+            <td>{{ ad_request_details.user_name }}</td>
+          </tr>
+          <tr>
+            <td>Requirements</td>
+            <td>{{ad_request_details.ad_request.requirements}}</td>
+          </tr>
+          <tr>
+            <td>Payment Amount</td>
+            <td>{{ ad_request_details.ad_request.payment_amount }}</td>
+          </tr>
+          <tr>
+            <td>Message</td>
+            <td>{{ ad_request_details.ad_request.messages }}</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>{{ ad_request_details.ad_request.status }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-2 col">
+    </div>
   </div>
-
-<div class="campaignContainer cc-in">
-  <table class="prim-table prim-table-home">
-    <caption class="heading2">Ad Request</caption>
-    <tr >
-      <th class="prim-row">Ad Request Details</th>
-      <th class="prim-row">Information</th>
-    </tr>
-    <tr class="prim-row">
-      <td>Campaign</td>
-      <td>{{ ad_request_details.campaign_name }}</td>
-    </tr>
-    <tr class="prim-row">
-      <td>Sponsor</td>
-      <td>{{ ad_request_details.user_name }}</td>
-    </tr class="prim-row">
-    <tr class="prim-row">
-      <td>Requirements</td>
-      <td>{{ad_request_details.ad_request.requirements}}</td>
-    </tr>
-    <tr class="prim-row">
-      <td>Payment Amount</td>
-      <td>{{ ad_request_details.ad_request.payment_amount }}</td>
-    </tr>
-    <tr class="prim-row">
-      <td>Message</td>
-      <td>{{ ad_request_details.ad_request.messages }}</td>
-    </tr>
-    <tr class="prim-row">
-      <td>Status</td>
-      <td>{{ ad_request_details.ad_request.status }}</td>
-    </tr>
-  </table>
 </div>
 
 {% endblock %}

@@ -53,6 +53,7 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         role= request.form.get('role')
+        niche=request.form.get('niche')
 
         user = User.query.filter_by(email=email).first()
         if user:

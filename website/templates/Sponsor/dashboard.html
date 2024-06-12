@@ -93,7 +93,7 @@
                   <th >Campaign</th>
                   <th>Influencer</th>
                   <th>Status</th>
-                  <th>Payment Amount</th>
+                  <th>Payment Amount Rs.</th>
                   <th class="link"></th>
                   <th class="link"></th>
                 </tr>
@@ -108,7 +108,7 @@
                   >
                     {{ request.ad_request.status }}
                   </td>
-                  <td>Rs. {{ request.ad_request.payment_amount }}</td>
+                  <td>{{ request.ad_request.payment_amount }}</td>
                   <td class="link">
                     <form
                       action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.ad_request.id) }}"

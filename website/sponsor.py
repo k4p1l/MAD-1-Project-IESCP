@@ -61,6 +61,7 @@ def createCampaign():
         budget = request.form.get('budget')
         visibility = request.form.get('visibility')
         goals = request.form.get('goals')
+        niche=request.form.get('niche')
         user_id = current_user.id
 
         new_campaign = Campaign(
@@ -71,6 +72,7 @@ def createCampaign():
             budget=budget,
             visibility=visibility,
             goals=goals,
+            niche=niche,
             user_id=user_id)
         
         db.session.add(new_campaign)
@@ -111,7 +113,6 @@ def viewCampaign(campaign_id):
 
     return render_template('Sponsor/viewCampaign.html', campaign=campaign,ad_requests=sent_requests_with_details,campaign_requests=campaign_requests_with_details)
 
-#to view all the campaigns list
 @sponsor.route('/viewCampaigns', methods=['GET'])
 @role_required('Sponsor')
 @login_required
@@ -382,6 +383,12 @@ def make_payment(ad_request_id):
             expiration_date = request.form.get('expiration_date')
             cvv = request.form.get('cvv')
 
+            #Validate card details
+            if not card_number or len(card_number) != 16 or not card_number.isdigit():
+                flash('Invalid card number.Card number must be 16 digits.', category='error')
+            if not cvv or len(cvv) not in [3, 4] or not cvv.isdigit():
+                flash('Invalid CVV. CVV must be 3 or 4 digits.', category='error')
+
             influencer_id = ad_request.influencer_id
             
             # Dummy payment processing
@@ -461,6 +468,9 @@ def rate_influencer(ad_request_id, request_type):
     if transaction.user_id != current_user.id:
         flash('You are not authorized to rate this transaction.', 'danger')
         return redirect(url_for('sponsor.dashboard'))
+    
+    influencer=Influencer.query.get_or_404(transaction.influencer_id)
+
 
     if request.method == 'POST':
         rating_value = request.form.get('rating')
@@ -479,5 +489,5 @@ def rate_influencer(ad_request_id, request_type):
         flash('Rating submitted successfully.', 'success')
         return redirect(url_for('sponsor.dashboard'))
 
-    return render_template('sponsor/rate_influencer.html', transaction=transaction)
+    return render_template('sponsor/rate_influencer.html', transaction=transaction,influencer_name=influencer.name)
 

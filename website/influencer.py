@@ -7,6 +7,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 import os
 from .auth import role_required
+from sqlalchemy.sql import func
 
 influencer= Blueprint('influencer', __name__)
 
@@ -18,34 +19,39 @@ influencer= Blueprint('influencer', __name__)
 def dashboard():
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
-    ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
-    campaignRequests = campaignRequest.query.filter_by(influencer_id=influencer.id).all()
-    campaign_requests_with_details = []
-    for campaign_request in campaignRequests:
-        campaign=Campaign.query.get(campaign_request.campaign_id)
-        if campaign:
-            campaign_name=campaign.name
-            campaign_requests_with_details.append({
-            'campaign_request': campaign_request,
-            'campaign_name': campaign_name
-                })
-        else:flash('Campaign not found', category='error')
+    avg_rating_query = db.session.query(func.avg(Rating.rating).label('average_rating')).filter(Rating.ratee_id == influencer.id).first()
+    average_rating = avg_rating_query.average_rating
+    if influencer:
+        ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
+        campaignRequests = campaignRequest.query.filter_by(influencer_id=influencer.id).all()
+        campaign_requests_with_details = []
+        for campaign_request in campaignRequests:
+            campaign=Campaign.query.get(campaign_request.campaign_id)
+            if campaign:
+                campaign_name=campaign.name
+                campaign_requests_with_details.append({
+                'campaign_request': campaign_request,
+                'campaign_name': campaign_name
+                    })
+            else:flash('Campaign not found', category='error')
 
-    ad_requests_with_details = []
-    for ad_request in ad_requests:
-        campaign = Campaign.query.get(ad_request.campaign_id)
-        user = User.query.get(campaign.user_id)
-        ad_requests_with_details.append({
-            'ad_request': ad_request,
-            'campaign_name': campaign.name,
-            'user_name': user.name
-        })
+        ad_requests_with_details = []
+        for ad_request in ad_requests:
+            campaign = Campaign.query.get(ad_request.campaign_id)
+            user = User.query.get(campaign.user_id)
+            ad_requests_with_details.append({
+                'ad_request': ad_request,
+                'campaign_name': campaign.name,
+                'user_name': user.name
+            })
 
-    transactions = Transaction.query.filter_by(influencer_id=influencer.id).all()
-    
-    # Calculate total earnings
-    total_earnings = sum(transaction.amount for transaction in transactions)
-    return render_template("Influencer/dashboard.html",campaign_requests=campaign_requests_with_details, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details,total_earnings=total_earnings)
+        transactions = Transaction.query.filter_by(influencer_id=influencer.id).all()
+        
+        # Calculate total earnings
+        total_earnings = sum(transaction.amount for transaction in transactions)
+        return render_template("Influencer/dashboard.html",campaign_requests=campaign_requests_with_details, user=current_user, influencer=influencer, ad_requests=ad_requests_with_details,total_earnings=total_earnings,average_rating=average_rating)
+
+    return render_template("Influencer/dashboard.html")
 
 @influencer.route('/activeCampaigns', methods=['GET'])
 @role_required('Influencer')
@@ -136,7 +142,7 @@ def addInfluencer():
             db.session.add(new_influencer)
             db.session.commit()
             flash('Influencer added successfully!', category='success')
-            return redirect(url_for('influencer.viewInfluencers'))
+            return redirect(url_for('influencer.dashboard'))
         
         else:
             flash('Profile picture is required!', 'error')    
@@ -289,10 +295,16 @@ def reject_ad_request(ad_request_id):
 @role_required('Influencer')
 @login_required
 def viewCampaigns():
-    campaigns = Campaign.query.all()
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        campaigns = Campaign.query.filter(Campaign.name.ilike(f'%{search_query}%')).all()
+    else:
+        campaigns = Campaign.query.all()
     for campaign in campaigns:
         campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id, campaign_id=campaign.id).first() is not None
-    return render_template('Influencer/viewCampaigns.html', campaigns=campaigns)
+    return render_template('Influencer/viewCampaigns.html', campaigns=campaigns, influencer=influencer)
 
 @influencer.route('/viewCampaign/<int:campaign_id>')
 @role_required('Influencer')
@@ -408,6 +420,7 @@ def rate_sponsor(ad_request_id):
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
     transaction = Transaction.query.get_or_404(ad_request_id)
+    user=User.query.get_or_404(transaction.user_id)
     
     
     # Ensure that the current user is the influencer in the transaction
@@ -431,7 +444,14 @@ def rate_sponsor(ad_request_id):
         flash('Rating submitted successfully.', 'success')
         return redirect(url_for('influencer.dashboard'))
     
-    return render_template('Influencer/rate_sponsor.html', transaction=transaction)
+    return render_template('Influencer/rate_sponsor.html', transaction=transaction,user_name=user.name)
 
-
+@influencer.route('/view_ratings')
+@role_required('Influencer')
+@login_required
+def view_ratings():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    ratings = Rating.query.filter_by(ratee_id=influencer.id).all()
+    return render_template('Influencer/view_ratings.html', ratings=ratings)
 

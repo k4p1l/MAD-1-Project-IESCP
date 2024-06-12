@@ -1,22 +1,22 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
 
-<section class="bg-white" >
+<section class="bg-white">
   <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
     <section
       class="relative flex h-32 items-end bg-white lg:col-span-5 lg:h-full xl:col-span-6"
     >
-      <img src="../static/adfluenceflow1.png"
-      class="absolute inset-0 h-full w-full object-contain" 
-      alt="">
-
+      <img
+        src="../static/adfluenceflow1.png"
+        class="absolute inset-0 h-full w-full object-contain"
+        alt=""
+      />
     </section>
 
     <main
       class="flex items-center justify-center px-4 py-4 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
     >
       <div class="max-w-xl lg:max-w-3xl">
-
         <form method="POST" class="mt-8 grid grid-cols-6 gap-6">
           <div class="col-span-6 sm:col-span-3">
             <label
@@ -48,10 +48,7 @@ content %}
           </div>
 
           <div class="col-span-6">
-            <label
-              for="role"
-              class="block text-sm font-medium text-gray-600"
-            >
+            <label for="role" class="block text-sm font-medium text-gray-600">
               Role
             </label>
 
@@ -61,9 +58,34 @@ content %}
               class="mt-1.5 w-full p-2 pe-12 rounded-lg border-gray-300 text-gray-600 sm:text-sm"
             >
               <option value="">Please select</option>
-              <option value="Admin">Admin</option>
               <option value="Sponsor">Sponsor</option>
               <option value="Influencer">Influencer</option>
+            </select>
+          </div>
+          <div class="col-span-6">
+            <label for="niche" class="block text-sm font-medium text-gray-600">
+              Niche/Industry
+            </label>
+
+            <select
+              name="niche"
+              id="niche"
+              class="mt-1.5 w-full p-2 pe-12 rounded-lg border-gray-300 text-gray-600 sm:text-sm"
+            >
+              <option value="">Please select</option>
+              <option value="Tech">Tech</option>
+              <option value="Fashion and Beauty">Fashion and Beauty</option>
+              <option value="Fitness and Wellness">Fitness and Wellness</option>
+              <option value="Travel">Travel</option>
+              <option value="Food ">Food</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Finance and Investing">
+                Finance and Investing
+              </option>
+              <option value="Entertainment and Pop Culture">
+                Entertainment and Pop Culture
+              </option>
             </select>
           </div>
           <div class="col-span-6 sm:col-span-3">

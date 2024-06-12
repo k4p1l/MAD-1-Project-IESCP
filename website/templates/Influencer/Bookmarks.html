@@ -1,117 +1,147 @@
-{% extends "base.html" %} {% block title %}{{ 'Edit' if campaign else 'Create'
-}} Campaign{% endblock %} {% block body_class %}influencer{% endblock %} {%
-block content %}
-
-<div class="navbar">
-    <a class="mb-8 heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
-      >Back</a
-    >
-    <div></div>
-    <div></div>
-    <div></div>
-    <a href="{{ url_for('influencer.viewInfluencers') }}">
-      <h1 class="text-center mb-8 heading1 link">Influencers</h1>
-    </a>
-    <a class="heading1 link" href="{{ url_for('influencer.activeCampaigns') }}"
-      >aCTIVE Campaigns</a
-    >
-    <a class="heading1 link" href="{{ url_for('influencer.viewCampaigns') }}"
-      >Find campaigns</a
-    >
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/influencer_css/bookmarks.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('influencer.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
+        find <ion-icon name="arrow-forward-sharp"></ion-icon> <br />
+        campaigns
+      </a>
+      <a
+        href="{{ url_for('influencer.activeCampaigns') }}"
+        class="pattern-2 view"
+      >
+        active<br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="col-1 col">
+      <div class="header">
+        <h1>Bookmarked Campaigns</h1>
+      </div>
+      <div class="numbers">
+        <p>xoxo</p>
+        <div class="hr"></div>
+        <p>xoxo</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="first-table">
+          <thead>
+            <tr>
+              <th>Name of Sponsor</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Budget</th>
+              <th>Campaign description</th>
+              <th class="link"></th>
+              <th class="link"></th>
+              <th class="link"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for campaign in bookmarked_campaigns %}
+            <tr>
+              <td>{{ campaign.name }}</td>
+              <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+              <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+              <td>Rs. {{ campaign.budget }}</td>
+              <td>{{ campaign.description }}</td>
+              <td class="link view">
+                <a
+                  href="{{ url_for('influencer.viewCampaign', campaign_id=campaign.id) }}"
+                  >View</a
+                >
+              </td>
+              <td class="link view">
+                <a
+                  href="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id)}}"
+                  >Request</a
+                >
+              </td>
+              <td class="link view">
+                <form
+                  action="{{ url_for('influencer.bookmark_campaign', campaign_id=campaign.id) }}"
+                  method="post"
+                  style="display: inline"
+                >
+                  {% if campaign.is_bookmarked %}
+                  <button type="submit">
+                    <svg
+                      class="bookmark-icon"
+                      fill="#000"
+                      width="50"
+                      height="50"
+                      viewBox="0 0 1024.00 1024.00"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="#000"
+                      stroke-width="0.01024"
+                    >
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M665.6 768L512 614.4 358.4 768V256h307.2v512z"
+                        ></path>
+                      </g>
+                    </svg>
+                  </button>
+                  {% else %}
+                  <button type="submit">
+                    <svg
+                      class="bookmark-icon"
+                      fill="#000"
+                      width="50"
+                      height="50"
+                      viewBox="0 0 1024 1024"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="#000"
+                    >
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M665.6 768L512 614.4 358.4 768V256h307.2v512zM512 537.6L614.4 640V307.2H409.6V640L512 537.6z"
+                        ></path>
+                      </g>
+                    </svg>
+                  </button>
+                  {% endif %}
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-2 col"></div>
   </div>
-
-<table class="prim-table">
-    <caption class="heading2">Bookmarked Campaigns</caption>
-  <thead>
-    <tr>
-      <th class="prim-row">Name of Sponsor</th>
-      <th class="prim-row">Start Date</th>
-      <th class="prim-row">End Date</th>
-      <th class="prim-row">Budget</th>
-      <th class="prim-row">Campaign description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for campaign in bookmarked_campaigns %}
-    <tr class="prim-row">
-      <td>{{ campaign.name }}</td>
-      <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
-      <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
-      <td>Rs. {{ campaign.budget }}</td>
-      <td>{{ campaign.description }}</td>
-      <td>
-        <a
-          href="{{ url_for('influencer.viewCampaign', campaign_id=campaign.id) }}"
-          class="link"
-          >View</a
-        >
-      </td>
-      <td>
-        <a
-          class="link"
-          href="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id)}}"
-          >Request</a
-        >
-      </td>
-      <td>
-        <form
-          action="{{ url_for('influencer.bookmark_campaign', campaign_id=campaign.id) }}"
-          method="post"
-          style="display: inline"
-        >
-          {% if campaign.is_bookmarked %}
-          <button type="submit">
-            <svg
-              class="bookmark-icon"
-              fill="#7c6d46"
-              width="50"
-              height="50"
-              viewBox="0 0 1024.00 1024.00"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#7c6d46"
-              stroke-width="0.01024"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path d="M665.6 768L512 614.4 358.4 768V256h307.2v512z"></path>
-              </g>
-            </svg>
-          </button>
-          {% else %}
-          <button type="submit">
-            <svg
-              class="bookmark-icon"
-              fill="#7c6d46"
-              width="50"
-              height="50"
-              viewBox="0 0 1024 1024"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#7c6d46"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M665.6 768L512 614.4 358.4 768V256h307.2v512zM512 537.6L614.4 640V307.2H409.6V640L512 537.6z"
-                ></path>
-              </g>
-            </svg>
-          </button>
-          {% endif %}
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+</div>
 
 {% endblock %}

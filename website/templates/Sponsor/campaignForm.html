@@ -83,13 +83,12 @@
             <div>
               <label class="cc-label" for="description">Description</label>
               <div class="form-field">
-                <textarea
-                  class="cc-textarea"
+                <input
+                  class="cc-input"
                   id="description"
                   name="description"
                   required
                 >
-                </textarea>
               </div>
             </div>
 
@@ -154,25 +153,59 @@
               </select>
             </div>
 
+            <div id="niche-container" class="hidden">
+              <label class="cc-label" for="niche">Niche:</label>
+              <select class="cc-input" id="niche" name="niche">
+                <option value="All">All</option>
+                <option value="Tech">Tech</option>
+                <option value="Fashion and Beauty">Fashion and Beauty</option>
+                <option value="Fitness and Wellness">
+                  Fitness and Wellness
+                </option>
+                <option value="Travel">Travel</option>
+                <option value="Food ">Food</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Finance and Investing">
+                  Finance and Investing
+                </option>
+                <option value="Entertainment and Pop Culture">
+                  Entertainment and Pop Culture
+                </option>
+              </select>
+            </div>
+
             <div>
               <label class="cc-label" for="goals">Goals:</label>
-              <textarea
+              <input
                 class="cc-input"
                 id="goals"
                 name="goals"
                 required
-              ></textarea>
+              >
             </div>
           </div>
           <label class="button-wrapper" for="submit-button">
-            <button type="submit" id="submit-button" class="submit-btn">Create</button>
+            <button type="submit" id="submit-button" class="submit-btn">
+              Create
+            </button>
             <ion-icon name="arrow-forward-sharp"></ion-icon>
-            </label>  
-          </div>
+          </label>
         </div>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+  document.getElementById("visibility").addEventListener("change", function () {
+    var nicheContainer = document.getElementById("niche-container");
+    if (this.value === "private") {
+      nicheContainer.classList.remove("hidden");
+    } else {
+      nicheContainer.classList.add("hidden");
+    }
+  });
+</script>
 
 {% endblock %}

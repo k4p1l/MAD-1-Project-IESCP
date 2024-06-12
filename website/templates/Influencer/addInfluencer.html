@@ -1,93 +1,141 @@
-{% extends "base.html" %} {% block body_class %} influencer {% endblock %} {%
-block content %}
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/influencer_css/add_influencer.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <p class="logo view">
+        AD <br />
+        FL
+      </p>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">Sign-up</p>
+      <p class="x">x</p>
+      <p class="menu-button">page</p>
+    </div>
+    <div class="nav-3">
 
-<div class="navbar">
-  <a
-    class="text-center mb-8 heading1 link"
-    href="{{ url_for('influencer.dashboard') }}"
-  >
-    Back
-  </a>
-  <h1 class="text-center mb-8 heading1">Influencers</h1>
-  <a class="text-center mb-8 heading1 link" href="{{ url_for('views.logout') }}"
-    >LOGOUT</a
-  >
+    </div>
+  </nav>
 
+  <div class="form-wrapper">
+    <form
+      action="{{ url_for('influencer.addInfluencer') }}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="content-wrapper">
+        <div class="col col-1">
+
+          <div class="header">
+            <h1>Sign-up as an Influencer</h1>
+          </div><div class="form-fields">
+        <input
+          type="hidden"
+          id="name"
+          name="name"
+          value="{{ current_user.name }}"
+          required
+        />
+        <input
+          type="hidden"
+          id="email"
+          name="email"
+          value="{{ current_user.email }}"
+        />
+
+        <label class="cc-label" for="platform">Platform</label>
+        <select name="platform" id="platform" class="cc-input">
+          <option value="">Please select</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Twitter">Twitter</option>
+          <option value="LinkedIn">LinkedIn</option>
+          <option value="Youtube">Youtube</option>
+          <option value="Snapchat">Snapchat</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Twitch">Twitch</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label class="cc-label" for="profile_picture">Profile Picture:</label>
+        <input
+          type="file"
+          id="profile_picture"
+          name="profile_picture"
+          class="cc-input"
+        />
+
+        <label class="cc-label" for="niche">Niche:</label>
+        <select id="niche" name="niche" class="cc-input">
+          <option value="">Please select</option>
+          <option value="Tech">Tech</option>
+          <option value="Fashion and Beauty">Fashion and Beauty</option>
+          <option value="Fitness and Wellness">Fitness and Wellness</option>
+          <option value="Travel">Travel</option>
+          <option value="Food ">Food</option>
+          <option value="Lifestyle">Lifestyle</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Finance and Investing">Finance and Investing</option>
+          <option value="Entertainment and Pop Culture">
+            Entertainment and Pop Culture
+          </option>
+        </select>
+
+        <label class="cc-label" for="reach">Reach:</label>
+        <input
+          type="number"
+          id="reach"
+          name="reach"
+          required
+          class="cc-input"
+        />
+        <input type="hidden" name="user_id" value="{{ current_user.id }}" />
+
+        <label class="button-wrapper" for="submit-button">
+          <button type="submit" id="submit-button" class="submit-btn">
+            Add influencer
+          </button>
+          <ion-icon name="arrow-forward-sharp"></ion-icon>
+        </label>
+      </div>
+        </div>
+        <div class="col-2">
+          <div class="circle">
+            <div class="arrow arrow1">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+            <div class="arrow2">
+              <svg
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 31"
+              >
+                <path
+                  d="M32.7188 30.2092L25.6611 30.1823L29.01 13.9866L12.2259 29.4822C11.7383 29.9323 11.099 30.1823 10.4353 30.1823H0.350586L24.5691 7.7427L9.97643 7.72816L12.817 1.29864C13.0989 0.660689 13.7309 0.24938 14.4283 0.250001L34.8251 0.268164C37.6565 0.269449 39.7495 2.90594 39.1084 5.66374L34.4507 28.7968C34.2848 29.6208 33.5593 30.2124 32.7188 30.2092Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  {% endblock %}
 </div>
-
-<h1 class="cc text-center">Sign-up as an Influencer</h1>
-<form
-  action="{{ url_for('influencer.addInfluencer') }}"
-  method="POST"
-  enctype="multipart/form-data"
-  class="influForm1"
->
-  <input
-    type="hidden"
-    id="name"
-    name="name"
-    value="{{ current_user.name }}"
-    required
-    class="w-10 mb-4 rounded-lg p-2"
-  />
-  <input
-    type="hidden"
-    id="email"
-    name="email"
-    value="{{ current_user.email }}"
-    class="w-10 mb-4 rounded-lg p-2"
-  />
-
-  <label class="heading4" for="platform">Platform</label>
-  <select name="platform" id="platform" class="w-10 mb-4 rounded-lg p-2">
-    <option value="">Please select</option>
-    <option value="Facebook">Facebook</option>
-    <option value="Instagram">Instagram</option>
-    <option value="Twitter">Twitter</option>
-    <option value="LinkedIn">LinkedIn</option>
-    <option value="Youtube">Youtube</option>
-    <option value="Snapchat">Snapchat</option>
-    <option value="TikTok">TikTok</option>
-    <option value="Twitch">Twitch</option>
-    <option value="Other">Other</option>
-  </select>
-
-  <label class="heading4" for="profile_picture">Profile Picture:</label>
-  <input
-    type="file"
-    id="profile_picture"
-    name="profile_picture"
-    class="w-10 mb-4 rounded-lg p-2"
-  />
-
-  <label class="heading4" for="niche">Niche:</label>
-  <select id="niche" name="niche" class="w-10 mb-4 rounded-lg p-2">
-    <option value="">Please select</option>
-    <option value="Tech">Tech</option>
-    <option value="Fashion and Beauty">Fashion and Beauty</option>
-    <option value="Fitness and Wellness">Fitness and Wellness</option>
-    <option value="Fitness and Wellness">Fitness and Wellness</option>
-    <option value="Travel">Travel</option>
-    <option value="Food ">Food</option>
-    <option value="Lifestyle">Lifestyle</option>
-    <option value="Gaming">Gaming</option>
-    <option value="Finance and Investing">Finance and Investing</option>
-    <option value="Entertainment and Pop Culture">
-      Entertainment and Pop Culture
-    </option>
-  </select>
-
-  <label class="heading4" for="reach">Reach:</label>
-  <input
-    type="number"
-    id="reach"
-    name="reach"
-    required
-    class="w-10 mb-4 rounded-lg p-2"
-  />
-  <input type="hidden" name="user_id" value="{{ current_user.id }}" />
-
-  <button class="btn btn-primary md1" type="submit">aDD INFLUENCER</button>
-</form>
-
-{% endblock %}
