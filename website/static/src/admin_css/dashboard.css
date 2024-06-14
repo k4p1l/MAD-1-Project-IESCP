@@ -1,0 +1,214 @@
+:root {
+  --black: #000;
+  --white: #fff;
+}
+
+@font-face {
+  font-family: up;
+  src: url(../../upheavtt.otf);
+}
+
+@font-face {
+  font-family: sk;
+  src: url(../../SKCuber-Expanded.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100%;
+  background-color: var(--black);
+  font-family: "Arame";
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+nav {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  gap: 0.25em;
+  padding: 0.25em 0 0 0;
+  background-color: var(--black);
+}
+
+nav > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+  background: var(--white);
+  color: var(--black);
+  border-radius: 10px;
+}
+
+.nav-1 {
+  flex: 3;
+}
+
+.nav-2 {
+  flex: 2.04;
+}
+
+.nav-3 {
+  flex: 3;
+}
+
+.content-wrapper {
+  flex: 12;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0.5em 0;
+  background-color: var(--black);
+  gap: 0.25em;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  border-radius: 10px;
+}
+
+.row-1 {
+  flex: 9;
+  display: flex;
+  gap: 0.25em;
+}
+
+.col-1 {
+  flex: 9.4;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.col-2 {
+  flex: 4;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.row-2 {
+  flex: 2.4;
+  display: flex;
+  gap: 0.25em;
+}
+
+.col-3,
+.col-4,
+.col-5,
+.col-6 {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease-out;
+}
+.col-3:hover,
+.col-4:hover,
+.col-5:hover {
+  background-color: #d3dada;
+}
+
+.col-4{
+  flex: 0.8;
+}
+
+.col-6{
+  flex: 0.8;
+}
+
+.view:hover {
+  color: blue;
+}
+
+.col-2 span {
+  transition: all 0.6s ease-in-out;
+}
+.col-2 span:hover {
+  color: rgb(141, 234, 0);
+}
+
+.marquee {
+  width: 100%;
+  position: absolute;
+  padding: 1em 0;
+  overflow: hidden;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 0 auto;
+  bottom: 0.2px;
+}
+
+.marquee span {
+  font-family: up;
+  font-size: 56px;
+  transform: translateX(50px);
+  transition: transform 0.5s ease-in-out;
+  cursor: pointer;
+}
+.col-4 .marquee span {
+  transform: translate(42px);
+}
+
+.col-5 .marquee span {
+  transform: translate(50px);
+}
+.col-5 .marquee span {
+  transform: translate(32px);
+}
+
+
+.marquee a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.marquee:hover span {
+  animation: marquee-animation 40s linear infinite;
+  color: #384243;
+}
+.col-5 .marquee:hover span {
+  animation: marquee-animation-2 40s linear infinite;
+  color: #384243;
+}
+@keyframes marquee-animation {
+  0% {
+    transform: translateX(50px);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-animation-2 {
+  0% {
+    transform: translateX(42px);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

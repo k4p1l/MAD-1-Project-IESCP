@@ -1,8 +1,8 @@
 from flask import Flask
+from flask_restful import Api, Resource 
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
-from flask_migrate import Migrate
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -10,13 +10,13 @@ DB_NAME = "database.db"
 
 def create_app():
     app = Flask(__name__)
+    api=Api(app)
     app.config['SECRET_KEY'] = 'idkra&w'
     app.config['UPLOAD_FOLDER'] = 'website/static/uploads'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
 
     from .views import views
-
     from .sponsor import sponsor
     from .admin import admin
     from .influencer import influencer
@@ -32,8 +32,6 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    # Initialize Flask-Migrate
-    migrate = Migrate(app, db)
 
     login_manager = LoginManager()
     login_manager.login_view = 'views.login'

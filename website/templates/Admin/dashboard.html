@@ -1,5 +1,154 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
-<h1 align="center">bruh</h1>
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/admin_css/dashboard.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3"></div>
+  </nav>
 
+  <div class="content-wrapper">
+    <div class="row-1 row">
+      <div class="col-1">
+        <canvas id="userChart" width="900px" height="400px"></canvas>
+      </div>
+
+      <div class="col-2">
+        <canvas id="campaign_by_status" width="400px" height="500px"></canvas>
+      </div>
+    </div>
+
+    <div class="row-2 row">
+      <div class="col-3">
+        <div class="marquee">
+          <span>
+            <a href="">
+              Campaigns &nbsp; &nbsp; Campaigns &nbsp; Campaigns &nbsp;
+              Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns
+              &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp;
+              Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns
+              &nbsp;
+            </a></span
+          >
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="marquee">
+          <span>
+            <a href="">
+              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
+              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
+              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
+              Sponsors &nbsp; Sponsors &nbsp;
+            </a></span
+          >
+        </div>
+      </div>
+
+      <div class="col-5">
+        <div class="marquee">
+          <span>
+            <a href="">
+              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
+              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
+              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
+              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
+              Influencers &nbsp; Influencers &nbsp;
+            </a></span
+          >
+        </div>
+      </div>
+
+      <div class="col-6">
+        <p>Xoxo</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ctx = document.getElementById("userChart").getContext("2d");
+  const labels = [
+      "Total Users", "Sponsors", "Influencers", "Campaigns", "Transactions", "Ad Requests"
+  ]
+  var userChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+          labels: labels,
+          datasets: [{
+              label: "Total Number ",
+            data:[{{user_count}}, {{sponsor_count}}, {{influencer_count}}, {{ campaign_count }}, {{ transaction_count }}, {{ ad_request_count }}],
+            backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)'],
+            borderColor: [ 'rgba(75, 192, 192, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)'],
+            borderWidth: 1
+          }]
+
+      },
+  options:{
+          responsive:false,
+              maintainAspectRatio: false,
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+  }
+  })
+
+  const campaign_by_status_ctx=document.getElementById("campaign_by_status").getContext("2d");
+  var campaign_by_status = new Chart(campaign_by_status_ctx, {
+    type:"pie",
+    data:{
+      labels:{{labels_campaign_by_status | safe}},
+      datasets:[{
+        data:{{values_campaign_by_status | safe}},
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)'],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'],
+        borderWidth: 1}]
+    },
+    options:{
+      responsive:false,
+      maintainAspectRatio: false,
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+    }
+  })
+</script>
 {% endblock %}

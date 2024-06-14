@@ -27,6 +27,8 @@ class Campaign(db.Model):
     visibility = db.Column(db.String(10), nullable=False)  # 'public' or 'private'
     goals = db.Column(db.Text, nullable=False)
     niche= db.Column(db.String(100), nullable=False)
+    status= db.Column(db.String(100), nullable=False,default='Incomplete')
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
 

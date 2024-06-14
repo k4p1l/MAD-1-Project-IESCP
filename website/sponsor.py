@@ -1,19 +1,15 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,abort,send_file,Response
 from .models import Campaign,AdRequest,User,Influencer,campaignRequest,Transaction,Rating
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db   ##means from __init__.py import db
+from . import db   #means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 from .auth import role_required
 from sqlalchemy.sql import func
 import pdfkit
-from io import BytesIO
-import os
 
 
 sponsor = Blueprint('sponsor', __name__)
-
-
 
 
 @sponsor.route('/dashboard', methods=['GET', 'POST'])
@@ -386,8 +382,7 @@ def make_payment(ad_request_id):
             #Validate card details
             if not card_number or len(card_number) != 16 or not card_number.isdigit():
                 flash('Invalid card number.Card number must be 16 digits.', category='error')
-            if not cvv or len(cvv) not in [3, 4] or not cvv.isdigit():
-                flash('Invalid CVV. CVV must be 3 or 4 digits.', category='error')
+            
 
             influencer_id = ad_request.influencer_id
             
