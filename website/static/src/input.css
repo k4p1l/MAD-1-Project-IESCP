@@ -22,7 +22,7 @@
 }
 
 body.influencer {
-  background-color: #F6F5F3;
+  background-color: #f6f5f3;
   margin: 0px;
   padding: 0px;
 }
@@ -33,6 +33,12 @@ body.sponsor {
 }
 body.grey {
   background-color: #f6f7ff;
+}
+
+.container {
+  max-width: 3840px;
+  max-height: 2160px;
+  margin: 0 auto;
 }
 
 .title {
@@ -67,7 +73,6 @@ body.grey {
   gap: 16px; /* Adjust gap between squares as needed */
   padding: 24px;
 }
-
 
 .heading {
   font-family: aesthetic;
@@ -132,7 +137,6 @@ body.grey {
   gap: 6px;
 }
 
-
 .heading4 {
   color: #544e37;
   font-size: 24px;
@@ -186,8 +190,6 @@ body.grey {
   border-radius: 0.75rem;
 }
 
-
-
 .prim-table-home {
   height: fit-content;
   padding: 20px;
@@ -234,7 +236,6 @@ body.grey {
   margin: 0;
   margin-top: 6px;
 }
-
 
 section {
   display: grid;
@@ -505,5 +506,3 @@ input#profile_picture {
 .search-form.icon:hover {
   color: #433e30;
 }
-
-

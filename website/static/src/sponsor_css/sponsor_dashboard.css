@@ -20,7 +20,9 @@
 
 html,
 body {
-  width: 100vw;
+  width: 100%;
+  max-width: 3840px;
+  margin: 0 auto;
   height: 100%;
   background-color: var(--black);
   font-family: "Arame";
@@ -39,6 +41,8 @@ p {
 .container {
   width: 100%;
   height: 100vh;
+  max-width: 3840px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 0.25em;
