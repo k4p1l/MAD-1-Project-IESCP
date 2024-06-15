@@ -19,31 +19,38 @@
       <p class="x">v</p>
       <p class="menu-button">dashboard</p>
     </div>
-    <div class="nav-3">
-      
-    </div>
+    <div class="nav-3"></div>
   </nav>
 
   <div class="content-wrapper">
     <div class="row-1 row">
       <div class="col-1">
-        Total number of users: {{user_count}} <br>
-        Total number of sponsors: {{sponsor_count}} <br>
-        Total number of campaigns: {{ campaign_count }} <br>
-        Total number of influencers: {{influencer_count}} <br>
-        Total number of ad requests: {{ ad_request_count }} <br> 
-        Total number of transactions: {{ transaction_count }} <br> <br>
-        <canvas id="userChart" width="900px" height="400px"></canvas>
+        <canvas id="userChart" width="950px" height="600px"></canvas>
       </div>
 
       <div class="col-2">
-        <h1>Campaigns by status</h1>
-        <br>
-        <canvas id="campaign_by_status" width="400px" height="500px"></canvas>
+        <h1 class="mt-2 ml-4 mb-2">Campaigns by status</h1>
+        <canvas id="campaign_by_status" width="400px" height="220px"></canvas>
+        <br />
+        <div class="links">
+          <a class="link" href="{{ url_for('admin.influencer_stats') }}"
+            ><span>influencer stats</span
+            ><ion-icon name="arrow-forward-sharp"></ion-icon
+          ></a>
+          <a class="link" href="{{ url_for('admin.sponsor_stats') }}"
+            ><span>sponsor stats</span
+            ><ion-icon name="arrow-forward-sharp"></ion-icon
+          ></a>
+          <a class="link" href="{{ url_for('admin.campaign_stats') }}">
+            <span> campaign stats</span
+            ><ion-icon name="arrow-forward-sharp"></ion-icon
+          ></a>
+          <a class="link" href="{{ url_for('admin.transaction_stats') }}">
+            <span>transaction stats</span>
+            <ion-icon name="arrow-forward-sharp"></ion-icon
+          ></a>
+        </div>
       </div>
-    </div>
-
-
     </div>
   </div>
 </div>

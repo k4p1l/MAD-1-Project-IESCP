@@ -636,6 +636,18 @@ video {
   margin-top: 2rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.ml-4 {
+  margin-left: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 .block {
   display: block;
 }
@@ -726,10 +738,6 @@ video {
 
 .gap-6 {
   gap: 1.5rem;
-}
-
-.rounded {
-  border-radius: 0.25rem;
 }
 
 .rounded-lg {
@@ -891,7 +899,7 @@ video {
 }
 
 body.influencer {
-  background-color: #F6F5F3;
+  background-color: #f6f5f3;
   margin: 0px;
   padding: 0px;
 }
@@ -904,6 +912,12 @@ body.sponsor {
 
 body.grey {
   background-color: #f6f7ff;
+}
+
+.container {
+  /* max-width: 3840px;
+  max-height: 2160px; */
+  margin: 0 auto;
 }
 
 .title {
@@ -1510,5 +1524,3 @@ input#profile_picture {
     grid-column: span 6 / span 6;
   }
 }
-
-

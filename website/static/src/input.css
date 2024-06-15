@@ -36,8 +36,8 @@ body.grey {
 }
 
 .container {
-  max-width: 3840px;
-  max-height: 2160px;
+  /* max-width: 3840px;
+  max-height: 2160px; */
   margin: 0 auto;
 }
 

@@ -21,7 +21,6 @@
 html,
 body {
   width: 100%;
-  max-width: 3840px;
   margin: 0 auto;
   height: 100%;
   background-color: var(--black);

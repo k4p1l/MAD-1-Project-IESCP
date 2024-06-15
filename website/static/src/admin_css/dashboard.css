@@ -57,6 +57,7 @@ nav > div {
 
 .nav-1 {
   flex: 3;
+
 }
 
 .nav-2 {
@@ -65,6 +66,7 @@ nav > div {
 
 .nav-3 {
   flex: 3;
+  background: #c20c15;
 }
 
 .content-wrapper {
@@ -100,10 +102,11 @@ nav > div {
   flex: 4;
   background-color: #fff;
   border-radius: 10px;
-  padding: 20px;
+  /* padding: 20px; */
   display: flex;
   flex-direction: column;
   gap: 0.25em;
+  justify-content: space-between;
 }
 
 .row-2 {
@@ -131,11 +134,11 @@ nav > div {
   background-color: #d3dada;
 }
 
-.col-4{
+.col-4 {
   flex: 0.8;
 }
 
-.col-6{
+.col-6 {
   flex: 0.8;
 }
 
@@ -143,71 +146,24 @@ nav > div {
   color: blue;
 }
 
-.col-2 span {
-  transition: all 0.6s ease-in-out;
-}
-.col-2 span:hover {
-  color: rgb(141, 234, 0);
-}
-
-.marquee {
-  width: 100%;
-  padding: 1em 0;
-  overflow: hidden;
-  z-index: 3;
+.links {
   display: flex;
+  flex-direction: column;
+  font-size: 1.6em;
+}
+
+.link {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  margin: 0 auto;
+  padding: 1em 0.6em 1em 1.4em;
+  font-family: "Neue Montreal";
+  font-weight: 500;
+  transition: all 0.3s ease;
+  /* border: 1px solid rgba(204, 204, 204,0.35); */
 }
 
-.marquee span {
-  font-family: up;
-  font-size: 56px;
-  transform: translateX(50px);
-  transition: transform 0.5s ease-in-out;
-  cursor: pointer;
-}
-.col-4 .marquee span {
-  transform: translate(42px);
-}
-
-.col-5 .marquee span {
-  transform: translate(50px);
-}
-.col-5 .marquee span {
-  transform: translate(32px);
-}
-
-
-.marquee a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.marquee:hover span {
-  animation: marquee-animation 40s linear infinite;
-  color: #384243;
-}
-.col-5 .marquee:hover span {
-  animation: marquee-animation-2 40s linear infinite;
-  color: #384243;
-}
-@keyframes marquee-animation {
-  0% {
-    transform: translateX(50px);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes marquee-animation-2 {
-  0% {
-    transform: translateX(42px);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+.link:hover {
+  background-color: #c20c15;
+  color: white;
 }
