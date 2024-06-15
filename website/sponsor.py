@@ -7,6 +7,7 @@ from datetime import datetime
 from .auth import role_required
 from sqlalchemy.sql import func
 import pdfkit
+import os
 
 
 sponsor = Blueprint('sponsor', __name__)
@@ -16,6 +17,7 @@ sponsor = Blueprint('sponsor', __name__)
 @role_required('Sponsor')
 @login_required
 def dashboard():
+    print(os.name)
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
     campaign_requests = campaignRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
     campaign_requests_with_details = []
@@ -409,7 +411,12 @@ def make_payment(ad_request_id):
             return redirect(url_for('sponsor.viewCampaigns'))
     return render_template('sponsor/make_payment.html', ad_request=adrequest_with_details)
 
-path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'  # Update this path based on your installation
+
+if os.name == 'nt':
+    path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+else:
+    path_to_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'
+    
 config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 
 @sponsor.route('/download_transactions_pdf')
