@@ -1,10 +1,11 @@
 services:
   - type: web
-    name: MAD-1-Project-IESCP-1
+    name: MAD-1-Project-IESCP
     env: python
     buildCommand: |
       apt-get update && apt-get install -y wget
       wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6/wkhtmltox_0.12.6-1.bionic_amd64.deb
       apt install -y ./wkhtmltox_0.12.6-1.bionic_amd64.deb
+      which wkhtmltopdf
       pip install -r requirements.txt
     startCommand: python main.py
