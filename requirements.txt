@@ -1,0 +1,7 @@
+Flask==3.0.3
+Flask_Login==0.6.3
+Flask_RESTful==0.3.10
+flask_sqlalchemy==3.1.1
+pdfkit==1.0.0
+SQLAlchemy==2.0.30
+Werkzeug==3.0.3

@@ -19,65 +19,31 @@
       <p class="x">v</p>
       <p class="menu-button">dashboard</p>
     </div>
-    <div class="nav-3"></div>
+    <div class="nav-3">
+      
+    </div>
   </nav>
 
   <div class="content-wrapper">
     <div class="row-1 row">
       <div class="col-1">
+        Total number of users: {{user_count}} <br>
+        Total number of sponsors: {{sponsor_count}} <br>
+        Total number of campaigns: {{ campaign_count }} <br>
+        Total number of influencers: {{influencer_count}} <br>
+        Total number of ad requests: {{ ad_request_count }} <br> 
+        Total number of transactions: {{ transaction_count }} <br> <br>
         <canvas id="userChart" width="900px" height="400px"></canvas>
       </div>
 
       <div class="col-2">
+        <h1>Campaigns by status</h1>
+        <br>
         <canvas id="campaign_by_status" width="400px" height="500px"></canvas>
       </div>
     </div>
 
-    <div class="row-2 row">
-      <div class="col-3">
-        <div class="marquee">
-          <span>
-            <a href="">
-              Campaigns &nbsp; &nbsp; Campaigns &nbsp; Campaigns &nbsp;
-              Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns
-              &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp;
-              Campaigns &nbsp; Campaigns &nbsp; Campaigns &nbsp; Campaigns
-              &nbsp;
-            </a></span
-          >
-        </div>
-      </div>
 
-      <div class="col-4">
-        <div class="marquee">
-          <span>
-            <a href="">
-              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
-              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
-              Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp; Sponsors &nbsp;
-              Sponsors &nbsp; Sponsors &nbsp;
-            </a></span
-          >
-        </div>
-      </div>
-
-      <div class="col-5">
-        <div class="marquee">
-          <span>
-            <a href="">
-              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
-              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
-              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
-              Influencers &nbsp; Influencers &nbsp; Influencers &nbsp;
-              Influencers &nbsp; Influencers &nbsp;
-            </a></span
-          >
-        </div>
-      </div>
-
-      <div class="col-6">
-        <p>Xoxo</p>
-      </div>
     </div>
   </div>
 </div>

@@ -152,15 +152,14 @@ nav > div {
 
 .marquee {
   width: 100%;
-  position: absolute;
   padding: 1em 0;
   overflow: hidden;
   z-index: 3;
   display: flex;
   align-items: center;
+  justify-content: center;
   white-space: nowrap;
   margin: 0 auto;
-  bottom: 0.2px;
 }
 
 .marquee span {
