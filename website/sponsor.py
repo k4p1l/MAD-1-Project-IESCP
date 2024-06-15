@@ -6,7 +6,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 from .auth import role_required
 from sqlalchemy.sql import func
-import pdfkit
+# import pdfkit
 import os
 
 
@@ -412,39 +412,39 @@ def make_payment(ad_request_id):
     return render_template('sponsor/make_payment.html', ad_request=adrequest_with_details)
 
 
-if os.name == 'nt':
-    path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-else:
-    path_to_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'
+# if os.name == 'nt':
+#     path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+# else:
+#     path_to_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'
     
-config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+# config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 
-@sponsor.route('/download_transactions_pdf')
-@role_required('Sponsor')
-@login_required
-def download_transactions_pdf():
-    transactions = Transaction.query.all()
-    transaction_with_details=[]
-    for transaction in transactions:
-        influencer = Influencer.query.get(transaction.influencer_id)
-        influencer_name=influencer.name
-        influencer_platform=influencer.platform
-        ad_request=AdRequest.query.get(transaction.ad_request_id)
-        campaign_id=ad_request.campaign_id
-        campaign=Campaign.query.get(campaign_id)
-        campaign_name=campaign.name
-        transaction_with_details.append({
-            'transaction': transaction,
-            'influencer_name':influencer_name,
-            'influencer_platform':influencer_platform,
-            'campaign_name':campaign_name
-        })
-    html = render_template('Sponsor/payment_history.html', transactions=transaction_with_details)
+# @sponsor.route('/download_transactions_pdf')
+# @role_required('Sponsor')
+# @login_required
+# def download_transactions_pdf():
+#     transactions = Transaction.query.all()
+#     transaction_with_details=[]
+#     for transaction in transactions:
+#         influencer = Influencer.query.get(transaction.influencer_id)
+#         influencer_name=influencer.name
+#         influencer_platform=influencer.platform
+#         ad_request=AdRequest.query.get(transaction.ad_request_id)
+#         campaign_id=ad_request.campaign_id
+#         campaign=Campaign.query.get(campaign_id)
+#         campaign_name=campaign.name
+#         transaction_with_details.append({
+#             'transaction': transaction,
+#             'influencer_name':influencer_name,
+#             'influencer_platform':influencer_platform,
+#             'campaign_name':campaign_name
+#         })
+#     html = render_template('Sponsor/payment_history.html', transactions=transaction_with_details)
     
-    # Convert the HTML to PDF
-    pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
+#     # Convert the HTML to PDF
+#     pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
     
-    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
+#     return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
     
 @sponsor.route('/view_ratings')
 @role_required('Sponsor')
