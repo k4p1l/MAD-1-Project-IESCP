@@ -1,0 +1,240 @@
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/admin_css/campaign_stats.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">X</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3"></div>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="col-1">
+      <div class="row-1">
+        <div>
+          <h1 class="mb-4">Campaigns by visibility</h1>
+          <canvas
+            id="camapigns_by_visibility"
+            height="200px"
+            width="200px"
+          ></canvas>
+        </div>
+        <div>
+          <h1 class="mb-4">Ad Requests by status</h1>
+          <canvas id="ads_by_status" height="200px" width="200px"></canvas>
+        </div>
+        <div class="mr-4">
+          <h1 class="mb-4">AdRequests by Payment Status</h1>
+          <canvas
+            id="ads_by_payment_status"
+            height="200px"
+            width="300px"
+          ></canvas>
+        </div>
+      </div>
+      <div class="row-2">
+        <div>
+          <canvas id="campaign_by_niche" width="980px" height="300px"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-2">
+      <div class="table-wrapper">
+        <table>
+          <tr>
+            <th>Total Campaigns</th>
+            <td>{{ campaign_count }}</td>
+          </tr>
+          <tr>
+            <th>Total Budget</th>
+            <td>Rs. {{total_budget}}</td>
+          </tr>
+          <tr>
+            <th>Average Budget of Campaign</th>
+            <td>Rs. {{average_campaign_budget}}</td>
+          </tr>
+          <tr>
+            <th>Total No. of ad requests</th>
+            <td>{{total_request_count}}</td>
+          </tr>
+          <tr>
+            <th>No. of Bookmarked Campaigns</th>
+            <td>{{bookmark_count}}</td>
+          </tr>
+          <tr>
+            <th>Most Popular Niche</th>
+            <td>
+              {{first_most_populated_niche}} <br />
+              {{second_most_populated_niche}}
+            </td>
+          </tr>
+          <tr>
+            <th>Most Popular Influencer Niche</th>
+            <td>{{most_popular_influencer_niche}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    const ctx = document.getElementById("ads_by_status").getContext("2d");
+    var ads_by_status = new Chart(ctx, {
+        type:"doughnut",
+        data: {
+            labels:{{ads_by_status_labels | safe}},
+            datasets: [{
+                label: "Ads by Status",
+                data:{{ads_by_status_values | safe}},
+                backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'],
+                borderColor: [ 'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'],
+                hoverOffset: 16,
+                borderWidth: 1
+            }]
+        },
+        options:{
+            responsive:false,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    })
+
+
+  const ctx2 = document.getElementById("camapigns_by_visibility").getContext("2d");
+  var camapigns_by_visibility = new Chart(ctx2, {
+      type:"doughnut",
+      data: {
+          labels:{{campaign_by_visibility_labels | safe}},
+          datasets: [{
+              label: "Campaigns by Visibility",
+              data:{{campaign_by_visibility_values | safe}},
+              backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)'],
+              borderColor: [ 'rgba(75, 192, 192, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'],
+                  hoverOffset: 16,
+              borderWidth: 1
+          }]
+      },
+      options:{
+          responsive:false,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  })
+
+  const ctx3 = document.getElementById("ads_by_payment_status").getContext("2d");
+  var ads_by_payment_status = new Chart(ctx3, {
+      type:"doughnut",
+      data: {
+          labels:{{ads_by_payment_labels | safe}},
+          datasets: [{
+              label: "Ads by Payment Status",
+              data:{{ads_by_payment_values | safe}},
+              backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)'],
+              borderColor: [ 'rgba(75, 192, 192, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'],
+                  hoverOffset: 16,
+              borderWidth: 1
+          }]
+      },
+      options:{
+          responsive:false,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  })
+
+  const ct=document.getElementById("campaign_by_niche").getContext("2d");
+  var campaign_by_niche = new Chart(ct, {
+      type:"bar",
+      data: {
+          labels:{{campaign_by_niche_labels | safe}},
+          datasets: [{
+              label: "Campaigns by Niche",
+              data:{{campaign_by_niche_values | safe}},
+              backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)'],
+              borderColor: [ 'rgba(75, 192, 192, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'],
+                  hoverOffset: 16,
+              borderWidth: 1
+          }]
+      },
+      options:{
+          responsive:false,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  })
+</script>
+
+{% endblock %}

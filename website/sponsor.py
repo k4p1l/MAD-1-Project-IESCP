@@ -251,7 +251,6 @@ def browse_influencers(campaign_id):
 @role_required('Sponsor')
 def view_all_influencers(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-    # Logic to retrieve and display all influencers without any filters applied
     influencers = Influencer.query.all()
     return render_template('Sponsor/browse_influencers.html', influencers=influencers,campaign=campaign)
 

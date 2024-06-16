@@ -319,7 +319,7 @@ def viewCampaigns():
         search_query = request.form.get('search_query')
         campaigns = Campaign.query.filter(Campaign.name.ilike(f'%{search_query}%')).all()
     else:
-        campaigns = Campaign.query.all()
+        campaigns = Campaign.query.filter_by(flagged=False).all()
     for campaign in campaigns:
         campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id,
                                                           campaign_id=campaign.id).first() is not None
@@ -393,6 +393,8 @@ def bookmark_campaign(campaign_id):
 @role_required('Influencer')
 @login_required
 def view_bookmarks():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
     campaigns = Campaign.query.all()
     for campaign in campaigns:
         campaign.is_bookmarked = Bookmark.query.filter_by(user_id=current_user.id,
@@ -400,7 +402,7 @@ def view_bookmarks():
     influencer_bookmarks = Bookmark.query.filter_by(user_id=current_user.id).all()
     bookmarked_campaigns = [Campaign.query.get(bookmark.campaign_id) for bookmark in influencer_bookmarks]
 
-    return render_template('Influencer/Bookmarks.html', bookmarked_campaigns=bookmarked_campaigns, campaigns=campaigns)
+    return render_template('Influencer/Bookmarks.html', bookmarked_campaigns=bookmarked_campaigns, campaigns=campaigns,influencer=influencer)
 
 
 @influencer.route('/search_campaigns', methods=['GET', 'POST'])

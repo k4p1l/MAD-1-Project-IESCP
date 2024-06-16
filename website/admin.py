@@ -56,16 +56,26 @@ def influencer_stats():
     most_populated_niche= db.session.query(Influencer.niche, func.count(Influencer.niche)).group_by(Influencer.niche).order_by(func.count(Influencer.niche).desc()).first()
     average_influencer_balance = db.session.query(db.func.avg(Influencer.bank_account_balance)).scalar() or 0
     influencers_by_niche= db.session.query(Influencer.niche, func.count(Influencer.niche)).group_by(Influencer.niche).all()
+    influencers_by_niche_labels= [influencer[0] for influencer in influencers_by_niche]
+    influencers_by_niche_values= [influencer[1] for influencer in influencers_by_niche]
+
     influencers_by_platform= db.session.query(Influencer.platform, func.count(Influencer.platform)).group_by(Influencer.platform).all()
+    influencers_by_platform_labels= [influencer[0] for influencer in influencers_by_platform]
+    influencers_by_platform_values= [influencer[1] for influencer in influencers_by_platform]
+
     average_influencer_reach= db.session.query(db.func.avg(Influencer.reach)).scalar() or 0
 
     return render_template('Admin/influencer_stats.html',influencer_count=influencer_count,
                            most_used_platform=most_used_platform,
                            most_populated_niche=most_populated_niche,
                            average_influencer_balance=average_influencer_balance,
-                           influencers_by_niche=influencers_by_niche,
+                           influencers_by_niche_labels=influencers_by_niche_labels,
+                           influencers_by_niche_values=influencers_by_niche_values,
                            influencers_by_platform=influencers_by_platform,
-                           average_influencer_reach=average_influencer_reach
+                           average_influencer_reach=average_influencer_reach,
+                           influencers_by_platform_labels=influencers_by_platform_labels,
+                           influencers_by_platform_values=influencers_by_platform_values
+                        
                            )
 
 @admin.route('/sponsor_stats')
@@ -97,31 +107,205 @@ def transaction_stats():
 @role_required('Admin')
 @login_required
 def campaign_stats():
+    campaign_count = Campaign.query.count()
     campaigns_by_visibility = db.session.query(
         Campaign.visibility, db.func.count(Campaign.id)
     ).group_by(Campaign.visibility).all()
 
+    campaign_by_visibility_labels = [campaign[0] for campaign in campaigns_by_visibility]
+    campaign_by_visibility_values = [campaign[1] for campaign in campaigns_by_visibility]
+
+    most_populated_niches= db.session.query(Campaign.niche, func.count(Campaign.niche)).group_by(Campaign.niche).order_by(func.count(Campaign.niche).desc()).limit(2).all()
+    # Extracting the first and second values
+    if len(most_populated_niches) > 1:
+        first_most_populated_niche = most_populated_niches[0]
+        second_most_populated_niche = most_populated_niches[1]
+    else:
+        first_most_populated_niche = most_populated_niches[0]
+        second_most_populated_niche = None
     campaigns_by_niche = db.session.query(
         Campaign.niche, db.func.count(Campaign.id)
     ).group_by(Campaign.niche).all()
 
-    campaigns_by_status = db.session.query(
-        Campaign.status, db.func.count(Campaign.id)
-    ).group_by(Campaign.status).all()
-    labels_campaign_by_status=[campaign[0] for campaign in campaigns_by_status]
-    values_campaign_by_status=[campaign[1] for campaign in campaigns_by_status]
+    campaign_by_niche_labels = [campaign[0] for campaign in campaigns_by_niche]
+    campaign_by_niche_values = [campaign[1] for campaign in campaigns_by_niche]
 
-    average_campaign_budget= db.session.query(db.func.avg(Campaign.budget)).scalar() or 0
-    bookmark_count = Bookmark.query.count()
-
+ # Fetch ad_requests data
+    ad_requests_data = db.session.query(
+        AdRequest.status, func.count(AdRequest.id)
+    ).group_by(AdRequest.status).all()
     
+    # Fetch campaign_requests data
+    campaign_requests_data = db.session.query(
+        campaignRequest.status, func.count(campaignRequest.id)
+    ).group_by(campaignRequest.status).all()
+
+    # Combine both data sets
+    combined_requests_data = {}
+    for status, count in ad_requests_data + campaign_requests_data:
+        if status in combined_requests_data:
+            combined_requests_data[status] += count
+        else:
+            combined_requests_data[status] = count
+    
+    ads_by_status_labels = list(combined_requests_data.keys())
+    ads_by_status_values = list(combined_requests_data.values())
+
+    ad_requests_data_1= db.session.query(
+        AdRequest.payment_done, 
+        func.count(AdRequest.id)).group_by(AdRequest.payment_done).all()
+    
+    campaign_requests_data_1= db.session.query(
+        campaignRequest.payment_done, 
+        func.count(campaignRequest.id)).group_by(campaignRequest.payment_done).all()
+
+    combined_requests_data_1 = {}
+    for status, count in ad_requests_data_1 + campaign_requests_data_1:
+        if status in combined_requests_data_1:
+            combined_requests_data_1[status] += count
+        else:
+            combined_requests_data_1[status] = count
+    status_mapping = {
+    False: 'Payment Pending',
+    True: 'Payment Done'
+}
+    renamed_combined_requests_data_1 = {status_mapping[status]: count for status, count in combined_requests_data_1.items()}
+    
+    ads_by_status_labels_1 = list(renamed_combined_requests_data_1.keys())
+    ads_by_status_values_1 = list(renamed_combined_requests_data_1.values())
+
+    average_campaign_budget= db.session.query(func.round(func.avg(Campaign.budget)),2).scalar() or 0
+    ad_request_count= db.session.query(func.count(AdRequest.id)).scalar() or 0
+    campaign_request_count= db.session.query(func.count(campaignRequest.id)).scalar() or 0
+    total_request_count= ad_request_count + campaign_request_count
+    total_budget= db.session.query(func.sum(Campaign.budget)).scalar() or 0
+    bookmark_count = Bookmark.query.count()
+    most_popular_influencer_niche= db.session.query(Influencer.niche, func.count(Influencer.niche)).group_by(Influencer.niche).order_by(func.count(Influencer.niche).desc()).first()
     return render_template('Admin/campaign_stats.html', 
+                           total_request_count=total_request_count,
+                           total_budget=total_budget,
+                           first_most_populated_niche=first_most_populated_niche,
+                           second_most_populated_niche=second_most_populated_niche,
+                            most_popular_influencer_niche=most_popular_influencer_niche,
+                            campaign_count=campaign_count,
                             bookmark_count=bookmark_count,
                             campaigns_by_visibility=campaigns_by_visibility,
                             campaigns_by_niche=campaigns_by_niche,
-                            campaigns_by_status=campaigns_by_status,
-                            labels_campaign_by_status=labels_campaign_by_status,
-                            values_campaign_by_status=values_campaign_by_status,
-                            average_campaign_budget=average_campaign_budget)
+                            average_campaign_budget=average_campaign_budget,
+                            ads_by_status_labels=ads_by_status_labels,
+                            ads_by_status_values=ads_by_status_values,
+                            campaign_by_visibility_labels=campaign_by_visibility_labels,
+                            campaign_by_visibility_values=campaign_by_visibility_values,
+                            campaign_by_niche_labels=campaign_by_niche_labels,
+                            campaign_by_niche_values=campaign_by_niche_values,
+                            ads_by_payment_labels=ads_by_status_labels_1,
+                            ads_by_payment_values=ads_by_status_values_1
+                            )
 
 
+
+@admin.route('view_campaigns', methods=['GET', 'POST'])
+@role_required('Admin')
+@login_required
+def view_campaigns():
+
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        campaigns = Campaign.query.filter(Campaign.name.ilike(f'%{search_query}%')).all()
+    else:
+        campaigns = Campaign.query.all()
+    return render_template('Admin/view_campaigns.html', campaigns=campaigns)
+
+@admin.route('/flag_campaign/<int:campaign_id>', methods=['POST'])
+@login_required
+def flag_campaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    campaign.flagged = True
+    db.session.commit()
+    flash('Campaign flagged!', category='success')
+    return redirect(url_for('admin.view_campaigns'))
+
+@admin.route('/unflag_campaign/<int:campaign_id>', methods=['POST'])
+@login_required
+def unflag_campaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    campaign.flagged = False
+    db.session.commit()
+    flash('Campaign unflagged!', category='success')
+    return redirect(url_for('admin.view_flagged_campaigns'))
+
+@admin.route('/delete_campaign/<int:campaign_id>', methods=['POST'])
+@login_required
+def delete_campaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    db.session.delete(campaign)
+    db.session.commit()
+    flash('Campaign deleted!', category='success')
+    return redirect(url_for('admin.view_flagged_campaigns'))
+
+@admin.route('/view_flagged_campaigns')
+@login_required
+def view_flagged_campaigns():
+    campaigns = Campaign.query.filter_by(flagged=True).all()
+    return render_template('Admin/view_flagged_campaigns.html', campaigns=campaigns)
+
+@admin.route('/view_influencers', methods=['GET', 'POST'])
+@role_required('Admin') 
+@login_required
+def view_influencers():
+    # Get parameters from the request
+    reach = request.args.get('reach')
+    niche = request.args.get('niche')
+
+    # Base query
+    query = Influencer.query
+
+    # Apply filters if provided
+    if reach:
+        query = query.filter(Influencer.reach >= int(reach))
+    if niche:
+        query = query.filter(Influencer.niche == niche)
+
+    # Execute the query
+    filtered_influencers = query.all()
+    return render_template('Admin/view_influencers.html', influencers=filtered_influencers)
+
+@admin.route('/view_all_influencers')
+@role_required('Admin')
+@login_required
+def view_all_influencers():
+    influencers=Influencer.query.all()
+    return render_template('Admin/view_influencers.html',influencers=influencers)
+
+@admin.route('/flag_influencer/<int:influencer_id>', methods=['POST'])
+@login_required
+def flag_influencer(influencer_id):
+    influencer = Influencer.query.get_or_404(influencer_id)
+    influencer.flagged = True
+    db.session.commit()
+    flash('Influencer flagged!', category='success')
+    return redirect(url_for('admin.view_influencers'))
+
+@admin.route('/unflag_influencer/<int:influencer_id>', methods=['POST'])
+@login_required
+def unflag_influencer(influencer_id):
+    influencer = Influencer.query.get_or_404(influencer_id)
+    influencer.flagged = False
+    db.session.commit()
+    flash('Influencer Reinstated!', category='success')
+    return redirect(url_for('admin.view_flagged_influencers'))
+
+@admin.route('/delete_influencer/<int:influencer_id>', methods=['POST'])
+@login_required
+def delete_influencer(influencer_id):
+    influencer = Influencer.query.get_or_404(influencer_id)
+    db.session.delete(influencer)
+    db.session.commit()
+    flash('Influencer deleted!', category='success')
+    return redirect(url_for('admin.view_influencers'))
+
+@admin.route('/view_flagged_influencers')
+@login_required
+def view_flagged_influencers():
+    influencers = Influencer.query.filter_by(flagged=True).all()
+    return render_template('Admin/view_flagged_influencers.html', influencers=influencers)

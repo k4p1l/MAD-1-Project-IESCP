@@ -28,7 +28,7 @@ class Campaign(db.Model):
     goals = db.Column(db.Text, nullable=False)
     niche= db.Column(db.String(100), nullable=False)
     status= db.Column(db.String(100), nullable=False,default='Incomplete')
-
+    flagged = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
 
@@ -44,6 +44,7 @@ class Influencer(db.Model, UserMixin):
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     platform= db.Column(db.String(100), nullable=False)
     bank_account_balance = db.Column(db.Float, default=0.0)
+    flagged= db.Column(db.Boolean, default=False)
 
 
 class AdRequest(db.Model):

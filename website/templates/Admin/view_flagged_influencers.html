@@ -1,0 +1,122 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/browse_influencer.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+        <a href="{{ url_for('admin.view_influencers') }}" class="view">
+          View all Influencers
+        </a>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="col">
+      <div class="header">
+        <h1>ALL FLAGGED Influencers</h1>
+      </div>
+      <div class="main-container">
+        <div class="col-1">
+          <form action="{{ url_for('admin.view_influencers') }}" method="get">
+            <p>Filters</p>
+            <label for="reach">Minimum Reach</label>
+
+            <input type="number" id="reach" name="reach" class="cc-input" />
+            <br />
+
+            <label for="niche">Niche</label>
+
+            <select class="cc-input" id="niche" name="niche">
+              <option value="">Please select</option>
+              <option value="Tech">Tech</option>
+              <option value="Fashion and Beauty">Fashion and Beauty</option>
+              <option value="Fitness and Wellness">Fitness and Wellness</option>
+              <option value="Travel">Travel</option>
+              <option value="Food ">Food</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Finance and Investing">
+                Finance and Investing
+              </option>
+              <option value="Entertainment and Pop Culture">
+                Entertainment and Pop Culture
+              </option>
+            </select>
+            <br />
+
+            <a href="">
+              <button type="submit">Apply</button>
+            </a>
+
+            <a href="{{ url_for('admin.view_all_influencers') }}">
+              <button type="button">Remove</button></a
+            >
+          </form>
+        </div>
+        <div class="col-2">
+          {% for influencer in influencers %}
+
+          <div class="square">
+            <div class="pfp-wrapper">
+              <img
+                src="{{ url_for('static', filename='uploads/' + influencer.profile_picture) }}"
+                alt="{{ influencer.name }}'s profile picture"
+                class="pfp"
+              />
+            </div>
+            <div class="name">{{ influencer.name }}</div>
+            <div class="attributes">
+              <p>{{ influencer.niche }}</p>
+              <p>Reach: {{ influencer.reach }}</p>
+            </div>
+            <div class="more-info">
+              <img
+                src="{{ url_for('static', filename='Arrow.png') }}"
+                class="arrow"
+                alt="Arrow"
+              />
+              <table class="info-table">
+                <tr>
+                  <td>Email</td>
+                  <td>{{ influencer.email }}</td>
+                </tr>
+                <tr>
+                  <td>Platform</td>
+                  <td>{{ influencer.platform }}</td>
+                </tr>
+                <tr>
+                  <td>Rating</td>
+                  <td>5.0</td>
+                </tr>
+              </table>
+              <form
+                action="{{ url_for('admin.unflag_influencer', influencer_id=influencer.id) }}"
+                method="POST"
+              >
+                <button type="submit">REINSTATE</button>
+              </form>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -57,7 +57,9 @@
             </tr>
           </thead>
           <tbody>
-            {% for campaign in bookmarked_campaigns %}
+            {% for campaign in bookmarked_campaigns %} {% if influencer.flagged
+            == False %}
+
             <tr>
               <td>{{ campaign.name }}</td>
               <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
@@ -135,7 +137,8 @@
                 </form>
               </td>
             </tr>
-            {% endfor %}
+
+            {% endif %} {% endfor %}
           </tbody>
         </table>
       </div>

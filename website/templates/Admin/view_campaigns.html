@@ -1,0 +1,117 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/influencer_css/view_campaigns.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a class="view" href="{{ url_for('admin.view_flagged_campaigns') }}">View Flagged Campaigns</a>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="col">
+      <div class="header flex items-center justify-between">
+        <a href="{{ url_for('admin.view_campaigns') }}"
+          ><h1>All Campaigns</h1></a
+        >
+      </div>
+      <div class="main-container">
+        <div class="col-1">
+          <form action="{{url_for('admin.view_campaigns') }}" method="post">
+            <p>Search</p>
+            <div>
+              <label for="search_query">Campaign Name:</label>
+              <div class="form-field">
+                <input
+                  class="cc-input"
+                  type="text"
+                  id="search_query"
+                  name="search_query"
+                  required
+                />
+              </div>
+            </div>
+
+            <a href="">
+              <button type="submit">Search</button>
+            </a>
+          </form>
+        </div>
+        <div class="col-2">
+          {% for campaign in campaigns %}{% if campaign.flagged == False %}
+          <div class="square">
+            <div class="name">{{ campaign.name }}</div>
+            <div class="attributes">
+              <table class="info-table">
+                <tr>
+                  <th>Budget</th>
+                  <td>Rs. {{ campaign.budget }}</td>
+                </tr>
+                <tr>
+                  <th>Niche</th>
+                  <td>{{ campaign.niche }}</td>
+                </tr>
+                <tr>
+                  <th>Start Date</th>
+                  <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                <tr>
+                  <th>End Date</th>
+                  <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                <tr>
+                  <th>Visibility</th>
+                  <td>{{ campaign.visibility }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="more-info">
+              <img
+                src="{{ url_for('static', filename='Arrow.png') }}"
+                class="arrow"
+                alt="Arrow"
+              />
+
+              <table class="info-table">
+                <tr>
+                  <td>Description</td>
+                  <td>{{ campaign.description }}</td>
+                </tr>
+                <tr>
+                  <td>Goals</td>
+                  <td>{{ campaign.goals }}</td>
+                </tr>
+              </table>
+              <div class="flex gap-28">
+                <form
+                  action="{{ url_for('admin.flag_campaign', campaign_id=campaign.id) }}"
+                  method="POST"
+                >
+                  <button type="submit">Flag as Inappropriate</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

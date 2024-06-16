@@ -82,11 +82,18 @@
       </p>
       <a href="{{ url_for('views.logout') }}" class="view">logout</a>
     </div>
+    {% if influencer.flagged == True %}
+    <div class="nav-2 flagged">
+      <p class="text-center">You have been flagged by admin</p>
+    </div>
+    {% else%}
     <div class="nav-2">
       <p class="menu-button">the</p>
       <p class="x">x</p>
       <p class="menu-button">dashboard</p>
     </div>
+    {% endif %}
+
     <div class="nav-3">
       <a href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
         Find <br />
@@ -124,9 +131,7 @@
             <tr>
               <td>{{ influencer.niche }}</td>
               <td>{{ influencer.reach }}</td>
-              <td>
-                {{average_rating}}
-              </td>
+              <td>{{average_rating}}</td>
             </tr>
           </tbody>
         </table>

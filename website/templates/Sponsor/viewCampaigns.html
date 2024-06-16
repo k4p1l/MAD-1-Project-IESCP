@@ -51,6 +51,7 @@
             <th>Goals</th>
             <th class="link"></th>
             <th class="link"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +69,7 @@
             <td>Rs. {{ campaign.budget }}</td>
             <td>{{ campaign.description }}</td>
             <td>{{ campaign.goals }}</td>
+
             <td class="link danger">
               <form
                 action="{{ url_for('sponsor.deleteCampaign', campaign_id=campaign.id) }}"
@@ -86,6 +88,9 @@
                 <button type="submit">edit</button>
               </form>
             </td>
+            {% if campaign.flagged==True %}
+            <td class="status-rejected">Flagged by admin</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>

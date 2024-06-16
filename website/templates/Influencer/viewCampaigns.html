@@ -61,6 +61,7 @@
         <div class="col-2">
           {% for campaign in campaigns %} {% if campaign.niche == 'All' or
           campaign.niche == influencer.niche %}
+          {% if influencer.flagged == False %}
           <div class="square">
             <div class="name">{{ campaign.name }}</div>
             <div class="attributes">
@@ -173,6 +174,7 @@
               </div>
             </div>
           </div>
+          {% endif %}
           {% endif %} {% endfor %}
         </div>
       </div>
