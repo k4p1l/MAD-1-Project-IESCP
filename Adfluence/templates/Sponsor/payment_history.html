@@ -42,6 +42,10 @@
       .table-wrapper {
         padding-top: 10px;
         width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
       .table-wrapper h1 {
         text-align: center;
@@ -70,17 +74,24 @@
         letter-spacing: -0.4px;
         border-bottom: 2px solid #000;
       }
+      button {
+        background-color: transparent;
+        border: none;
+        font-family: Arame;
+      }
+      .wd-sm {
+        width: 40px;
+      }
     </style>
   </head>
 
   <body>
     <div class="table-wrapper">
-      <a href="{{ url_for('sponsor.download_transactions_pdf') }}"
-        ><h1>Transaction History</h1></a
-      >
+      <button onclick="window.print()"><h1>Transaction History</h1></button>
       <table>
         <thead>
           <tr>
+            <th class="wd-sm">Transaction ID</th>
             <th>Influencer Name</th>
             <th>Platform</th>
             <th>Campaign</th>
@@ -92,6 +103,7 @@
         <tbody>
           {%for transaction in transactions%}
           <tr>
+            <td class="wd-sm">{{transaction.transaction.id}}</td>
             <td>{{transaction.influencer_name}}</td>
             <td>{{transaction.influencer_platform}}</td>
             <td>{{transaction.campaign_name}}</td>

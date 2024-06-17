@@ -20,6 +20,7 @@
     </div>
     <div class="nav-3">
       <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      <a href="{{url_for('sponsor.export_csv')}}">Export CSV</a>
       <a
         href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
         class="view"
