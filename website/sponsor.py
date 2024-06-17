@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for,abort,send_file,Response
+from flask import Blueprint, render_template, request, flash, redirect, url_for,abort,Response
 from .models import Campaign,AdRequest,User,Influencer,campaignRequest,Transaction,Rating
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db   #means from __init__.py import db
+from . import db   
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 from .auth import role_required
@@ -9,15 +8,14 @@ from sqlalchemy.sql import func
 import pdfkit
 import os
 
-
 sponsor = Blueprint('sponsor', __name__)
 
 
+#---------- Sponsor Dashboard ------------------------#
 @sponsor.route('/dashboard', methods=['GET', 'POST'])
 @role_required('Sponsor')
 @login_required
 def dashboard():
-    print(os.name)
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
     campaign_requests = campaignRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
     campaign_requests_with_details = []
@@ -33,7 +31,6 @@ def dashboard():
                 'influencer_name':influencer_name})
         else:
             flash('Influencer not found', category='error')
-
             
     sent_requests = AdRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
     sent_requests_with_details = []
@@ -46,7 +43,7 @@ def dashboard():
         })
     return render_template('Sponsor/dashboard.html', user=current_user, active_campaigns=active_campaigns, campaign_requests=campaign_requests_with_details, sent_requests=sent_requests_with_details)
 
-
+#------------------- Campaign ------------------------#
 @sponsor.route('/createCampaign', methods=['GET', 'POST'])
 @role_required('Sponsor')
 @login_required
@@ -97,7 +94,6 @@ def viewCampaign(campaign_id):
                 'request_type': 'Received'})
         else:
             flash('Influencer not found', category='error')
-
     adrequests=AdRequest.query.filter_by(campaign_id=campaign_id).all()
     sent_requests_with_details = []
     for sent_request in adrequests:
@@ -108,7 +104,6 @@ def viewCampaign(campaign_id):
             'influencer_name': influencer_name,
             'request_type': 'Sent'
         })
-
     return render_template('Sponsor/viewCampaign.html', campaign=campaign,ad_requests=sent_requests_with_details,campaign_requests=campaign_requests_with_details)
 
 @sponsor.route('/viewCampaigns', methods=['GET'])
@@ -126,7 +121,6 @@ def deleteCampaign(campaign_id):
     if campaign.user_id != current_user.id:
         flash('You are not authorized to delete this campaign.', category='error')
         return redirect(url_for('sponsor.viewCampaigns'))
-
     db.session.delete(campaign)
     db.session.commit()
     flash('Campaign deleted successfully!', category='success')
@@ -172,9 +166,9 @@ def editCampaign(campaign_id):
         except ValueError as e:
             flash(f'Invalid input: {e}', category='error')
             return render_template('Sponsor/editCampaign.html', campaign=campaign)
-    
     return render_template('Sponsor/editCampaign.html', campaign=campaign)
 
+#-------------------------------- Ad request-------------------------------------#
 @sponsor.route('/campaign/<int:campaign_id>/create_ad_request', methods=['GET', 'POST'])
 @role_required('Sponsor')
 @login_required
@@ -223,37 +217,6 @@ def request_action(request_id, action):
     flash(f'Request has been {action}ed.', category='success')
     return redirect(url_for('sponsor.dashboard'))
 
-@sponsor.route('/campaign/<int:campaign_id>/browse_influencers')
-@login_required
-@role_required('Sponsor')
-def browse_influencers(campaign_id):
-    campaign = Campaign.query.get_or_404(campaign_id)
-
-     # Get parameters from the request
-    reach = request.args.get('reach')
-    niche = request.args.get('niche')
-
-
-    # Base query
-    query = Influencer.query
-
-    # Apply filters if provided
-    if reach:
-        query = query.filter(Influencer.reach >= int(reach))
-    if niche:
-        query = query.filter(Influencer.niche == niche)
-
-    # Execute the query
-    filtered_influencers = query.all()
-    return render_template('Sponsor/browse_influencers.html', influencers=filtered_influencers,campaign=campaign)
-
-@sponsor.route('/view_all_influencers/<int:campaign_id>')
-@role_required('Sponsor')
-def view_all_influencers(campaign_id):
-    campaign = Campaign.query.get_or_404(campaign_id)
-    influencers = Influencer.query.all()
-    return render_template('Sponsor/browse_influencers.html', influencers=influencers,campaign=campaign)
-
 @sponsor.route('/ad_request/<int:ad_request_id>/delete', methods=['POST'])
 @role_required('Sponsor')
 @login_required
@@ -272,30 +235,10 @@ def delete_ad_request(ad_request_id):
     flash('Ad request deleted successfully.', category='success')
     return redirect(url_for('sponsor.dashboard'))
 
-@sponsor.route('/viewCampaign/<int:campaign_id>/<int:ad_request_id>/confirm_completion', methods=['POST'])
-@role_required('Sponsor')
-@login_required
-def confirm_completion(campaign_id, ad_request_id):
-    request_type = request.form.get('request_type')
-
-    if request_type=='Sent':
-        ad_request = AdRequest.query.get_or_404(ad_request_id)
-        if ad_request.completed==True:
-            ad_request.completion_confirmed=True
-    
-    if request_type=='Received':
-        campaign_request = campaignRequest.query.get_or_404(ad_request_id)
-        if campaign_request.completed==True:
-            campaign_request.completion_confirmed=True
-    db.session.commit()
-    flash('Ad request completed successfully.', category='success')
-    return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
-
 @sponsor.route('/view_completed_ad_requests/<int:campaign_id>')
 @role_required('Sponsor')
 @login_required
 def view_completed_ad_requests(campaign_id):
-
     campaign = Campaign.query.get_or_404(campaign_id)
     campaignRequests=campaignRequest.query.filter_by(campaign_id=campaign_id,completion_confirmed=True).all()
     campaign_requests_with_details=[]
@@ -320,10 +263,59 @@ def view_completed_ad_requests(campaign_id):
             'influencer_name': influencer_name,
             'request_type': 'Sent'
         })
-        
-
     return render_template('Sponsor/view_completed_ad_requests.html', campaign=campaign,ad_requests=sent_requests_with_details,campaign_requests=campaign_requests_with_details)
 
+#---------------------------------View Influencers-----------------------------#
+@sponsor.route('/campaign/<int:campaign_id>/browse_influencers')
+@login_required
+@role_required('Sponsor')
+def browse_influencers(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+
+    # Get parameters from the request
+    reach = request.args.get('reach')
+    niche = request.args.get('niche')
+
+    # Base query
+    query = Influencer.query
+
+    # Apply filters if provided
+    if reach:
+        query = query.filter(Influencer.reach >= int(reach))
+    if niche:
+        query = query.filter(Influencer.niche == niche)
+
+    # Execute the query
+    filtered_influencers = query.all()
+    return render_template('Sponsor/browse_influencers.html', influencers=filtered_influencers,campaign=campaign)
+
+@sponsor.route('/view_all_influencers/<int:campaign_id>')
+@role_required('Sponsor')
+def view_all_influencers(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    influencers = Influencer.query.all()
+    return render_template('Sponsor/browse_influencers.html', influencers=influencers,campaign=campaign)
+
+@sponsor.route('/viewCampaign/<int:campaign_id>/<int:ad_request_id>/confirm_completion', methods=['POST'])
+@role_required('Sponsor')
+@login_required
+def confirm_completion(campaign_id, ad_request_id):
+    request_type = request.form.get('request_type')
+
+    if request_type=='Sent':
+        ad_request = AdRequest.query.get_or_404(ad_request_id)
+        if ad_request.completed==True:
+            ad_request.completion_confirmed=True
+    
+    if request_type=='Received':
+        campaign_request = campaignRequest.query.get_or_404(ad_request_id)
+        if campaign_request.completed==True:
+            campaign_request.completion_confirmed=True
+    db.session.commit()
+    flash('Ad request completed successfully.', category='success')
+    return redirect(url_for('sponsor.viewCampaign', campaign_id=campaign_id))
+
+#---------------------------------Payment Gateway-----------------------------#
 @sponsor.route('/payment_history/<int:user_id>')
 @role_required('Sponsor')
 @login_required
@@ -383,10 +375,8 @@ def make_payment(ad_request_id):
             #Validate card details
             if not card_number or len(card_number) != 16 or not card_number.isdigit():
                 flash('Invalid card number.Card number must be 16 digits.', category='error')
-            
-
             influencer_id = ad_request.influencer_id
-            
+        
             # Dummy payment processing
             transaction = Transaction(
                 ad_request_id=ad_request.id,
@@ -411,40 +401,41 @@ def make_payment(ad_request_id):
     return render_template('sponsor/make_payment.html', ad_request=adrequest_with_details)
 
 
-if os.name == 'nt':
-    path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-else:
-    path_to_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'
+# if os.name == 'nt':
+#     path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+# else:
+#     path_to_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'
     
-config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+# config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 
-@sponsor.route('/download_transactions_pdf')
-@role_required('Sponsor')
-@login_required
-def download_transactions_pdf():
-    transactions = Transaction.query.all()
-    transaction_with_details=[]
-    for transaction in transactions:
-        influencer = Influencer.query.get(transaction.influencer_id)
-        influencer_name=influencer.name
-        influencer_platform=influencer.platform
-        ad_request=AdRequest.query.get(transaction.ad_request_id)
-        campaign_id=ad_request.campaign_id
-        campaign=Campaign.query.get(campaign_id)
-        campaign_name=campaign.name
-        transaction_with_details.append({
-            'transaction': transaction,
-            'influencer_name':influencer_name,
-            'influencer_platform':influencer_platform,
-            'campaign_name':campaign_name
-        })
-    html = render_template('Sponsor/payment_history.html', transactions=transaction_with_details)
+# @sponsor.route('/download_transactions_pdf')
+# @role_required('Sponsor')
+# @login_required
+# def download_transactions_pdf():
+#     transactions = Transaction.query.all()
+#     transaction_with_details=[]
+#     for transaction in transactions:
+#         influencer = Influencer.query.get(transaction.influencer_id)
+#         influencer_name=influencer.name
+#         influencer_platform=influencer.platform
+#         ad_request=AdRequest.query.get(transaction.ad_request_id)
+#         campaign_id=ad_request.campaign_id
+#         campaign=Campaign.query.get(campaign_id)
+#         campaign_name=campaign.name
+#         transaction_with_details.append({
+#             'transaction': transaction,
+#             'influencer_name':influencer_name,
+#             'influencer_platform':influencer_platform,
+#             'campaign_name':campaign_name
+#         })
+#     html = render_template('Sponsor/payment_history.html', transactions=transaction_with_details)
     
-    # Convert the HTML to PDF
-    pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
+#     # Convert the HTML to PDF
+#     pdf = pdfkit.from_string(html, False, configuration=config,options={"enable-local-file-access": ""})
     
-    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
-    
+#     return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=transactions.pdf'})
+
+#-------------------------------Ratings-----------------------------#    
 @sponsor.route('/view_ratings')
 @role_required('Sponsor')
 @login_required
@@ -462,17 +453,13 @@ def rate_influencer(ad_request_id, request_type):
         ad_request=AdRequest.query.get_or_404(ad_request_id)
     else:
         ad_request=None
-
     if request_type=='Received':
         ad_request=campaignRequest.query.get_or_404(ad_request_id)
 
     if transaction.user_id != current_user.id:
         flash('You are not authorized to rate this transaction.', 'danger')
         return redirect(url_for('sponsor.dashboard'))
-    
     influencer=Influencer.query.get_or_404(transaction.influencer_id)
-
-
     if request.method == 'POST':
         rating_value = request.form.get('rating')
         review = request.form.get('review')

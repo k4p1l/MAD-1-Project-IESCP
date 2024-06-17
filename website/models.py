@@ -6,9 +6,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
-
 class User(db.Model, UserMixin):
-    
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
@@ -32,6 +30,7 @@ class Campaign(db.Model):
     flagged = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     ad_requests = db.relationship('AdRequest', backref='campaign', lazy=True)
+    campaign_requests = db.relationship('campaignRequest', backref='campaign', lazy=True)
 
 
 class Influencer(db.Model, UserMixin):
