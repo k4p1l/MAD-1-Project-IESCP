@@ -98,10 +98,14 @@ nav > div {
   line-height: 1;
 }
 .col h1 {
-  font-size: 40px;
+  font-size: 48px;
   text-align: center;
   font-family: aux;
   font-weight: normal;
+  color: #1c1723;
+  font-weight: bold;
+  margin-top: -10px;
+  margin-bottom: -10px;
 }
 .numbers {
   width: 100%;
@@ -164,7 +168,6 @@ nav > div {
 
 .col-2 {
   flex: 14;
-  /* background-color: aliceblue; */
   overflow-x: auto;
   overflow-y: auto;
   padding: 20px;
@@ -178,7 +181,7 @@ nav > div {
   font-weight: 900;
   margin-bottom: 0.25em;
   text-align: left;
-  color: #262c2c;
+  color: #1c1723;
   letter-spacing: -2px;
 }
 .col-1 form{
@@ -190,11 +193,11 @@ nav > div {
   background-color: transparent;
   border: none;
   font-family: aux;
-  color: #dee3e3;
+  color: #EAE6EF;
   font-size: 36px;
   cursor: pointer ;
   transition: all 0.3s ease-out;
-  background-color: #262c2c;
+  background-color: #1c1723;
   padding: 4px 12px 4px 12px;
   border-radius: 4px;
   margin-bottom: 8px;
@@ -203,7 +206,7 @@ nav > div {
 }
 
 .col-1 form button:hover{
-  color: #384243;
+  color: #1c1723;
   background-color: transparent;
 }
 
@@ -222,9 +225,9 @@ nav > div {
 }
 
 .square {
-  background-color: #262c2c;
+  background-color: #272031;
   border-radius: 16px;
-  color: #dee3e3;
+  color: #EAE6EF;
   max-width: 360px;
   display: flex;
   flex-direction: column;
@@ -255,7 +258,7 @@ nav > div {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 3.4rem;
   font-weight: bold;
-  color: #dee3e3;
+  color: #EAE6EF;
   width: 80%;
   transition: opacity 0.3s ease;
   letter-spacing: -2.4px;
@@ -283,7 +286,7 @@ nav > div {
   left: 0;
   width: 100%;
   height: 100%;
-  color: #dee3e3;
+  color: #EAE6EF;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -308,8 +311,8 @@ nav > div {
 .square:hover {
   transform: scale(1.05);
   border-radius: 0px;
-  background-color: #384243;
-  box-shadow: 0 4px 8px rgb(56, 66, 67);
+  background-color: #1c1723;
+  box-shadow: 0 4px 8px #1c1723;
 }
 
 .square:hover .pfp-wrapper,
@@ -320,7 +323,7 @@ nav > div {
 
 .more-info a {
   text-decoration: none;
-  color: #dee3e3;
+  color: #EAE6EF;
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing: -2px;
   font-weight: bold;

@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
+
 class User(db.Model, UserMixin):
     
     id = db.Column(db.Integer, primary_key=True)
@@ -100,3 +101,6 @@ class Rating(db.Model):
     rating = db.Column(db.Float, nullable=False)
     review = db.Column(db.Text, nullable=True)
     date = db.Column(db.DateTime, nullable=False, default=func.now())
+
+
+

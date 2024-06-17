@@ -86,22 +86,31 @@ def sponsor_stats():
     user_count = User.query.count()
 
     sponsor_count = user_count - influencer_count
-    sponsor_by_niche= db.session.query(User.niche, func.count(User.niche)).group_by(User.niche).all()
-    
-    
-
-    return render_template('Admin/sponsor_stats.html')
-
-@admin.route('/transaction_stats')
-@role_required('Admin')
-@login_required
-def transaction_stats():
+    most_populated_niche= db.session.query(User.niche, func.count(User.niche)).filter(User.role == "Sponsor").group_by(User.niche).order_by(func.count(User.niche).desc()).first()
+    sponsor_by_niche = db.session.query(User.niche,func.count(User.niche)).filter(User.role == "Sponsor").group_by(User.niche).all()
+    sponsor_by_niche_labels= [sponsor[0] for sponsor in sponsor_by_niche]
+    sponsor_by_niche_values= [sponsor[1] for sponsor in sponsor_by_niche]
     transaction_count = Transaction.query.count()
     total_transaction_amount = db.session.query(db.func.sum(Transaction.amount)).scalar() or 0
     average_transaction_amount = db.session.query(db.func.avg(Transaction.amount)).scalar() or 0
     transaction_by_request_type= db.session.query(Transaction.request_type, func.count(Transaction.request_type)).group_by(Transaction.request_type).all()
+    transaction_by_request_type_labels= [transaction[0] for transaction in transaction_by_request_type]
+    transaction_by_request_type_values= [transaction[1] for transaction in transaction_by_request_type]
 
-    return render_template('Admin/transaction_stats.html')
+    return render_template('Admin/sponsor_stats.html',
+                           most_populated_niche=most_populated_niche,
+                           sponsor_count=sponsor_count,
+                           transaction_count=transaction_count,
+                           total_transaction_amount=total_transaction_amount,
+                           average_transaction_amount=average_transaction_amount,
+                           transaction_by_request_type=transaction_by_request_type,
+                           transaction_by_request_type_labels=transaction_by_request_type_labels,
+                           transaction_by_request_type_values=transaction_by_request_type_values,
+                           sponsor_by_niche=sponsor_by_niche,
+                           sponsor_by_niche_labels=sponsor_by_niche_labels,
+                           sponsor_by_niche_values=sponsor_by_niche_values
+                           )
+
 
 @admin.route('/campaign_stats')
 @role_required('Admin')

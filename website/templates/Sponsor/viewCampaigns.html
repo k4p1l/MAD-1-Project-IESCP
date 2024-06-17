@@ -33,10 +33,7 @@
   <div class="content-wrapper">
     <div class="header-wrapper">
       <div class="header-1">
-        <h1>Active campaigns</h1>
-      </div>
-      <div class="header-2">
-        <h1></h1>
+        <h1 class="text-center">Active campaigns</h1>
       </div>
     </div>
     <div class="table-wrapper">
@@ -51,7 +48,6 @@
             <th>Goals</th>
             <th class="link"></th>
             <th class="link"></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +75,10 @@
                 <button type="submit">delete</button>
               </form>
             </td>
+            {% if campaign.flagged==True %}
+            <td class="status-rejected">Flagged by admin</td>
+            {% else %}
+
             <td class="link view">
               <form
                 action="{{ url_for('sponsor.editCampaign', campaign_id=campaign.id) }}"
@@ -88,8 +88,6 @@
                 <button type="submit">edit</button>
               </form>
             </td>
-            {% if campaign.flagged==True %}
-            <td class="status-rejected">Flagged by admin</td>
             {% endif %}
           </tr>
           {% endfor %}

@@ -60,19 +60,27 @@ nav > div {
 }
 
 .view:hover{
-    color: blue;
+    color: rgb(255, 255, 255);
 }
 
 .nav-1 {
   flex: 3;
+  transition: all 0.2s ease-out;
+}
+
+.nav-1:hover {
+  background: #b20811;
+  color: #fff;  
+  font-weight: bold;
+  flex: 3.2;
 }
 
 .nav-2 {
-  flex: 2.04;
+  flex: 3;
 }
 
 .nav-3 {
-  flex: 3;
+  flex: 2.4;
 }
 
 

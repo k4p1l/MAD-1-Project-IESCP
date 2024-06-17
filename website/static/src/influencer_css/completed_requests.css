@@ -111,7 +111,7 @@ nav > div {
 }
 
 .header-2 {
-  flex: 2.56;
+  flex: 2.2;
   background-color: #fff;
   border-radius: 10px;
   display: flex;
@@ -139,7 +139,7 @@ nav > div {
 .marquee span {
   font-family: up;
   font-size: 32px;
-  transform: translateX(80px);
+  transform: translateX(52px);
   transition: transform 0.5s ease-in-out;
   cursor: pointer;
 }
@@ -149,13 +149,13 @@ nav > div {
 }
 
 .marquee:hover span {
-  animation: marquee-animation 40s linear infinite;
+  animation: marquee-animation 20s linear infinite;
   color: #384243;
 }
 
 @keyframes marquee-animation {
   0% {
-    transform: translateX(80px);
+    transform: translateX(52px);
   }
   100% {
     transform: translateX(-100%);

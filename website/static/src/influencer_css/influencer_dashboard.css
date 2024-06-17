@@ -67,7 +67,7 @@ nav > div {
 .nav-2 {
   flex: 2;
 }
-.flagged{
+.flagged {
   background-color: #b20811;
   color: #fff;
   display: flex;
@@ -185,7 +185,6 @@ tr:hover {
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
-
 }
 
 .second-table {
@@ -246,7 +245,6 @@ tr:hover {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   letter-spacing: -2.4px;
-
 }
 .arrow {
   position: absolute;
@@ -352,11 +350,36 @@ button {
   opacity: 0;
   transform: translateX(-4px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  margin-left: 5px; 
+  margin-left: 5px;
   margin-top: 15px;
 }
 
 .btn-sec:hover .icon {
   opacity: 1;
   transform: translateX(0); /* Move the icon to its normal position */
+}
+.create ion-icon {
+  margin-top: 10.8px;
+  font-size: 20px;
+}
+
+.create {
+  position: relative;
+}
+
+.create ion-icon {
+  position: absolute;
+  left: 36px;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.create:hover ion-icon {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+}
+
+.create ion-icon {
+  transform: translateY(-50%) translateX(20px);
 }

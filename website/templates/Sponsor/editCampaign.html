@@ -84,11 +84,12 @@
             <div>
               <label class="cc-label" for="description">Description</label>
               <div class="form-field">
-                <textarea
-                  class="cc-textarea"
+                <input
+                  class="cc-input"
                   id="description"
+                  value="{{ campaign.description }}"
                   name="description"
-                  required>{{ campaign.description }}</textarea>
+                  required>
               </div>
             </div>
 
@@ -158,12 +159,13 @@
 
             <div>
               <label class="cc-label" for="goals">Goals:</label>
-              <textarea
+              <input
                 class="cc-input"
                 id="goals"
                 name="goals"
+                value="{{ campaign.goals }}"
                 required
-              >{{ campaign.goals }}</textarea>
+              >
             </div>
           </div>
           <label class="button-wrapper" for="submit-button">

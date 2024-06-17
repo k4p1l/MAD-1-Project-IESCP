@@ -1,0 +1,134 @@
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/admin_css/influencer_stats.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">X</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3"></div>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="col-1">
+      <canvas id="sponsors_by_niche" width="950px" height="600px"></canvas>
+    </div>
+
+    <div class="col-2">
+      <div class="pie">
+        <h1>Transactions by Requests</h1>
+        <canvas
+          id="transaction_by_request"
+          width="400px"
+          height="220px"
+        ></canvas>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <tr>
+            <th>Total Sponsors: </th>
+            <td>{{sponsor_count}}</td>
+          </tr>
+          <tr>
+            <th>
+              Transaction Count
+            </th>
+            <td>{{transaction_count}}</td>
+          </tr>
+          <tr>
+            <th>Total Transaction Amount</th>
+            <td>Rs. {{total_transaction_amount}}</td>
+          </tr>
+          <tr>
+            <th>Most Popular Niche</th>
+            <td>{{most_populated_niche}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var ctx = document.getElementById("sponsors_by_niche").getContext("2d");
+  var sponsor_by_niche = new Chart(ctx, {
+      type: "bar",
+      data: {
+          labels: {{sponsor_by_niche_labels | safe}},
+          datasets: [{
+              label: "Total Number ",
+              data: {{sponsor_by_niche_values | safe}},
+            backgroundColor: [ 'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)'],
+            borderColor: [ 'rgba(75, 192, 192, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)'],
+            borderWidth: 1
+          }]
+
+      },
+  options:{
+          responsive:false,
+              maintainAspectRatio: false,
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+  }
+  })
+
+  const ctx2 = document.getElementById("transaction_by_request").getContext("2d");
+  var transaction_by_request = new Chart(ctx2, {
+    type:"pie",
+    data:{
+      labels:{{transaction_by_request_type_labels | safe}},
+      datasets:[{
+        data:{{transaction_by_request_type_values | safe}},
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)'],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'],
+          hoverOffset: 16,
+        borderWidth: 1}]
+    },
+    options:{
+      responsive:false,
+      maintainAspectRatio: false,
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+    }
+  })
+</script>
+
+{% endblock %}

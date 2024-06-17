@@ -1,77 +1,59 @@
-{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
-content %}
-
-<section class="bg-white">
-  <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
-    <section
-      class="relative flex h-32 items-end bg-white lg:col-span-5 lg:h-full xl:col-span-6"
-    >
-      <img
-        src="../static/adfluenceflow1.png"
-        class="absolute inset-0 h-full w-full object-contain"
-        alt=""
-      />
-    </section>
-
-    <main
-      class="flex items-center justify-center px-4 py-4 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
-    >
-      <div class="max-w-xl lg:max-w-3xl">
-        <form method="POST" class="mt-8 grid grid-cols-6 gap-6">
-          <div class="col-span-6 sm:col-span-3">
-            <label
-              for="firstName"
-              class="block text-sm font-medium text-gray-700"
-            >
-              First Name
-            </label>
-
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              class="mt-1 px-1 py-2 h-8 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/src/signup.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="left-side">
+        <div class="img-wrapper">
+          <img class="spiderman-img" src="../static/lois.png" alt="" />
+        </div>
+        <div class="hero-text">
+          <div class="login-text">Sign-Up</div>
+          <div class="welcome">LOIS HERE,</div>
+          <div class="welcome">LETS GET YOU</div>
+          <div class="welcome">STARTED</div>
+        </div>
+      </div>
+      <div class="right-side">
+        <form method="POST">
+          <h1 class="title">Adfluence</h1>
+          <div class="form-field-wrapper">
+            <label for="firstName" class="label">NAME </label>
+            <input type="text" id="firstName" name="firstName" />
           </div>
-
-          <div class="col-span-6">
-            <label for="email" class="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="mt-1 px-1 py-2 h-8 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
+          <div class="form-field-wrapper">
+            <label class="label" for="email">EMAIL </label>
+            <input type="email" name="email" id="email" />
           </div>
-
-          <div class="col-span-6">
-            <label for="role" class="block text-sm font-medium text-gray-600">
-              Role
-            </label>
-
-            <select
-              name="role"
-              id="role"
-              class="mt-1.5 w-full p-2 pe-12 rounded-lg border-gray-300 text-gray-600 sm:text-sm"
-            >
-              <option value="">Please select</option>
+          <div class="form-field-wrapper">
+            <label class="label" for="role">ROLE</label>
+            <select name="role" id="role">
               <option value="Sponsor">Sponsor</option>
               <option value="Influencer">Influencer</option>
             </select>
           </div>
-          <div class="col-span-6">
-            <label for="niche" class="block text-sm font-medium text-gray-600">
-              Niche/Industry
-            </label>
-
-            <select
-              name="niche"
-              id="niche"
-              class="mt-1.5 w-full p-2 pe-12 rounded-lg border-gray-300 text-gray-600 sm:text-sm"
-            >
+          <div class="form-field-wrapper">
+            <label for="niche" class="label">NICHE:</label>
+            <select name="niche" id="niche">
               <option value="">Please select</option>
               <option value="Tech">Tech</option>
               <option value="Fashion and Beauty">Fashion and Beauty</option>
@@ -88,54 +70,24 @@ content %}
               </option>
             </select>
           </div>
-          <div class="col-span-6 sm:col-span-3">
-            <label
-              for="password1"
-              class="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
 
-            <input
-              type="password"
-              id="password1"
-              name="password1"
-              class="mt-1 px-1 py-2 h-8 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
+          <div class="form-field-wrapper">
+            <label class="label" for="password1">PASSWORD</label>
+            <input type="password" name="password1" id="password1" />
           </div>
-
-
-          <div class="col-span-6 sm:col-span-3">
-            <label
-              for="password2"
-              class="block text-sm font-medium text-gray-700"
-            >
-              Password Confirmation
-            </label>
-
-            <input
-              type="password"
-              id="password2"
-              name="password2"
-              class="mt-1 px-1 py-2 h-8 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
+          <div class="form-field-wrapper">
+            <label class="label" for="password2">CONFIRM PASSWORD</label>
+            <input type="password" name="password2" id="password2" />
           </div>
-
-          <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-            <button
-              class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
-            >
-              Create an account
-            </button>
-
-            <p class="mt-4 text-sm text-gray-500 sm:mt-0">
-              Already have an account?
-              <a href="/" class="text-gray-700 underline">Log in</a>.
-            </p>
+          <div class="form-field-wrapper">
+            <div class="signup">
+              <label for="signup">Already have an account ? </label>
+              <a href="/" class="signup-btn"> Login</a>
+            </div>
+            <button type="submit" class="btn">Create Account <ion-icon name="arrow-forward-sharp"></ion-icon></button>
           </div>
         </form>
       </div>
-    </main>
-  </div>
-</section>
-{% endblock %}
+    </div>
+  </body>
+</html>
