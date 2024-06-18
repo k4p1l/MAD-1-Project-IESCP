@@ -38,9 +38,15 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    from .api import Influencer
+    from .api import CampaignAPI
+    from .api import AdRequestAPI
+    from .api import UserAPI
+    from .api import InfluencerAPI
 
-    api.add_resource(Influencer, "/api/influencer")
+    api.add_resource(UserAPI, "/api/user/<int:id>", "/api/user")
+    api.add_resource(CampaignAPI, "/api/campaign/<int:id>", "/api/campaign")
+    api.add_resource(AdRequestAPI, "/api/adrequest/<int:id>", "/api/adrequest")
+    api.add_resource(InfluencerAPI, "/api/influencer/<int:id>", "/api/influencer")
     return app
 
 

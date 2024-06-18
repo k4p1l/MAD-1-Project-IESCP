@@ -13,7 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db  ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 from .auth import role_required
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, extract
 
 
 admin = Blueprint("admin", __name__)
@@ -330,6 +330,7 @@ def view_campaigns():
 
 
 @admin.route("/flag_campaign/<int:campaign_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def flag_campaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
@@ -340,6 +341,7 @@ def flag_campaign(campaign_id):
 
 
 @admin.route("/unflag_campaign/<int:campaign_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def unflag_campaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
@@ -350,6 +352,7 @@ def unflag_campaign(campaign_id):
 
 
 @admin.route("/delete_campaign/<int:campaign_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def delete_campaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
@@ -360,6 +363,7 @@ def delete_campaign(campaign_id):
 
 
 @admin.route("/view_flagged_campaigns")
+@role_required("Admin")
 @login_required
 def view_flagged_campaigns():
     campaigns = Campaign.query.filter_by(flagged=True).all()
@@ -399,6 +403,7 @@ def view_all_influencers():
 
 
 @admin.route("/flag_influencer/<int:influencer_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def flag_influencer(influencer_id):
     influencer = Influencer.query.get_or_404(influencer_id)
@@ -409,6 +414,7 @@ def flag_influencer(influencer_id):
 
 
 @admin.route("/unflag_influencer/<int:influencer_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def unflag_influencer(influencer_id):
     influencer = Influencer.query.get_or_404(influencer_id)
@@ -419,6 +425,7 @@ def unflag_influencer(influencer_id):
 
 
 @admin.route("/delete_influencer/<int:influencer_id>", methods=["POST"])
+@role_required("Admin")
 @login_required
 def delete_influencer(influencer_id):
     influencer = Influencer.query.get_or_404(influencer_id)
@@ -429,9 +436,63 @@ def delete_influencer(influencer_id):
 
 
 @admin.route("/view_flagged_influencers")
+@role_required("Admin")
 @login_required
 def view_flagged_influencers():
     influencers = Influencer.query.filter_by(flagged=True).all()
     return render_template(
         "Admin/view_flagged_influencers.html", influencers=influencers
+    )
+
+
+# Fetch transactions and group by date
+@admin.route("/transaction_stats")
+@role_required("Admin")
+@login_required
+def transaction_stats():
+    transactions = (
+        db.session.query(
+            extract("year", Transaction.date).label("year"),
+            extract("month", Transaction.date).label("month"),
+            func.count(Transaction.id).label("count"),
+        )
+        .group_by(extract("year", Transaction.date), extract("month", Transaction.date))
+        .all()
+    )
+    month_labels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
+    labels = []
+    transaction_counts = []
+
+    for record in transactions:
+        year = int(record.year)
+        month = int(record.month)
+        labels.append(f"{month_labels[month-1]} {year}")
+        transaction_counts.append(record.count)
+    transaction_count = Transaction.query.count()
+    total_transaction_amount = (
+        db.session.query(db.func.sum(Transaction.amount)).scalar() or 0
+    )
+    average_transaction_amount = (
+        db.session.query(db.func.avg(Transaction.amount)).scalar() or 0
+    )
+    return render_template(
+        "Admin/transactions_stats.html",
+        labels=labels,
+        transaction_counts=transaction_counts,
+        transaction_count=transaction_count,
+        total_transaction_amount=total_transaction_amount,
+        average_transaction_amount=average_transaction_amount,
     )

@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from datetime import datetime
+
 
 
 class User(db.Model, UserMixin):
@@ -20,8 +20,8 @@ class Campaign(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    end_date = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     budget = db.Column(db.Integer, nullable=False)
     visibility = db.Column(db.String(10), nullable=False)  # 'public' or 'private'
     goals = db.Column(db.Text, nullable=False)
@@ -109,4 +109,4 @@ class Rating(db.Model):
     ratee_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     rating = db.Column(db.Float, nullable=False)
     review = db.Column(db.Text, nullable=True)
-    date = db.Column(db.DateTime, nullable=False, default=func.now())
+    date = db.Column(db.Date, nullable=False, default=func.now())

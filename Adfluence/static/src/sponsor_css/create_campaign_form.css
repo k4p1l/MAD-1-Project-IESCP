@@ -299,3 +299,7 @@ nav > div {
   align-items: center;
   margin-top: -30px;
 }
+
+.hidden{
+  display: none;
+}

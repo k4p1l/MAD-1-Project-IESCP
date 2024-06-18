@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/admin_css/campaign_stats.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('admin.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">X</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3"></div>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="col-1">
+      <canvas id="transaction_by_month" width="950px" height="600px"></canvas>
+    </div>
+
+    <div class="col-2">
+      <div class="table-wrapper">
+        <table>
+          <tr>
+            <th>Transaction Count</th>
+            <td>{{ transaction_count }}</td>
+          </tr>
+          <tr>
+            <th>Total Transaction Amount</th>
+            <td>Rs. {{ total_transaction_amount }}</td>
+          </tr>
+          <tr>
+            <th>Average Transaction Amount</th>
+            <td>Rs. {{ average_transaction_amount }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ctx = document.getElementById("transaction_by_month").getContext("2d");
+  var transaction_by_month = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: {{ labels | safe }},
+      datasets: [
+        {
+          label: "Transactions by Month in 2024",
+          data: {{ transaction_counts | safe }},
+          backgroundColor: [
+            "rgba(153, 102, 255, 0.8)",
+            "rgba(255, 159, 64, 0.8)",
+          ],
+          borderColor: [
+
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+</script>
+
+{% endblock %}

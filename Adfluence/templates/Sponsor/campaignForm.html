@@ -88,7 +88,7 @@
                   id="description"
                   name="description"
                   required
-                >
+                />
               </div>
             </div>
 
@@ -177,12 +177,7 @@
 
             <div>
               <label class="cc-label" for="goals">Goals:</label>
-              <input
-                class="cc-input"
-                id="goals"
-                name="goals"
-                required
-              >
+              <input class="cc-input" id="goals" name="goals" required />
             </div>
           </div>
           <label class="button-wrapper" for="submit-button">
@@ -206,6 +201,18 @@
       nicheContainer.classList.add("hidden");
     }
   });
+
+  document
+    .getElementById("campaignForm")
+    .addEventListener("submit", function (event) {
+      const startDate = new Date(document.getElementById("start_date").value);
+      const endDate = new Date(document.getElementById("end_date").value);
+
+      if (startDate > endDate) {
+        event.preventDefault();
+        alert("End date must be after start date.");
+      }
+    });
 </script>
 
 {% endblock %}

@@ -122,9 +122,8 @@ nav > div {
 }
 
 .view:hover {
-  color: rgb(255, 255, 255);
+  color: blue;
 }
-
 .links {
   display: flex;
   flex-direction: column;
