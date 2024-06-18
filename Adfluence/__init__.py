@@ -42,10 +42,12 @@ def create_app():
     from .api import AdRequestAPI
     from .api import UserAPI
     from .api import InfluencerAPI
+    from .api import CampaignRequestAPI
 
     api.add_resource(UserAPI, "/api/user/<int:id>", "/api/user")
     api.add_resource(CampaignAPI, "/api/campaign/<int:id>", "/api/campaign")
     api.add_resource(AdRequestAPI, "/api/adrequest/<int:id>", "/api/adrequest")
+    api.add_resource(CampaignRequestAPI, "/api/CampaignRequest/<int:id>", "/api/CampaignRequest")
     api.add_resource(InfluencerAPI, "/api/influencer/<int:id>", "/api/influencer")
     return app
 
