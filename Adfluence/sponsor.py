@@ -161,8 +161,9 @@ def viewCampaign(campaign_id):
 @login_required
 def viewCampaigns():
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
-    return render_template("Sponsor/viewCampaigns.html",user=current_user, campaigns=active_campaigns)
-
+    return render_template(
+        "Sponsor/viewCampaigns.html", user=current_user, campaigns=active_campaigns
+    )
 
 @sponsor.route("/deleteCampaign/<int:campaign_id>", methods=["POST"])
 @role_required("Sponsor")
