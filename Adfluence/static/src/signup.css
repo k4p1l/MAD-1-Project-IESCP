@@ -179,8 +179,8 @@ select:focus {
   padding: 1rem 1rem;
   font-size: 18px;
   letter-spacing: -0.8px;
-  transition-duration: 0.1s;
-  transition-timing-function: linear;
+  transition-duration: 0.2s;
+  transition-timing-function:ease;
   margin-top: 12px;
 }
 
@@ -233,7 +233,7 @@ ion-icon {
   position: relative;
   top: 2px;
   left: 2px;
-  transition: all 0.1s ease-out;
+  transition: all 0.2s ease-out;
 }
 .btn:hover ion-icon {
   translate: 80px 0;

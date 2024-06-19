@@ -1,10 +1,9 @@
 {% extends "base.html" %} {% block head %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='src/influencer_css/view_campaigns.css') }}"
+  href="{{ url_for('static', filename='src/admin_css/view_sponsors.css') }}"
 />
 {% endblock %} {% block content %}
-
 <div class="container">
   <nav>
     <div class="nav-1">
@@ -20,24 +19,22 @@
       <p class="menu-button">dashboard</p>
     </div>
     <div class="nav-3">
-      <a class="view" href="{{ url_for('admin.view_campaigns') }}"
-        >View all Campaigns</a
+      <a class="view" href="{{ url_for('admin.view_sponsors') }}"
+        >View Sponsors</a
       >
     </div>
   </nav>
   <div class="content-wrapper">
     <div class="col">
       <div class="header flex items-center justify-between">
-        <a href="{{ url_for('admin.view_campaigns') }}"
-          ><h1>All flagged Campaigns</h1></a
-        >
+        <a href="{{ url_for('admin.view_sponsors') }}"><h1>All Sponsors</h1></a>
       </div>
       <div class="main-container">
         <div class="col-1">
-          <form action="{{url_for('admin.view_campaigns') }}" method="post">
+          <form action="{{url_for('admin.view_sponsors') }}" method="post">
             <p>Search</p>
             <div>
-              <label for="search_query">Campaign Name:</label>
+              <label for="search_query">Sponsor Name:</label>
               <div class="form-field">
                 <input
                   class="cc-input"
@@ -55,70 +52,47 @@
           </form>
         </div>
         <div class="col-2">
-          {% for campaign in campaigns %}
+          {% for sponsor in sponsors %}{% if sponsor.flagged == True %}
           <div class="square">
-            <div class="name">{{ campaign.name }}</div>
+            <div class="name">{{ sponsor.name }}</div>
             <div class="attributes">
               <table class="info-table">
+                <h3 class="text-left">Sponsor Info</h3>
+
                 <tr>
-                  <th>Budget</th>
-                  <td>Rs. {{ campaign.budget }}</td>
+                  <th>Email</th>
+                  <td>{{ sponsor.email }}</td>
                 </tr>
                 <tr>
                   <th>Niche</th>
-                  <td>{{ campaign.niche }}</td>
-                </tr>
-                <tr>
-                  <th>Start Date</th>
-                  <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
-                </tr>
-                <tr>
-                  <th>End Date</th>
-                  <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
-                </tr>
-                <tr>
-                  <th>Visibility</th>
-                  <td>{{ campaign.visibility }}</td>
+                  <td>{{ sponsor.niche }}</td>
                 </tr>
               </table>
             </div>
             <div class="more-info">
               <img
-                src="{{ url_for('static', filename='thinArrow1.png') }}"
+                src="{{ url_for('static', filename='Arrow.png') }}"
                 class="arrow"
                 alt="Arrow"
               />
-
-              <table class="info-table">
-                <tr>
-                  <td>Description</td>
-                  <td>{{ campaign.description }}</td>
-                </tr>
-                <tr>
-                  <td>Goals</td>
-                  <td>{{ campaign.goals }}</td>
-                </tr>
-              </table>
               <div class="flex gap-28">
                 <form
-                  action="{{ url_for('admin.unflag_campaign', campaign_id=campaign.id) }}"
+                  action="{{ url_for('admin.unflag_sponsor', user_id=sponsor.id) }}"
                   method="POST"
                 >
-                  <button type="submit">Unflag</button>
+                  <button type="submit">reinstate</button>
                 </form>
-                <form
-                  action="{{ url_for('admin.delete_campaign', campaign_id=campaign.id) }}"
-                  method="POST"
-                >
-                  <button type="submit">Delete</button>
+                <form action="{{ url_for('admin.delete_sponsor', user_id=sponsor.id) }}" method="POST">
+                  <button type="submit">delete</button>
                 </form>
               </div>
             </div>
           </div>
-          {% endfor %}
+          {% endif %} {% endfor %}
         </div>
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

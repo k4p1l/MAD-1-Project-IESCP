@@ -92,7 +92,6 @@ nav > div {
   flex-direction: column;
   gap: 1em;
   align-items: center;
-  
 }
 
 .col p {
@@ -102,8 +101,8 @@ nav > div {
 .col h1 {
   font-size: 40px;
   font-family: aux;
-  font-weight: bold;
-  color: #1d3031;
+  /* font-weight: bold; */
+  color: #6584cc;
   margin-top: -20px;
   padding-bottom: 0px;
 }
@@ -186,7 +185,7 @@ nav > div {
   font-weight: 900;
   margin-bottom: 0.25em;
   text-align: left;
-  color: #1d3031;
+  color: #6584cc;
   letter-spacing: -2px;
 }
 .col-1 form {
@@ -199,29 +198,34 @@ nav > div {
   background-color: transparent;
   border: none;
   font-family: aux;
-  color: #e6efef;
+  color: #EDF2FB;
   font-size: 36px;
   cursor: pointer;
   transition: all 0.3s ease-out;
-  background-color: #355253;
+  background-color: #6584cc;
   padding: 4px 12px 4px 12px;
   border-radius: 4px;
   width: 100%;
 }
+label{
+    color: #6584cc;
+    font-weight: bold;
+}
 
 .col-1 form button:hover {
-  background-color: #1d3031;
+    color:#6584cc;
+    background-color: transparent;
   transform: scale(0.95);
 }
 .col-1 form button:active {
   transform: scale(0.9);
-  color: #fff;
+  color: #5675bc;
 }
 
 .cc-input {
   text-transform: none;
   background-color: transparent;
-  border: 1px solid #6c757d;
+  border: 1px solid #6584cc;
   border-radius: 0.2em;
   width: 100%;
   height: auto;
@@ -232,13 +236,19 @@ nav > div {
   font-family: "Arame";
 }
 
-.square {
-  background-color: #355253;
+.cc-input:focus {
+    border: 2.5px solid #709BFF;
+    outline: none;
+}
+
+
+.square { 
+  background-color:#e2eafc ;
   border-radius: 30px;
-  color: #e6efef;
-  max-width: 360px;
-  min-width: 360px;
-  height: 470px;
+  color: #6584cc;
+  max-width: 300px;
+  min-width: 300px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -254,7 +264,7 @@ nav > div {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2.8rem;
   font-weight: bold;
-  color: #e6efef;
+  color: #6584cc;
   width: 80%;
   transition: opacity 0.3s ease;
   letter-spacing: -2.4px;
@@ -283,7 +293,7 @@ nav > div {
   left: 0;
   width: 100%;
   height: 100%;
-  color: #e6efef;
+  color: #4e6ebb;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -295,11 +305,11 @@ nav > div {
 }
 
 .arrow {
-  width: 70%;
+  width: 50%;
   height: auto;
   position: absolute;
-  top: -28px;
-  right: -34px;
+  top: 20px;
+  right: 20px;
   z-index: 6;
 }
 .square:hover .more-info {
@@ -309,8 +319,8 @@ nav > div {
 .square:hover {
   transform: scale(1.05);
   border-radius: 0px;
-  background-color: #1d3031;
-  box-shadow: 0 4px 8px rgb(56, 66, 67);
+  background-color: #e2eafc;
+  box-shadow: 0 4px 8px #4e6ebb;
 }
 
 .square:hover .pfp-wrapper,
@@ -321,7 +331,7 @@ nav > div {
 
 .more-info .info {
   text-decoration: none;
-  color: #e6efef;
+  color: #7fa0ed;
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing: -2px;
   font-weight: bold;
@@ -343,6 +353,6 @@ nav > div {
 .info-table th,
 .info-table td {
   padding: 10px;
-  border-bottom: 1px solid #e6efef;
+  border-bottom: 1px solid #7fa0ed;
   vertical-align: top;
 }

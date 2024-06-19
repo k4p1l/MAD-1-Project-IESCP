@@ -5,7 +5,6 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
@@ -13,10 +12,17 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(150))
     role = db.Column(db.String(20), nullable=True)
     niche = db.Column(db.String(100), nullable=True)
+    flagged = db.Column(db.Boolean, default=False)
     influencers = relationship("Influencer", backref="user", lazy=True)
+    campaigns = relationship("Campaign", backref="user", cascade="all, delete-orphan")
+    transactions = relationship(
+        "Transaction", backref="user", cascade="all,delete-orphan"
+    )
+    ratings = relationship("Rating", backref="user", cascade="all, delete-orphan")
 
 
 class Campaign(db.Model):
+    __tablename__ = "campaign"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -29,9 +35,11 @@ class Campaign(db.Model):
     status = db.Column(db.String(100), nullable=False, default="Incomplete")
     flagged = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    ad_requests = db.relationship("AdRequest", backref="campaign", lazy=True)
+    ad_requests = db.relationship(
+        "AdRequest", backref="campaign", cascade="all, delete-orphan"
+    )
     campaign_requests = db.relationship(
-        "campaignRequest", backref="campaign", lazy=True
+        "campaignRequest", backref="campaign", cascade="all, delete-orphan"
     )
 
 
@@ -47,6 +55,10 @@ class Influencer(db.Model, UserMixin):
     platform = db.Column(db.String(100), nullable=False)
     bank_account_balance = db.Column(db.Float, default=0.0)
     flagged = db.Column(db.Boolean, default=False)
+    transactions = relationship(
+        "Transaction", backref="influencer", cascade="all, delete-orphan"
+    )
+    ratings = relationship("Rating", backref="influencer", cascade="all, delete-orphan")
 
 
 class AdRequest(db.Model):
@@ -80,7 +92,9 @@ class campaignRequest(db.Model):
 class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey("campaign.id"), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    influencer_id = db.Column(
+        db.Integer, db.ForeignKey("influencer.id"), nullable=False
+    )
 
 
 class Transaction(db.Model):
@@ -96,7 +110,6 @@ class Transaction(db.Model):
     status = db.Column(db.Boolean, nullable=False, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     request_type = db.Column(db.String(150), nullable=False)
-    influencer = relationship("Influencer", backref="transactions")
     ratings = db.relationship("Rating", backref="transaction", lazy=True)
 
 
@@ -106,7 +119,7 @@ class Rating(db.Model):
         db.Integer, db.ForeignKey("transaction.id"), nullable=False
     )
     rater_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    ratee_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    ratee_id = db.Column(db.Integer, db.ForeignKey("influencer.id"), nullable=False)
     rating = db.Column(db.Float, nullable=False)
     review = db.Column(db.Text, nullable=True)
-    date = db.Column(db.Date, nullable=False, default=func.now())
+    date = db.Column(db.DateTime, nullable=False, default=func.now())

@@ -20,6 +20,7 @@
     </div>
     <div class="nav-3">
       {% if campaign.flagged == False %}
+      {% if user.flagged == False %}
       <a
         href="{{ url_for('sponsor.browse_influencers', campaign_id=campaign.id) }}"
         class="create view"
@@ -27,6 +28,7 @@
         find <ion-icon name="arrow-forward-sharp"></ion-icon> <br />
         Influencers
       </a>
+      {% endif %}
       {% endif %}
       <a
         href="{{url_for('sponsor.view_completed_ad_requests', campaign_id=campaign.id)}}"

@@ -19,8 +19,10 @@
       <p class="menu-button view">dashboard</p>
     </div>
     <div class="nav-3">
+      {% if user.flagged == False %}
       <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
-      <a href="{{url_for('sponsor.export_csv')}}">Export CSV</a>
+
+      {% endif %}
       <a
         href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
         class="view"
@@ -34,7 +36,20 @@
   <div class="content-wrapper">
     <div class="header-wrapper">
       <div class="header-1">
-        <h1 class="text-center">Active campaigns</h1>
+        <h1>Active campaigns</h1>
+      </div>
+      <div class="header-2">
+        <div class="marquee">
+          <span>
+            <a href="{{ url_for('influencer.view_ratings')}}">
+              Export Transactions as CSV &nbsp; Export Transactions as CSV
+              &nbsp; Export Transactions as CSV &nbsp; Export Transactions as
+              CSV &nbsp; Export Transactions as CSV &nbsp; Export Transactions
+              as CSV &nbsp; Export Transactions as CSV &nbsp; Export
+              Transactions as CSV &nbsp; Export Transactions as CSV &nbsp;
+            </a>
+          </span>
+        </div>
       </div>
     </div>
     <div class="table-wrapper">
@@ -96,6 +111,6 @@
       </table>
     </div>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}
+</div>

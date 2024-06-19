@@ -35,56 +35,59 @@ influencer = Blueprint("influencer", __name__)
 def dashboard():
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
-    avg_rating_query = (
-        db.session.query(func.avg(Rating.rating).label("average_rating"))
-        .filter(Rating.ratee_id == influencer.id)
-        .first()
-    )
-    average_rating = avg_rating_query.average_rating
     if influencer:
-        ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
-        campaignRequests = campaignRequest.query.filter_by(
-            influencer_id=influencer.id
-        ).all()
-        campaign_requests_with_details = []
-        for campaign_request in campaignRequests:
-            campaign = Campaign.query.get(campaign_request.campaign_id)
-            if campaign:
-                campaign_name = campaign.name
-                campaign_requests_with_details.append(
+        avg_rating_query = (
+            db.session.query(func.avg(Rating.rating).label("average_rating"))
+            .filter(Rating.ratee_id == influencer.id)
+            .first()
+        )
+        average_rating = avg_rating_query.average_rating
+        if influencer:
+            ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
+            campaignRequests = campaignRequest.query.filter_by(
+                influencer_id=influencer.id
+            ).all()
+            campaign_requests_with_details = []
+            for campaign_request in campaignRequests:
+                campaign = Campaign.query.get(campaign_request.campaign_id)
+                if campaign:
+                    campaign_name = campaign.name
+                    campaign_requests_with_details.append(
+                        {
+                            "campaign_request": campaign_request,
+                            "campaign_name": campaign_name,
+                        }
+                    )
+                else:
+                    flash("Campaign not found", category="error")
+
+            ad_requests_with_details = []
+            for ad_request in ad_requests:
+                campaign = Campaign.query.get(ad_request.campaign_id)
+                user = User.query.get(campaign.user_id)
+                ad_requests_with_details.append(
                     {
-                        "campaign_request": campaign_request,
-                        "campaign_name": campaign_name,
+                        "ad_request": ad_request,
+                        "campaign_name": campaign.name,
+                        "user_name": user.name,
                     }
                 )
-            else:
-                flash("Campaign not found", category="error")
 
-        ad_requests_with_details = []
-        for ad_request in ad_requests:
-            campaign = Campaign.query.get(ad_request.campaign_id)
-            user = User.query.get(campaign.user_id)
-            ad_requests_with_details.append(
-                {
-                    "ad_request": ad_request,
-                    "campaign_name": campaign.name,
-                    "user_name": user.name,
-                }
+            transactions = Transaction.query.filter_by(
+                influencer_id=influencer.id
+            ).all()
+
+            # Calculate total earnings
+            total_earnings = sum(transaction.amount for transaction in transactions)
+            return render_template(
+                "Influencer/dashboard.html",
+                campaign_requests=campaign_requests_with_details,
+                user=current_user,
+                influencer=influencer,
+                ad_requests=ad_requests_with_details,
+                total_earnings=total_earnings,
+                average_rating=average_rating,
             )
-
-        transactions = Transaction.query.filter_by(influencer_id=influencer.id).all()
-
-        # Calculate total earnings
-        total_earnings = sum(transaction.amount for transaction in transactions)
-        return render_template(
-            "Influencer/dashboard.html",
-            campaign_requests=campaign_requests_with_details,
-            user=current_user,
-            influencer=influencer,
-            ad_requests=ad_requests_with_details,
-            total_earnings=total_earnings,
-            average_rating=average_rating,
-        )
 
     return render_template("Influencer/dashboard.html")
 
@@ -237,16 +240,16 @@ def editInfluencer(influencer_id):
 
         profile_picture = request.files["profile_picture"]
         if profile_picture:
-            filename = secure_filename(profile_picture.filename)
-            profile_picture.save(
-                os.path.join(influencer.config["UPLOAD_FOLDER"], filename)
-            )
-            influencer.profile_picture = filename
-
-        db.session.commit()
-        flash("Influencer updated successfully!", category="success")
-        return redirect(url_for("influencer.dashboard"))
-
+            try:
+                filename = secure_filename(profile_picture.filename)
+                save_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+                profile_picture.save(save_path)
+                influencer.profile_picture = filename
+                db.session.commit()
+                flash("Influencer updated successfully!", category="success")
+                return redirect(url_for("influencer.dashboard"))
+            except Exception as e:
+                flash(f"Failed to save profile picture: {str(e)}", category="error")
     return render_template("Influencer/editInfluencer.html", influencer=influencer)
 
 
@@ -298,6 +301,11 @@ def deleteInfluencer(influencer_id):
     if influencer.user_id != current_user.id:
         flash("You are not authorized to delete this profile.", "error")
         return redirect(url_for("influencer.viewInfluencers"))
+    for rating in influencer.ratings:
+        db.session.delete(rating)
+
+    for transaction in influencer.transactions:
+        transaction.influencer_id = None
 
     db.session.delete(influencer)
     db.session.commit()
@@ -402,7 +410,7 @@ def viewCampaigns():
     for campaign in campaigns:
         campaign.is_bookmarked = (
             Bookmark.query.filter_by(
-                user_id=current_user.id, campaign_id=campaign.id
+                influencer_id=current_user.id, campaign_id=campaign.id
             ).first()
             is not None
         )
@@ -464,7 +472,7 @@ def bookmark_campaign(campaign_id):
     if request.method == "POST":
         # Check if the campaign is already bookmarked
         bookmark = Bookmark.query.filter_by(
-            user_id=current_user.id, campaign_id=campaign_id
+            influencer_id=current_user.id, campaign_id=campaign_id
         ).first()
         if bookmark:
             # If already bookmarked, remove the bookmark
@@ -472,7 +480,7 @@ def bookmark_campaign(campaign_id):
             db.session.commit()
         else:
             # If not bookmarked, create a new bookmark entry
-            new_bookmark = Bookmark(user_id=current_user.id, campaign_id=campaign_id)
+            new_bookmark = Bookmark(influencer_id=current_user.id, campaign_id=campaign_id)
             db.session.add(new_bookmark)
             db.session.commit()
         return redirect(url_for("influencer.viewCampaigns", campaign_id=campaign_id))
@@ -488,11 +496,11 @@ def view_bookmarks():
     for campaign in campaigns:
         campaign.is_bookmarked = (
             Bookmark.query.filter_by(
-                user_id=current_user.id, campaign_id=campaign.id
+                influencer_id=current_user.id, campaign_id=campaign.id
             ).first()
             is not None
         )
-    influencer_bookmarks = Bookmark.query.filter_by(user_id=current_user.id).all()
+    influencer_bookmarks = Bookmark.query.filter_by(influencer_id=current_user.id).all()
     bookmarked_campaigns = [
         Campaign.query.get(bookmark.campaign_id) for bookmark in influencer_bookmarks
     ]
@@ -517,7 +525,7 @@ def search_campaigns():
         for campaign in campaigns:
             campaign.is_bookmarked = (
                 Bookmark.query.filter_by(
-                    user_id=current_user.id, campaign_id=campaign.id
+                    influencer_id=current_user.id, campaign_id=campaign.id
                 ).first()
                 is not None
             )

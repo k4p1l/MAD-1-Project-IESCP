@@ -95,14 +95,14 @@ nav > div {
 }
 
 .col-1 {
-  flex: 5.45;
+  flex: 5;
   display: flex;
   flex-direction: column;
   gap: 2em;
 }
 
 .col-2 {
-  flex: 3;
+  flex: 3.4;
   display: flex;
   flex-direction: column;
 }
@@ -111,40 +111,19 @@ nav > div {
   line-height: 1;
 }
 .col-1 h1 {
-  font-size: 68px;
+  font-size: 52px;
   margin-top: -20px;
-  /* letter-spacing: -2px; */
   text-align: center;
   font-family: aux;
 }
-.numbers {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
-.numbers p {
-  flex: 1;
-}
-
-.numbers p:nth-child(3) {
-  text-align: right;
-}
-.numbers .hr {
-  flex: 5;
-  width: 100%;
-  height: 1.2px;
-  background: var(--black);
-  margin-bottom: 40px;
-}
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
   overflow-y: auto;
-  /* height: 100vh; */
   display: flex;
   justify-content: center;
+  margin-top: -14px;
 }
 
 .first-table {
@@ -190,7 +169,15 @@ tr:hover {
   transition: all 0.2s ease-out;
   font-family: "Arame";
 }
-
+.flagged {
+  background-color: #b20811;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
 .danger:hover {
   color: red;
 }
@@ -203,8 +190,10 @@ tr:hover {
 
 .col-2 h1 {
   font-family: aux;
-  font-size: 36px;
+  font-size: 46px;
   margin-bottom: 12px;
+  text-align: center;
+  margin-top: -20px;
 }
 
 .table-wrapper-2 {

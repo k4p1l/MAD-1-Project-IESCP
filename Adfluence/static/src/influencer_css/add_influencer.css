@@ -115,6 +115,10 @@ nav > div {
   text-align: center;
   font-family: aux;
 }
+
+.form-field {
+  margin-bottom: 20px;
+}
 .cc-input {
   text-transform: none;
   background-color: transparent;
@@ -122,27 +126,12 @@ nav > div {
   border-radius: 0.2em;
   width: 100%;
   height: auto;
-  margin-top: 0.4em;
   padding: 0.8em 1.2em 0.8em 1em;
   font-size: 1em;
   line-height: 1.2em;
   font-family: "Arame";
 }
 
-.cc-textarea {
-  text-transform: none;
-  background-color: transparent;
-  border: 1px solid #6c757d;
-  border-radius: 0.2em;
-  width: 100%;
-  height: auto;
-  margin-top: 0.4em;
-  padding: 0.8em 1.2em 0.8em 1em;
-  font-size: 1em;
-  line-height: 1.2em;
-  font-family: "Arame";
-  resize: none;
-}
 .button-wrapper {
   background-color: #000;
   color: #fff;
@@ -278,6 +267,6 @@ nav > div {
   align-items: center;
   margin-top: -30px;
 }
-.header h1{
-    font-family: Arame;
+.header h1 {
+  font-family: Arame;
 }

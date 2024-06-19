@@ -184,8 +184,8 @@ select:focus {
   padding: 0.8rem 1rem;
   font-size: 18px;
   letter-spacing: -1px;
-  transition-duration: 0.1s;
-  transition-timing-function: linear;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
   margin-top: 12px;
 }
 
@@ -236,12 +236,10 @@ select:focus {
 
 ion-icon {
   position: relative;
-  top: 2px;
-  left: 2px;
-  /* opacity: 0; */
-  transition: all 0.1s ease-out;
+  top: 2.5px;
+  left: 4px;
+  transition: all 0.2s ease-in-out;
 }
 .login-btn:hover ion-icon {
-  opacity: 1;
   translate: 110px 0;
 }

@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     api = Api(app)
     app.config["SECRET_KEY"] = "idkra&w"
-    app.config["UPLOAD_FOLDER"] = "website/static/uploads"
+    app.config["UPLOAD_FOLDER"] = "Adfluence/static/uploads"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_NAME}"
     db.init_app(app)
 
@@ -51,8 +51,3 @@ def create_app():
     api.add_resource(InfluencerAPI, "/api/influencer/<int:id>", "/api/influencer")
     return app
 
-
-def create_database(app):
-    if not path.exists("website/" + DB_NAME):
-        db.create_all(app=app)
-        print("Created Database!")

@@ -429,6 +429,11 @@ def unflag_influencer(influencer_id):
 @login_required
 def delete_influencer(influencer_id):
     influencer = Influencer.query.get_or_404(influencer_id)
+    for rating in influencer.ratings:
+        db.session.delete(rating)
+
+    for transaction in influencer.transactions:
+        transaction.influencer_id = None
     db.session.delete(influencer)
     db.session.commit()
     flash("Influencer deleted!", category="success")
@@ -443,6 +448,68 @@ def view_flagged_influencers():
     return render_template(
         "Admin/view_flagged_influencers.html", influencers=influencers
     )
+
+
+@admin.route("/view_sponsors", methods=["GET", "POST"])
+@role_required("Admin")
+@login_required
+def view_sponsors():
+    if request.method == "POST":
+        search_query = request.form.get("search_query")
+        base_query = User.query.filter_by(role="Sponsor")
+        sponsors = base_query.filter(User.name.ilike(f"%{search_query}%")).all()
+    else:
+        sponsors = User.query.filter_by(role="Sponsor").all()
+        print(sponsors)
+    return render_template("Admin/view_sponsors.html", sponsors=sponsors)
+
+
+@admin.route("/view_flagged_sponsors", methods=["GET", "POST"])
+@role_required("Admin")
+@login_required
+def view_flagged_sponsors():
+    sponsors = User.query.filter_by(flagged=True).all()
+    return render_template("Admin/view_flagged_sponsors.html", sponsors=sponsors)
+
+
+@admin.route("flag_sponsor/<int:user_id>", methods=["POST"])
+@role_required("Admin")
+@login_required
+def flag_sponsor(user_id):
+    user = User.query.get_or_404(user_id)
+    user.flagged = True
+    db.session.commit()
+    flash("Sponsor flagged!", category="success")
+    return redirect(url_for("admin.view_sponsors"))
+
+
+@admin.route("unflag_sponsor/<int:user_id>", methods=["POST"])
+@role_required("Admin")
+@login_required
+def unflag_sponsor(user_id):
+    user = User.query.get_or_404(user_id)
+    user.flagged = False
+    db.session.commit()
+    flash("Sponsor reinstated!", category="success")
+    return redirect(url_for("admin.view_flagged_sponsors"))
+
+
+@admin.route("delete_sponsor/<int:user_id>", methods=["POST"])
+@role_required("Admin")
+@login_required
+def delete_sponsor(user_id):
+    user = User.query.get_or_404(user_id)
+    for campaign in user.campaigns:
+        db.session.delete(campaign)
+    for rating in user.ratings:
+        db.session.delete(rating)
+    for transaction in user.transactions:
+        transaction.user_id = None
+    
+    db.session.delete(user)
+    db.session.commit()
+    flash("Sponsor deleted!", category="success")
+    return redirect(url_for("admin.view_sponsors"))
 
 
 # Fetch transactions and group by date

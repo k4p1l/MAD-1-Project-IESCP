@@ -229,6 +229,7 @@ nav > div {
   border-radius: 16px;
   color: #EAE6EF;
   max-width: 360px;
+  height: 490px;
   display: flex;
   flex-direction: column;
   align-items: center;

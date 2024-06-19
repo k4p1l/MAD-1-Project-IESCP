@@ -93,19 +93,15 @@ nav > div {
   display: flex;
   gap: 0.25em;
 }
-
 .header{
-  flex: 8;
   background-color: #fff;
-  color: #000;
   border-radius: 10px;
-  text-align: left;
-  padding: 0.8em 2em;
 }
-.header h1{
+.header h1 {
   font-family: up;
   font-size: 50px;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .header-1 {
@@ -114,7 +110,7 @@ nav > div {
   color: #000;
   border-radius: 10px;
   text-align: left;
-  padding: 0.8em 2em;
+  padding: 0.2em 2em;
 }
 
 .header-1 h1 {
@@ -124,9 +120,57 @@ nav > div {
 }
 
 .header-2 {
-  flex: 2;
+  flex: 4;
+  position: relative;
   background-color: #fff;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  transition: all 0.2s ease-out;
+}
+.header-2:hover {
+  background-color: #b20811;
+}
+
+.marquee {
+  width: 100%;
+  position: absolute;
+  padding: 1em 0;
+  overflow: hidden;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 0 auto;
+  bottom: 2px;
+}
+
+.marquee span {
+  font-family: up;
+  font-weight: normal;
+  letter-spacing: 1px;
+  font-size: 30px;
+  transform: translateX(12px);
+  transition: transform 0.5s ease-in-out;
+  cursor: pointer;
+}
+.marquee a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.marquee:hover span {
+  animation: marquee-animation 20s linear infinite;
+  color: #fff;
+}
+
+@keyframes marquee-animation {
+  0% {
+    transform: translateX(12px);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .table-wrapper {

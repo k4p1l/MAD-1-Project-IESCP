@@ -149,6 +149,7 @@ def viewCampaign(campaign_id):
         )
     return render_template(
         "Sponsor/viewCampaign.html",
+        user=current_user,
         campaign=campaign,
         ad_requests=sent_requests_with_details,
         campaign_requests=campaign_requests_with_details,
@@ -160,7 +161,7 @@ def viewCampaign(campaign_id):
 @login_required
 def viewCampaigns():
     active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
-    return render_template("Sponsor/viewCampaigns.html", campaigns=active_campaigns)
+    return render_template("Sponsor/viewCampaigns.html",user=current_user, campaigns=active_campaigns)
 
 
 @sponsor.route("/deleteCampaign/<int:campaign_id>", methods=["POST"])

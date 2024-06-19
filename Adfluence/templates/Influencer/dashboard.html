@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block head %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='src/influencer_css/influencer_dashboard.css') }}"
+  href="{{ url_for('static', filename='src/influencer_css/dashboard.css') }}"
 />
 {% endblock %} {% block content %}
 
@@ -10,32 +10,6 @@
   <div class="text-center cyp-wrapper">
     <a href="{{ url_for('influencer.addInfluencer') }}" class="cyp-btn btn-sec">
       <span class="text">COMPLETE YOUR PROFILE</span>
-      <span class="icon">
-        <svg
-          width="90"
-          height="90"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          transform="rotate(45)"
-        >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g
-            id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></g>
-          <g id="SVGRepo_iconCarrier">
-            <path
-              d="M6 18L18 6M18 6H9M18 6V15"
-              stroke="#384243"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </g>
-        </svg>
-      </span>
     </a>
     <svg
       width="60"
@@ -139,18 +113,28 @@
       <a
         href="{{ url_for('influencer.editInfluencer', influencer_id=influencer.id) }}"
       >
-        <img
-          class="arrow"
-          src="../../static/arrow_outward_48dp_FILL0_wght700_GRAD200_opsz48.png"
-          alt=""
-        />
+        <img class="arrow" src="../../static/thinArrow.png" alt="" />
       </a>
 
       <div class="more-info">
-        <p class="info">Email: {{ influencer.email }}</p>
-        <p class="info">Platform: {{ influencer.platform }}</p>
-        <p class="info">Reach: {{ influencer.reach }}</p>
-        <p class="info">Earnings: {{ influencer.bank_account_balance}}</p>
+        <table>
+          <tr>
+            <th>Email:</th>
+            <td>{{ influencer.email }}</td>
+          </tr>
+          <tr>
+            <th>Platform:</th>
+            <td>{{ influencer.platform }}</td>
+          </tr>
+          <tr>
+            <th>Reach:</th>
+            <td>{{ influencer.reach }}</td>
+          </tr>
+          <tr>
+            <th>Earnings:</th>
+            <td>Rs. {{ influencer.bank_account_balance }}</td>
+          </tr>
+        </table>
       </div>
     </div>
     <div class="col-2 col">

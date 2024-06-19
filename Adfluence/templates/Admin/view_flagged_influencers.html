@@ -19,9 +19,9 @@
       <p class="menu-button">dashboard</p>
     </div>
     <div class="nav-3">
-        <a href="{{ url_for('admin.view_influencers') }}" class="view">
-          View all Influencers
-        </a>
+      <a href="{{ url_for('admin.view_influencers') }}" class="view">
+        View all Influencers
+      </a>
     </div>
   </nav>
   <div class="content-wrapper">
@@ -102,13 +102,26 @@
                   <td>Rating</td>
                   <td>5.0</td>
                 </tr>
+                <tr>
+                  <td>
+                    <form
+                      action="{{ url_for('admin.unflag_influencer', influencer_id=influencer.id) }}"
+                      method="POST"
+                    >
+                      <button type="submit">REINSTATE</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form
+                      action="{{ url_for('admin.delete_influencer', influencer_id=influencer.id) }}"
+                      method="POST"
+                      onsubmit="return confirm('Are you sure you want to delete this influencer?');"
+                    >
+                      <button type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
               </table>
-              <form
-                action="{{ url_for('admin.unflag_influencer', influencer_id=influencer.id) }}"
-                method="POST"
-              >
-                <button type="submit">REINSTATE</button>
-              </form>
             </div>
           </div>
 
