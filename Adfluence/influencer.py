@@ -147,6 +147,7 @@ def view_completed_requests():
     ad_requests = AdRequest.query.filter_by(
         influencer_id=influencer.id, completed=True
     ).all()
+    print(ad_requests)
     ad_requests_with_details = []
     for ad_request in ad_requests:
         campaign = Campaign.query.get(ad_request.campaign_id)
@@ -480,7 +481,9 @@ def bookmark_campaign(campaign_id):
             db.session.commit()
         else:
             # If not bookmarked, create a new bookmark entry
-            new_bookmark = Bookmark(influencer_id=current_user.id, campaign_id=campaign_id)
+            new_bookmark = Bookmark(
+                influencer_id=current_user.id, campaign_id=campaign_id
+            )
             db.session.add(new_bookmark)
             db.session.commit()
         return redirect(url_for("influencer.viewCampaigns", campaign_id=campaign_id))
@@ -596,6 +599,7 @@ def rate_sponsor(ad_request_id):
     )
 
 
+# -----------------------Ratings-------------------------#
 @influencer.route("/view_ratings")
 @role_required("Influencer")
 @login_required
@@ -603,4 +607,14 @@ def view_ratings():
     influencers = current_user.influencers
     influencer = influencers[0] if influencers else None
     ratings = Rating.query.filter_by(ratee_id=influencer.id).all()
-    return render_template("Influencer/view_ratings.html", ratings=ratings)
+    ratings_with_details = []
+    for rating in ratings:
+        sponsor = User.query.get(rating.rater_id)
+        sponsor_name = sponsor.name
+        ratings_with_details.append(
+            {
+                "rating": rating,
+                "sponsor_name": sponsor_name,
+            }
+        )
+    return render_template("Influencer/view_ratings.html", ratings=ratings_with_details)

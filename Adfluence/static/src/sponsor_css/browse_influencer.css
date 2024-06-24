@@ -163,7 +163,6 @@ nav > div {
   flex: 3;
   width: 100%;
   padding: 20px;
-
 }
 
 .col-2 {
@@ -184,28 +183,27 @@ nav > div {
   color: #1c1723;
   letter-spacing: -2px;
 }
-.col-1 form{
+.col-1 form {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-.col-1 form button{
+.col-1 form button {
   background-color: transparent;
   border: none;
   font-family: aux;
-  color: #EAE6EF;
+  color: #eae6ef;
   font-size: 36px;
-  cursor: pointer ;
+  cursor: pointer;
   transition: all 0.3s ease-out;
   background-color: #1c1723;
   padding: 4px 12px 4px 12px;
   border-radius: 4px;
   margin-bottom: 8px;
   width: 100%;
-
 }
 
-.col-1 form button:hover{
+.col-1 form button:hover {
   color: #1c1723;
   background-color: transparent;
 }
@@ -227,7 +225,7 @@ nav > div {
 .square {
   background-color: #272031;
   border-radius: 16px;
-  color: #EAE6EF;
+  color: #eae6ef;
   max-width: 360px;
   height: 490px;
   display: flex;
@@ -259,7 +257,7 @@ nav > div {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 3.4rem;
   font-weight: bold;
-  color: #EAE6EF;
+  color: #eae6ef;
   width: 80%;
   transition: opacity 0.3s ease;
   letter-spacing: -2.4px;
@@ -287,7 +285,7 @@ nav > div {
   left: 0;
   width: 100%;
   height: 100%;
-  color: #EAE6EF;
+  color: #eae6ef;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -324,7 +322,7 @@ nav > div {
 
 .more-info a {
   text-decoration: none;
-  color: #EAE6EF;
+  color: #eae6ef;
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing: -2px;
   font-weight: bold;

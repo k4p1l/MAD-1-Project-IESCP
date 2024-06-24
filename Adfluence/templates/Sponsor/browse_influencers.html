@@ -38,6 +38,12 @@
             method="get"
           >
             <p>Filters</p>
+
+            <label for="name">Name:</label>
+
+            <input type="text" id="name" name="name" class="cc-input" />
+            <br>
+
             <label for="reach">Minimum Reach</label>
 
             <input type="number" id="reach" name="reach" class="cc-input" />
@@ -91,11 +97,16 @@
               <p>Reach: {{ influencer.reach }}</p>
             </div>
             <div class="more-info">
-              <img
-                src="{{ url_for('static', filename='Arrow.png') }}"
-                class="arrow"
-                alt="Arrow"
-              />
+              <a
+                class="info"
+                href="{{ url_for('sponsor.create_ad_request', campaign_id=campaign.id,influencer_id=influencer.id) }}"
+              >
+                <img
+                  src="{{ url_for('static', filename='Arrow.png') }}"
+                  class="arrow"
+                  alt="Arrow"
+                />
+              </a>
               <table class="info-table">
                 <tr>
                   <td>Email</td>

@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block head %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='src/sponsor_css/create_ad_request.css') }}"
+  href="{{ url_for('static', filename='src/sponsor_css/view_ratings.css') }}"
 />
 {% endblock %} {% block content %}
 
@@ -44,13 +44,19 @@
             <div class="first-table">
               <table>
                 <tr>
+                  <th>S.no</th>
+                  <th>Ratee</th>
                   <th>Rating</th>
                   <th>Review</th>
+                  <th>Date</th>
                 </tr>
                 {% for rating in ratings %}
                 <tr>
-                  <td>{{rating.rating}}</td>
-                  <td>{{rating.review}}</td>
+                  <td>{{rating.rating.id}}</td>
+                  <td>{{rating.influencer_name}}</td>
+                  <td>{{rating.rating.rating}}</td>
+                  <td>{{rating.rating.review}}</td>
+                  <td>{{rating.rating.date.strftime('%Y-%m-%d')}}</td>
                 </tr>
                 {% endfor %}
               </table>

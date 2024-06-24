@@ -50,10 +50,9 @@
         <div class="marquee">
           <span>
             <a href="{{ url_for('influencer.view_ratings')}}">
-              View Ratings &nbsp; &nbsp; View Ratings &nbsp; View
-              Ratings &nbsp; View Ratings &nbsp; View Ratings
-              &nbsp; View Ratings &nbsp; View Ratings &nbsp;
-              View Ratings &nbsp;
+              View Ratings &nbsp; &nbsp; View Ratings &nbsp; View Ratings &nbsp;
+              View Ratings &nbsp; View Ratings &nbsp; View Ratings &nbsp; View
+              Ratings &nbsp; View Ratings &nbsp;
             </a>
           </span>
         </div>
@@ -67,20 +66,25 @@
             <th>Sponsor</th>
             <th>Payment Amount</th>
             <th>Requirements</th>
+            <th>Completion Confirmed</th>
             <th>Received Payment</th>
-            <th class="link"></th>
             <th class="link"></th>
           </tr>
         </thead>
         <tbody>
           {% for request in ad_requests + campaign_requests %} {% if
-          request.request.completion_confirmed == True %}
+          request.request.completed == True %}
 
-          <tr >
+          <tr>
             <td>{{ request.campaign_name }}</td>
             <td>{{ request.user_name }}</td>
             <td>{{ request.request.payment_amount }}</td>
             <td>{{ request.request.requirements }}</td>
+            <td
+              class="{% if request.request.completion_confirmed == True %} status-accepted {% elif request.request.completion_confirmed == False %} status-rejected {% endif %}"
+            >
+              {{request.request.completion_confirmed}}
+            </td>
             <td
               class="{% if request.request.payment_done == True %} status-accepted {% elif request.request.payment_done == False %} status-rejected {% endif %}"
             >
@@ -93,10 +97,8 @@
                 >View</a
               >
             </td>
-            {%if request.request.payment_done == True %}
-            <td class="link view"><a href="{{ url_for('influencer.rate_sponsor', ad_request_id=request.request.id)}}">Give Rating</a></td>
 
-            {% endif %} {% endif %} {% endfor %}
+            {% endif %} {% endfor %}
           </tr>
         </tbody>
       </table>
@@ -105,5 +107,3 @@
 </div>
 
 {% endblock %}
-
-

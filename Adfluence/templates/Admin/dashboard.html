@@ -36,7 +36,25 @@
   <div class="content-wrapper">
     <div class="row-1 row">
       <div class="col-1">
-        <canvas id="userChart" width="950px" height="600px"></canvas>
+        <div class="stats-row">
+          <div class="stats">
+            <h1 class="stats-heading">Total Users</h1>
+            <h1 class="stats-data">{{ user_count }}</h1>
+          </div>
+          <div class="stats">
+            <h1 class="stats-heading">Total Influencers</h1>
+            <h1 class="stats-data">{{ influencer_count }}</h1>
+          </div>
+          <div class="stats">
+            <h1 class="stats-heading">Total Sponsors</h1>
+            <h1 class="stats-data">{{ sponsor_count }}</h1>
+          </div>
+          <div class="stats">
+            <h1 class="stats-heading">Total Campaigns</h1>
+            <h1 class="stats-data">{{ campaign_count }}</h1>
+          </div>
+        </div>
+        <canvas id="userChart" width="950px" height="400px"></canvas>
       </div>
 
       <div class="col-2">

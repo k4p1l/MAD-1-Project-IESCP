@@ -93,7 +93,7 @@ nav > div {
   display: flex;
   gap: 0.25em;
 }
-.header{
+.header {
   background-color: #fff;
   border-radius: 10px;
 }

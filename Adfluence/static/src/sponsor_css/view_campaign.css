@@ -221,7 +221,7 @@ tr:hover {
   padding: 0.5em 0.2em;
   border-bottom: 2px solid #000;
   text-align: left;
-  vertical-align: top; /* Ensures text starts from the top of the cell */
+  vertical-align: top;
   word-wrap: break-word; /* Breaks long words onto the next line */
   white-space: normal;
   font-size: 14px;
@@ -231,11 +231,12 @@ tr:hover {
   padding: 0.5em 0.5em;
   border-bottom: 1px solid #000;
   text-align: left;
-  vertical-align: top; /* Ensures text starts from the top of the cell */
+  vertical-align: top;
   word-wrap: break-word; /* Breaks long words onto the next line */
   white-space: normal; /* Allows the text to wrap */
   font-size: 14px;
 }
+
 
 .create ion-icon {
   margin-top: 10.8px;

@@ -62,7 +62,7 @@ nav > div {
 
 .nav-1:hover {
   background: #b20811;
-  color: #fff;  
+  color: #fff;
   font-weight: bold;
   flex: 3.2;
 }
@@ -103,6 +103,42 @@ nav > div {
   gap: 0.25em;
 }
 
+.stats-row {
+  display: flex;
+  gap: 1em;
+  justify-content: space-evenly;
+  align-items: center;
+  font-family: "Neue Montreal";
+  font-weight: 500;
+  transition: all 0.2s ease-out;
+  margin-bottom: 40px;
+}
+
+.stats {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  padding: 1em;
+  border-radius: 10px;
+  transition: all 0.2s ease-out;
+}
+
+.stats:hover {
+  background-color: #b20811;
+  color: white;
+}
+
+.stats-heading {
+  font-size: 24px;
+}
+
+.stats-data {
+  font-size: 32px;
+}
+
 .col-1 {
   flex: 9.4;
   background-color: #fff;
@@ -114,7 +150,6 @@ nav > div {
   flex: 4;
   background-color: #fff;
   border-radius: 10px;
-  /* padding: 20px; */
   display: flex;
   flex-direction: column;
   gap: 0.25em;

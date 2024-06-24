@@ -165,6 +165,7 @@ def viewCampaigns():
         "Sponsor/viewCampaigns.html", user=current_user, campaigns=active_campaigns
     )
 
+
 @sponsor.route("/deleteCampaign/<int:campaign_id>", methods=["POST"])
 @role_required("Sponsor")
 @login_required
@@ -351,6 +352,7 @@ def browse_influencers(campaign_id):
     # Get parameters from the request
     reach = request.args.get("reach")
     niche = request.args.get("niche")
+    name = request.args.get("name")
 
     # Base query
     query = Influencer.query
@@ -360,6 +362,8 @@ def browse_influencers(campaign_id):
         query = query.filter(Influencer.reach >= int(reach))
     if niche:
         query = query.filter(Influencer.niche == niche)
+    if name:
+        query = query.filter(Influencer.name.ilike(f"%{name}%"))
 
     # Execute the query
     filtered_influencers = query.all()
@@ -566,9 +570,19 @@ def export_csv():
 @role_required("Sponsor")
 @login_required
 def view_ratings():
-    ratee_id = current_user.id
-    ratings = Rating.query.filter_by(ratee_id=ratee_id).all()
-    return render_template("sponsor/view_ratings.html", ratings=ratings)
+    rater_id = current_user.id
+    ratings = Rating.query.filter_by(rater_id=rater_id).all()
+    ratings_with_details = []
+    for rating in ratings:
+        influencer = Influencer.query.get(rating.ratee_id)
+        influencer_name = influencer.name
+        ratings_with_details.append(
+            {
+                "rating": rating,
+                "influencer_name": influencer_name,
+            }
+        )
+    return render_template("sponsor/view_ratings.html", ratings=ratings_with_details)
 
 
 @sponsor.route(

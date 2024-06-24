@@ -53,8 +53,9 @@
                   type="text"
                   id="card_number"
                   name="card_number"
-                  minlength="16"
-                  maxlength="16"
+                  pattern="\d{16}"
+                  title="Card number must be 16 digits"
+                  required
                 />
               </div>
             </div>
@@ -76,14 +77,13 @@
                 <label class="cc-label" for="cvv"> CVV:</label>
                 <div class="form-field">
                   <input
-                    type="number"
+                    type="text"
                     class="cc-input"
                     id="cvv"
                     name="cvv"
-                    step="1"
+                    pattern="\d{3}"
+                    title="CVV must be 3 digits"
                     required
-                    minlength="3"
-                    maxlength="3"
                   />
                 </div>
                 <label class="button-wrapper" for="submit-button">

@@ -60,10 +60,12 @@
         </div>
         <div class="col-2">
           {% for campaign in campaigns %} {% if campaign.niche == 'All' or
-          campaign.niche == influencer.niche %}
-          {% if influencer.flagged == False %}
+          campaign.niche == influencer.niche %} {% if influencer.flagged ==
+          False %}
           <div class="square">
-            <div class="name">{{ campaign.name }}</div>
+            <div style="text-transform: uppercase" class="name">
+              {{ campaign.name }}
+            </div>
             <div class="attributes">
               <table class="info-table">
                 <tr>
@@ -88,7 +90,7 @@
                 </tr>
               </table>
             </div>
-            <div class="more-info ">
+            <div class="more-info">
               <a
                 class="info"
                 href="{{ url_for('influencer.create_ad_request', campaign_id=campaign.id)}}"
@@ -174,8 +176,7 @@
               </div>
             </div>
           </div>
-          {% endif %}
-          {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
         </div>
       </div>
     </div>
