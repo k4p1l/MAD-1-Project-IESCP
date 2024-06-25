@@ -18,173 +18,17 @@ from .models import (
     Transaction,
     Rating,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db  ##means from __init__.py import db
-from flask_login import login_user, login_required, logout_user, current_user
+from . import db
+from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 import os
-from .auth import role_required
+from .views import role_required
 from sqlalchemy.sql import func
 
 influencer = Blueprint("influencer", __name__)
 
 
-@influencer.route("/dashboard", methods=["GET", "POST"])
-@role_required("Influencer")
-@login_required
-def dashboard():
-    influencers = current_user.influencers
-    influencer = influencers[0] if influencers else None
-    if influencer:
-        avg_rating_query = (
-            db.session.query(func.avg(Rating.rating).label("average_rating"))
-            .filter(Rating.ratee_id == influencer.id)
-            .first()
-        )
-        average_rating = avg_rating_query.average_rating
-        if influencer:
-            ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
-            campaignRequests = campaignRequest.query.filter_by(
-                influencer_id=influencer.id
-            ).all()
-            campaign_requests_with_details = []
-            for campaign_request in campaignRequests:
-                campaign = Campaign.query.get(campaign_request.campaign_id)
-                if campaign:
-                    campaign_name = campaign.name
-                    campaign_requests_with_details.append(
-                        {
-                            "campaign_request": campaign_request,
-                            "campaign_name": campaign_name,
-                        }
-                    )
-                else:
-                    flash("Campaign not found", category="error")
-
-            ad_requests_with_details = []
-            for ad_request in ad_requests:
-                campaign = Campaign.query.get(ad_request.campaign_id)
-                user = User.query.get(campaign.user_id)
-                ad_requests_with_details.append(
-                    {
-                        "ad_request": ad_request,
-                        "campaign_name": campaign.name,
-                        "user_name": user.name,
-                    }
-                )
-
-            transactions = Transaction.query.filter_by(
-                influencer_id=influencer.id
-            ).all()
-
-            # Calculate total earnings
-            total_earnings = sum(transaction.amount for transaction in transactions)
-            return render_template(
-                "Influencer/dashboard.html",
-                campaign_requests=campaign_requests_with_details,
-                user=current_user,
-                influencer=influencer,
-                ad_requests=ad_requests_with_details,
-                total_earnings=total_earnings,
-                average_rating=average_rating,
-            )
-
-    return render_template("Influencer/dashboard.html")
-
-
-@influencer.route("/activeCampaigns", methods=["GET"])
-@role_required("Influencer")
-@login_required
-def activeCampaigns():
-    influencers = current_user.influencers
-    influencer = influencers[0] if influencers else None
-    ad_requests = AdRequest.query.filter_by(
-        influencer_id=influencer.id, completed=False
-    ).all()
-    ad_requests_with_details = []
-    for ad_request in ad_requests:
-        campaign = Campaign.query.get(ad_request.campaign_id)
-        user = User.query.get(campaign.user_id)
-        ad_requests_with_details.append(
-            {
-                "request": ad_request,
-                "campaign_name": campaign.name,
-                "user_name": user.name,
-                "request_type": "Received",
-            }
-        )
-
-    campaign_requests = campaignRequest.query.filter_by(
-        influencer_id=influencer.id, completed=False
-    ).all()
-    campaign_requests_with_details = []
-    for campaign_request in campaign_requests:
-        campaign = Campaign.query.get(campaign_request.campaign_id)
-        user = User.query.get(campaign.user_id)
-        campaign_requests_with_details.append(
-            {
-                "request": campaign_request,
-                "campaign_name": campaign.name,
-                "user_name": user.name,
-                "request_type": "Sent",
-            }
-        )
-    return render_template(
-        "Influencer/activeCampaigns.html",
-        user=current_user,
-        influencer=influencer,
-        ad_requests=ad_requests_with_details,
-        campaign_requests=campaign_requests_with_details,
-    )
-
-
-@influencer.route("/view_completed_requests", methods=["GET"])
-@role_required("Influencer")
-@login_required
-def view_completed_requests():
-    influencers = current_user.influencers
-    influencer = influencers[0] if influencers else None
-    ad_requests = AdRequest.query.filter_by(
-        influencer_id=influencer.id, completed=True
-    ).all()
-    print(ad_requests)
-    ad_requests_with_details = []
-    for ad_request in ad_requests:
-        campaign = Campaign.query.get(ad_request.campaign_id)
-        user = User.query.get(campaign.user_id)
-        ad_requests_with_details.append(
-            {
-                "request": ad_request,
-                "campaign_name": campaign.name,
-                "user_name": user.name,
-                "request_type": "Received",
-            }
-        )
-
-    campaign_requests = campaignRequest.query.filter_by(
-        influencer_id=influencer.id, completed=True
-    ).all()
-    campaign_requests_with_details = []
-    for campaign_request in campaign_requests:
-        campaign = Campaign.query.get(campaign_request.campaign_id)
-        user = User.query.get(campaign.user_id)
-        campaign_requests_with_details.append(
-            {
-                "request": campaign_request,
-                "campaign_name": campaign.name,
-                "user_name": user.name,
-                "request_type": "Sent",
-            }
-        )
-    return render_template(
-        "Influencer/view_completed_requests.html",
-        user=current_user,
-        influencer=influencer,
-        ad_requests=ad_requests_with_details,
-        campaign_requests=campaign_requests_with_details,
-    )
-
-
+# ---------------INFLUENCER CRUD-------------------#
 @influencer.route("/addInfluencer", methods=["GET", "POST"])
 @role_required("Influencer")
 @login_required
@@ -254,46 +98,6 @@ def editInfluencer(influencer_id):
     return render_template("Influencer/editInfluencer.html", influencer=influencer)
 
 
-@influencer.route("/viewInfluencers", methods=["GET"])
-@role_required("Influencer")
-@login_required
-def viewInfluencers():
-    # Get parameters from the request
-    reach = request.args.get("reach")
-    niche = request.args.get("niche")
-
-    # Base query
-    query = Influencer.query
-
-    # Apply filters if provided
-    if reach:
-        query = query.filter(Influencer.reach >= int(reach))
-    if niche:
-        query = query.filter(Influencer.niche == niche)
-
-    # Execute the query
-    filtered_influencers = query.all()
-    return render_template(
-        "Influencer/viewInfluencers.html", influencers=filtered_influencers
-    )
-
-
-@influencer.route("/view_all_influencers")
-@role_required("Influencer")
-def view_all_influencers():
-    # Logic to retrieve and display all influencers without any filters applied
-    influencers = Influencer.query.all()
-    return render_template("Influencer/viewInfluencers.html", influencers=influencers)
-
-
-@influencer.route("/viewInfluencer/<int:influencer_id>", methods=["GET"])
-@role_required("Influencer")
-@login_required
-def viewInfluencer(influencer_id):
-    influencer = Influencer.query.get_or_404(influencer_id)
-    return render_template("Influencer/viewInfluencer.html", influencer=influencer)
-
-
 @influencer.route("/deleteInfluencer/<int:influencer_id>", methods=["POST"])
 @role_required("Influencer")
 @login_required
@@ -312,6 +116,245 @@ def deleteInfluencer(influencer_id):
     db.session.commit()
     flash("Profile deleted successfully!", category="success")
     return redirect(url_for("influencer.dashboard"))
+
+
+@influencer.route("/dashboard", methods=["GET", "POST"])
+@role_required("Influencer")
+@login_required
+def dashboard():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    if influencer:
+        avg_rating_query = (
+            db.session.query(func.avg(Rating.rating).label("average_rating"))
+            .filter(Rating.ratee_id == influencer.id)
+            .first()
+        )
+        average_rating = avg_rating_query.average_rating
+        if influencer:
+            ad_requests = AdRequest.query.filter_by(influencer_id=influencer.id).all()
+            campaignRequests = campaignRequest.query.filter_by(
+                influencer_id=influencer.id
+            ).all()
+            campaign_requests_with_details = []
+            for campaign_request in campaignRequests:
+                campaign = Campaign.query.get(campaign_request.campaign_id)
+                if campaign:
+                    campaign_name = campaign.name
+                    campaign_requests_with_details.append(
+                        {
+                            "campaign_request": campaign_request,
+                            "campaign_name": campaign_name,
+                        }
+                    )
+                else:
+                    flash("Campaign not found", category="error")
+
+            ad_requests_with_details = []
+            for ad_request in ad_requests:
+                campaign = Campaign.query.get(ad_request.campaign_id)
+                user = User.query.get(campaign.user_id)
+                ad_requests_with_details.append(
+                    {
+                        "ad_request": ad_request,
+                        "campaign_name": campaign.name,
+                        "user_name": user.name,
+                    }
+                )
+
+            transactions = Transaction.query.filter_by(
+                influencer_id=influencer.id
+            ).all()
+
+            # Calculate total earnings
+            total_earnings = sum(transaction.amount for transaction in transactions)
+            return render_template(
+                "Influencer/dashboard.html",
+                campaign_requests=campaign_requests_with_details,
+                user=current_user,
+                influencer=influencer,
+                ad_requests=ad_requests_with_details,
+                total_earnings=total_earnings,
+                average_rating=average_rating,
+            )
+
+    return render_template("Influencer/dashboard.html")
+
+
+# --------------Campaigns-------------------#
+@influencer.route("/activeCampaigns", methods=["GET"])
+@role_required("Influencer")
+@login_required
+def activeCampaigns():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    ad_requests = AdRequest.query.filter_by(
+        influencer_id=influencer.id, completed=False
+    ).all()
+    ad_requests_with_details = []
+    for ad_request in ad_requests:
+        campaign = Campaign.query.get(ad_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        ad_requests_with_details.append(
+            {
+                "request": ad_request,
+                "campaign_name": campaign.name,
+                "user_name": user.name,
+                "request_type": "Received",
+            }
+        )
+
+    campaign_requests = campaignRequest.query.filter_by(
+        influencer_id=influencer.id, completed=False
+    ).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaign_requests:
+        campaign = Campaign.query.get(campaign_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        campaign_requests_with_details.append(
+            {
+                "request": campaign_request,
+                "campaign_name": campaign.name,
+                "user_name": user.name,
+                "request_type": "Sent",
+            }
+        )
+    return render_template(
+        "Influencer/activeCampaigns.html",
+        user=current_user,
+        influencer=influencer,
+        ad_requests=ad_requests_with_details,
+        campaign_requests=campaign_requests_with_details,
+    )
+
+
+@influencer.route("/viewCampaigns", methods=["GET", "POST"])
+@role_required("Influencer")
+@login_required
+def viewCampaigns():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    if request.method == "POST":
+        search_query = request.form.get("search_query")
+        campaigns = Campaign.query.filter(
+            Campaign.name.ilike(f"%{search_query}%")
+        ).all()
+    else:
+        campaigns = Campaign.query.filter_by(flagged=False).all()
+    for campaign in campaigns:
+        campaign.is_bookmarked = (
+            Bookmark.query.filter_by(
+                influencer_id=current_user.id, campaign_id=campaign.id
+            ).first()
+            is not None
+        )
+    return render_template(
+        "Influencer/viewCampaigns.html", campaigns=campaigns, influencer=influencer
+    )
+
+
+@influencer.route("/viewCampaign/<int:campaign_id>")
+@role_required("Influencer")
+@login_required
+def viewCampaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    return render_template("Influencer/viewCampaign.html", campaign=campaign)
+
+
+@influencer.route("/search_campaigns", methods=["GET", "POST"])
+@login_required
+@role_required("Influencer")
+def search_campaigns():
+    if request.method == "POST":
+        search_query = request.form.get("search_query")
+        campaigns = Campaign.query.filter(
+            Campaign.name.ilike(f"%{search_query}%")
+        ).all()
+        for campaign in campaigns:
+            campaign.is_bookmarked = (
+                Bookmark.query.filter_by(
+                    influencer_id=current_user.id, campaign_id=campaign.id
+                ).first()
+                is not None
+            )
+        return render_template(
+            "Influencer/searchResults.html",
+            campaigns=campaigns,
+            search_query=search_query,
+        )
+    return render_template("Influencer/viewCampaigns.html")
+
+
+@influencer.route(
+    "/activeCampaigns/<int:ad_request_id>/mark_completed", methods=["POST"]
+)
+@login_required
+@role_required("Influencer")
+def mark_completed(ad_request_id):
+    request_type = request.form.get("request_type")
+    if request_type == "Received":
+        ad_request = AdRequest.query.get_or_404(ad_request_id)
+        if ad_request:
+            ad_request.completed = True
+            db.session.commit()
+            flash("Ad request completed successfully.", category="success")
+
+    if request_type == "Sent":
+        campaign_request = campaignRequest.query.get_or_404(ad_request_id)
+        if campaign_request:
+            campaign_request.completed = True
+            db.session.commit()
+            flash("Ad request completed successfully.", category="success")
+
+    return redirect(url_for("influencer.dashboard"))
+
+
+# ---------------------------Ad Requests---------------------------#
+@influencer.route("/view_completed_requests", methods=["GET"])
+@role_required("Influencer")
+@login_required
+def view_completed_requests():
+    influencers = current_user.influencers
+    influencer = influencers[0] if influencers else None
+    ad_requests = AdRequest.query.filter_by(
+        influencer_id=influencer.id, completed=True
+    ).all()
+    print(ad_requests)
+    ad_requests_with_details = []
+    for ad_request in ad_requests:
+        campaign = Campaign.query.get(ad_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        ad_requests_with_details.append(
+            {
+                "request": ad_request,
+                "campaign_name": campaign.name,
+                "user_name": user.name,
+                "request_type": "Received",
+            }
+        )
+
+    campaign_requests = campaignRequest.query.filter_by(
+        influencer_id=influencer.id, completed=True
+    ).all()
+    campaign_requests_with_details = []
+    for campaign_request in campaign_requests:
+        campaign = Campaign.query.get(campaign_request.campaign_id)
+        user = User.query.get(campaign.user_id)
+        campaign_requests_with_details.append(
+            {
+                "request": campaign_request,
+                "campaign_name": campaign.name,
+                "user_name": user.name,
+                "request_type": "Sent",
+            }
+        )
+    return render_template(
+        "Influencer/view_completed_requests.html",
+        user=current_user,
+        influencer=influencer,
+        ad_requests=ad_requests_with_details,
+        campaign_requests=campaign_requests_with_details,
+    )
 
 
 @influencer.route("/viewRequest/<int:ad_request_id>", methods=["GET"])
@@ -395,39 +438,6 @@ def reject_ad_request(ad_request_id):
     return redirect(url_for("influencer.dashboard"))
 
 
-@influencer.route("/viewCampaigns", methods=["GET", "POST"])
-@role_required("Influencer")
-@login_required
-def viewCampaigns():
-    influencers = current_user.influencers
-    influencer = influencers[0] if influencers else None
-    if request.method == "POST":
-        search_query = request.form.get("search_query")
-        campaigns = Campaign.query.filter(
-            Campaign.name.ilike(f"%{search_query}%")
-        ).all()
-    else:
-        campaigns = Campaign.query.filter_by(flagged=False).all()
-    for campaign in campaigns:
-        campaign.is_bookmarked = (
-            Bookmark.query.filter_by(
-                influencer_id=current_user.id, campaign_id=campaign.id
-            ).first()
-            is not None
-        )
-    return render_template(
-        "Influencer/viewCampaigns.html", campaigns=campaigns, influencer=influencer
-    )
-
-
-@influencer.route("/viewCampaign/<int:campaign_id>")
-@role_required("Influencer")
-@login_required
-def viewCampaign(campaign_id):
-    campaign = Campaign.query.get_or_404(campaign_id)
-    return render_template("Influencer/viewCampaign.html", campaign=campaign)
-
-
 @influencer.route("create_ad_request/<int:campaign_id>", methods=["GET", "POST"])
 @role_required("Influencer")
 @login_required
@@ -466,6 +476,7 @@ def create_ad_request(campaign_id):
     return render_template("Influencer/create_ad_request.html", campaign=campaign)
 
 
+# ----------------------Bookmark Campaign----------------------#
 @influencer.route("/bookmark_campaign/<int:campaign_id>", methods=["POST"])
 @role_required("Influencer")
 @login_required
@@ -513,89 +524,6 @@ def view_bookmarks():
         bookmarked_campaigns=bookmarked_campaigns,
         campaigns=campaigns,
         influencer=influencer,
-    )
-
-
-@influencer.route("/search_campaigns", methods=["GET", "POST"])
-@login_required
-@role_required("Influencer")
-def search_campaigns():
-    if request.method == "POST":
-        search_query = request.form.get("search_query")
-        campaigns = Campaign.query.filter(
-            Campaign.name.ilike(f"%{search_query}%")
-        ).all()
-        for campaign in campaigns:
-            campaign.is_bookmarked = (
-                Bookmark.query.filter_by(
-                    influencer_id=current_user.id, campaign_id=campaign.id
-                ).first()
-                is not None
-            )
-        return render_template(
-            "Influencer/searchResults.html",
-            campaigns=campaigns,
-            search_query=search_query,
-        )
-    return render_template("Influencer/viewCampaigns.html")
-
-
-@influencer.route(
-    "/activeCampaigns/<int:ad_request_id>/mark_completed", methods=["POST"]
-)
-@login_required
-@role_required("Influencer")
-def mark_completed(ad_request_id):
-    request_type = request.form.get("request_type")
-    if request_type == "Received":
-        ad_request = AdRequest.query.get_or_404(ad_request_id)
-        if ad_request:
-            ad_request.completed = True
-            db.session.commit()
-            flash("Ad request completed successfully.", category="success")
-
-    if request_type == "Sent":
-        campaign_request = campaignRequest.query.get_or_404(ad_request_id)
-        if campaign_request:
-            campaign_request.completed = True
-            db.session.commit()
-            flash("Ad request completed successfully.", category="success")
-
-    return redirect(url_for("influencer.dashboard"))
-
-
-@influencer.route("/rate_sponsor/<int:ad_request_id>", methods=["GET", "POST"])
-@login_required
-@role_required("Influencer")
-def rate_sponsor(ad_request_id):
-    influencers = current_user.influencers
-    influencer = influencers[0] if influencers else None
-    transaction = Transaction.query.get_or_404(ad_request_id)
-    user = User.query.get_or_404(transaction.user_id)
-
-    # Ensure that the current user is the influencer in the transaction
-    if transaction.influencer_id != influencer.id:
-        flash("You are not authorized to rate this transaction.", "danger")
-        return redirect(url_for("influencer.dashboard"))
-
-    if request.method == "POST":
-        rating_value = request.form.get("rating")
-        review = request.form.get("review")
-
-        new_rating = Rating(
-            transaction_id=transaction.id,
-            rater_id=influencer.id,
-            ratee_id=transaction.user_id,
-            rating=rating_value,
-            review=review,
-        )
-        db.session.add(new_rating)
-        db.session.commit()
-        flash("Rating submitted successfully.", "success")
-        return redirect(url_for("influencer.dashboard"))
-
-    return render_template(
-        "Influencer/rate_sponsor.html", transaction=transaction, user_name=user.name
     )
 
 

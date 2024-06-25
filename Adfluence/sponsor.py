@@ -20,9 +20,9 @@ from .models import (
     Rating,
 )
 from . import db
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import  login_required, current_user
 from datetime import datetime
-from .auth import role_required
+from .views import role_required
 from sqlalchemy.sql import func
 import csv
 from uuid import uuid4
@@ -225,7 +225,7 @@ def editCampaign(campaign_id):
     return render_template("Sponsor/editCampaign.html", campaign=campaign)
 
 
-# -------------------------------- Ad request-------------------------------------#
+# --------------------------------Adrequest-------------------------------------#
 @sponsor.route("/campaign/<int:campaign_id>/create_ad_request", methods=["GET", "POST"])
 @role_required("Sponsor")
 @login_required
@@ -342,7 +342,7 @@ def view_completed_ad_requests(campaign_id):
     )
 
 
-# ---------------------------------View Influencers-----------------------------#
+# ---------------------------------Influencers-----------------------------#
 @sponsor.route("/campaign/<int:campaign_id>/browse_influencers")
 @login_required
 @role_required("Sponsor")

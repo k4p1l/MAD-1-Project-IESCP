@@ -12,7 +12,7 @@ from .models import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db  ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
-from .auth import role_required
+from .views import role_required
 from sqlalchemy.sql import func, extract
 
 
@@ -505,7 +505,7 @@ def delete_sponsor(user_id):
         db.session.delete(rating)
     for transaction in user.transactions:
         transaction.user_id = None
-    
+
     db.session.delete(user)
     db.session.commit()
     flash("Sponsor deleted!", category="success")

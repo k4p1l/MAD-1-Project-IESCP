@@ -91,7 +91,6 @@
       <table>
         <thead>
           <tr>
-            <th class="wd-sm">Transaction ID</th>
             <th>Influencer Name</th>
             <th>Platform</th>
             <th>Campaign</th>
@@ -103,7 +102,6 @@
         <tbody>
           {%for transaction in transactions%}
           <tr>
-            <td class="wd-sm">{{transaction.transaction.id}}</td>
             <td>{{transaction.influencer_name}}</td>
             <td>{{transaction.influencer_platform}}</td>
             <td>{{transaction.campaign_name}}</td>

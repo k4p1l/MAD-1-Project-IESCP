@@ -15,7 +15,7 @@
 
 html,
 body {
-  width: 100vw;
+  width: 100%;
   height: 100%;
   background-color: #000;
   font-family: "Arame";
@@ -34,6 +34,8 @@ p {
 .container {
   width: 100%;
   height: 100vh;
+  max-width: 3840px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 0.25em;
@@ -190,7 +192,7 @@ tr:hover {
 .view:hover {
   color: blue;
 }
-.link{
+.link {
   width: 100px;
 }
 
@@ -304,6 +306,6 @@ tr:hover {
   color: #f44336;
   font-size: 16px;
 }
-.bookmark-icon{
+.bookmark-icon {
   margin-top: -10px;
 }

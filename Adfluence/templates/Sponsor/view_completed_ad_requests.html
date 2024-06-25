@@ -68,16 +68,17 @@
               >
               {%endif%}
             </td>
-            {% if request.request.payment_done==True %}
-            <td class="link view">
-              {% if request.request.rating_done == True %} Rated {% else %}
+            {% if request.request.payment_done==True %} {% if
+            request.request.rating_done == True %}
+            <td>Rated</td>
+            {% else %}
+            <td>
               <a
                 href="{{url_for('sponsor.rate_influencer', ad_request_id=request.request.id, request_type=request.request_type)}}"
                 >Give Rating</a
               >
-              {% endif %}
             </td>
-            {% if request.request.rating_done == True %}
+            {% endif %} {% if request.request.rating_done == True %}
             <td class="link danger">
               <form
                 action="{{ url_for('sponsor.delete_ad_request', ad_request_id=request.request.id) }}"

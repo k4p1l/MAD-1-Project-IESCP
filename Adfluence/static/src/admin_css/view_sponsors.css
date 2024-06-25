@@ -15,7 +15,7 @@
 
 html,
 body {
-  width: 100vw;
+  width: 100%;
   height: 100%;
   background-color: #000;
   font-family: "Arame";
@@ -34,6 +34,8 @@ p {
 .container {
   width: 100%;
   height: 100vh;
+  max-width: 3840px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 0.25em;
@@ -198,7 +200,7 @@ nav > div {
   background-color: transparent;
   border: none;
   font-family: aux;
-  color: #EDF2FB;
+  color: #edf2fb;
   font-size: 36px;
   cursor: pointer;
   transition: all 0.3s ease-out;
@@ -207,14 +209,14 @@ nav > div {
   border-radius: 4px;
   width: 100%;
 }
-label{
-    color: #6584cc;
-    font-weight: bold;
+label {
+  color: #6584cc;
+  font-weight: bold;
 }
 
 .col-1 form button:hover {
-    color:#6584cc;
-    background-color: transparent;
+  color: #6584cc;
+  background-color: transparent;
   transform: scale(0.95);
 }
 .col-1 form button:active {
@@ -237,13 +239,12 @@ label{
 }
 
 .cc-input:focus {
-    border: 2.5px solid #709BFF;
-    outline: none;
+  border: 2.5px solid #709bff;
+  outline: none;
 }
 
-
-.square { 
-  background-color:#e2eafc ;
+.square {
+  background-color: #e2eafc;
   border-radius: 30px;
   color: #6584cc;
   max-width: 300px;

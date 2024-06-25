@@ -21,20 +21,15 @@
   src: url(../upheavtt.otf);
 }
 
-.container {
-  /* max-width: 3840px;
-  max-height: 2160px; */
-  margin: 0 auto;
-}
-
 .alert {
   padding: 15px;
   margin-bottom: 20px;
+  font-family: Arame;
   border-radius: 4px;
   position: absolute;
   bottom: 10px;
   right: 10px;
-  animation: slideUpAndFadeOut 7s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+  animation: slideUpAndFadeOut 5s cubic-bezier(0.175, 0.885, 0.32, 1.275)
     forwards; /* Animation to fade out */
 }
 @keyframes slideUpAndFadeOut {
