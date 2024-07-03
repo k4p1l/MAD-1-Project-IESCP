@@ -1,3 +1,8 @@
+import csv
+import os
+from datetime import datetime
+from uuid import uuid4
+
 from flask import (
     Blueprint,
     render_template,
@@ -6,28 +11,22 @@ from flask import (
     redirect,
     url_for,
     abort,
-    Response,
     send_file,
     current_app,
 )
+from flask_login import login_required, current_user
+from sqlalchemy.sql import func
+
+from . import db
 from .models import (
     Campaign,
     AdRequest,
-    User,
     Influencer,
     campaignRequest,
     Transaction,
     Rating,
 )
-from . import db
-from flask_login import  login_required, current_user
-from datetime import datetime
 from .views import role_required
-from sqlalchemy.sql import func
-import csv
-from uuid import uuid4
-import os
-
 
 sponsor = Blueprint("sponsor", __name__)
 
@@ -532,6 +531,7 @@ def export_csv():
     filename = uuid4().hex + ".csv"
     url = "static/csv/" + filename
     filepath = os.path.join(current_app.root_path, "static", "csv", filename)
+    Sno=0
 
     # Ensure the directory exists
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -540,7 +540,7 @@ def export_csv():
         writer = csv.writer(file)
         writer.writerow(
             [
-                "Transaction ID",
+                "Sno.",
                 "Influencer Name",
                 "Platform",
                 "Campaign Name",
@@ -550,9 +550,10 @@ def export_csv():
             ]
         )
         for transaction in transaction_with_details:
+            Sno+=1
             writer.writerow(
                 [
-                    transaction["transaction"].id,
+                    Sno,
                     transaction["influencer_name"],
                     transaction["influencer_platform"],
                     transaction["campaign_name"],

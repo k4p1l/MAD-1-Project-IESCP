@@ -59,6 +59,15 @@ class Influencer(db.Model, UserMixin):
         "Transaction", backref="influencer", cascade="all, delete-orphan"
     )
     ratings = relationship("Rating", backref="influencer", cascade="all, delete-orphan")
+    bookmarks = relationship(
+        "Bookmark", backref="influencer", cascade="all, delete-orphan"
+    )
+    adrequests = relationship(
+        "AdRequest", backref="influencer", cascade="all, delete-orphan"
+    )
+    campaignrequests = relationship(
+        "campaignRequest", backref="influencer", cascade="all, delete-orphan"
+    )
 
 
 class AdRequest(db.Model):

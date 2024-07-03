@@ -168,7 +168,7 @@ select:focus {
   color: inherit;
   margin: 0;
   padding: 0;
-  cursor: pointer;
+cursor: none;
   background-color: transparent;
   color: var(--primary-color);
 }

@@ -1,4 +1,8 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask_login import login_required
+from sqlalchemy.sql import func, extract
+
+from . import db  # means from __init__.py import db
 from .models import (
     User,
     Influencer,
@@ -9,12 +13,7 @@ from .models import (
     Transaction,
     Rating,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db  ##means from __init__.py import db
-from flask_login import login_user, login_required, logout_user, current_user
 from .views import role_required
-from sqlalchemy.sql import func, extract
-
 
 admin = Blueprint("admin", __name__)
 
@@ -318,7 +317,6 @@ def campaign_stats():
 @role_required("Admin")
 @login_required
 def view_campaigns():
-
     if request.method == "POST":
         search_query = request.form.get("search_query")
         campaigns = Campaign.query.filter(
@@ -429,12 +427,27 @@ def unflag_influencer(influencer_id):
 @login_required
 def delete_influencer(influencer_id):
     influencer = Influencer.query.get_or_404(influencer_id)
-    for rating in influencer.ratings:
-        db.session.delete(rating)
 
-    for transaction in influencer.transactions:
-        transaction.influencer_id = None
-    db.session.delete(influencer)
+    with db.session.no_autoflush:
+        for rating in influencer.ratings:
+            db.session.delete(rating)
+
+        for transaction in influencer.transactions:
+            transaction.influencer_id = None
+            db.session.delete(transaction)
+
+        for adrequest in influencer.adrequests:
+            if adrequest:
+                db.session.delete(adrequest)
+
+        for campaignrequest in influencer.campaignrequests:
+            if campaignrequest:
+                db.session.delete(campaignrequest)
+
+        user = User.query.get(influencer.user_id)
+        db.session.delete(user)
+        db.session.delete(influencer)
+        
     db.session.commit()
     flash("Influencer deleted!", category="success")
     return redirect(url_for("admin.view_influencers"))
@@ -500,11 +513,14 @@ def unflag_sponsor(user_id):
 def delete_sponsor(user_id):
     user = User.query.get_or_404(user_id)
     for campaign in user.campaigns:
-        db.session.delete(campaign)
+        if campaign:
+            db.session.delete(campaign)
     for rating in user.ratings:
-        db.session.delete(rating)
+        if rating:
+            db.session.delete(rating)
     for transaction in user.transactions:
-        transaction.user_id = None
+        if transaction:
+            transaction.user_id = None
 
     db.session.delete(user)
     db.session.commit()
@@ -546,7 +562,7 @@ def transaction_stats():
     for record in transactions:
         year = int(record.year)
         month = int(record.month)
-        labels.append(f"{month_labels[month-1]} {year}")
+        labels.append(f"{month_labels[month - 1]} {year}")
         transaction_counts.append(record.count)
     transaction_count = Transaction.query.count()
     total_transaction_amount = (

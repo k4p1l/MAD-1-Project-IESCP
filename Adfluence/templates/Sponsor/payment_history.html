@@ -91,6 +91,7 @@
       <table>
         <thead>
           <tr>
+            <th>Sno.</th>
             <th>Influencer Name</th>
             <th>Platform</th>
             <th>Campaign</th>
@@ -99,9 +100,11 @@
             <th>Request Type</th>
           </tr>
         </thead>
+
         <tbody>
           {%for transaction in transactions%}
           <tr>
+            <td>{{loop.index}}</td>
             <td>{{transaction.influencer_name}}</td>
             <td>{{transaction.influencer_platform}}</td>
             <td>{{transaction.campaign_name}}</td>
