@@ -17,6 +17,7 @@ from .models import (
     Bookmark,
     Transaction,
     Rating,
+    Negotiation,
 )
 from . import db
 from flask_login import login_required, current_user
@@ -24,6 +25,7 @@ from werkzeug.utils import secure_filename
 import os
 from .views import role_required
 from sqlalchemy.sql import func
+from sqlalchemy import desc
 
 influencer = Blueprint("influencer", __name__)
 
@@ -378,8 +380,39 @@ def viewRequest(ad_request_id):
         "campaign_name": campaign.name,
         "user_name": user.name,
     }
+    negotiations = (
+        Negotiation.query.filter_by(
+            ad_request_id=ad_request.id, receiver_id=current_user.id
+        )
+        .order_by(desc(Negotiation.created_at))
+        .all()
+    )
+    latest_nego = (
+        Negotiation.query.filter_by(
+            ad_request_id=ad_request.id, receiver_id=current_user.id, status="Accepted"
+        )
+        .order_by(desc(Negotiation.created_at))
+        .first()
+    )
+    latest_pending_nego = (
+        Negotiation.query.filter_by(
+            ad_request_id=ad_request.id, receiver_id=current_user.id, status="Pending"
+        )
+        .order_by(desc(Negotiation.created_at))
+        .first()
+    )
+    print(latest_pending_nego)
+    latest_price = (
+        latest_nego.offer_amount if latest_nego else ad_request.payment_amount
+    )
+
     return render_template(
-        "Influencer/viewRequest.html", ad_request_details=ad_request_with_details
+        "Influencer/viewRequest.html",
+        ad_request_details=ad_request_with_details,
+        negotiations=negotiations,
+        latest_price=latest_price,
+        latest_pending_nego=latest_pending_nego,
+        
     )
 
 
@@ -421,7 +454,10 @@ def delete_campaign_request(campaign_request_id):
 @login_required
 def accept_ad_request(ad_request_id):
     ad_request = AdRequest.query.get_or_404(ad_request_id)
+
+    payment_amount = request.form.get("payment_amount")
     ad_request.status = "Accepted"
+    ad_request.payment_amount = payment_amount
     db.session.commit()
     flash("Ad request accepted successfully.", category="success")
     return redirect(url_for("influencer.dashboard"))
@@ -546,3 +582,27 @@ def view_ratings():
             }
         )
     return render_template("Influencer/view_ratings.html", ratings=ratings_with_details)
+
+
+@influencer.route("make_ad_offer/<int:ad_request_id>", methods=["POST", "GET"])
+@role_required("Influencer")
+@login_required
+def make_ad_offer(ad_request_id):
+    ad_request = AdRequest.query.get_or_404(ad_request_id)
+    campaign = Campaign.query.get(ad_request.campaign_id)
+    sponsor = User.query.get(campaign.user_id)
+    sender_id = sponsor.id
+    if request.method == "POST":
+        offer_amount = request.form.get("offer_amount")
+        negotiation = Negotiation(
+            campaign_id=campaign.id,
+            ad_request_id=ad_request_id,
+            offer_amount=offer_amount,
+            sender_id=sender_id,
+            receiver_id=current_user.id,
+        )
+        db.session.add(negotiation)
+        db.session.commit()
+        flash("Offer created successfully", "success")
+        return redirect(url_for("influencer.dashboard"))
+    return render_template("Influencer/dashboard.html", ad_request=ad_request)

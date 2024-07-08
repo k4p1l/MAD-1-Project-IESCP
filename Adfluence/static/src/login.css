@@ -171,7 +171,7 @@ select:focus {
   font-size: 100%;
   font-weight: 500;
   color: inherit;
-  cursor: none;
+  cursor: pointer;
   margin: 0;
   padding: 0;
   background-color: transparent;

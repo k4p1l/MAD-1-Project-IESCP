@@ -89,14 +89,14 @@ nav > div {
 }
 
 .col-1 {
-  flex: 3;
+  flex: 7.24;
   display: flex;
   flex-direction: column;
   gap: 2em;
 }
 
 .col-2 {
-  flex: 8;
+  flex: 4;
   display: flex;
   flex-direction: column;
 }
@@ -146,19 +146,20 @@ nav > div {
 .first-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  border-spacing: 0;
 }
 .first-table th {
   position: sticky;
   top: 0;
   z-index: 1;
   background-color: #fff;
-  padding: 0.5em 0.2em;
+  padding: 0.5em 2.2em;
   border-bottom: 2px solid #000;
   text-align: left;
+  width: fit-content;
 }
 .first-table td {
-  padding: 0.5em 0.5em;
+  padding: 0.5em 2.2em;
   border-bottom: 1px solid #000;
   text-align: left;
   vertical-align: top; /* Ensures text starts from the top of the cell */
@@ -223,7 +224,7 @@ tr:hover {
   padding: 0.5em 0.2em;
   border-bottom: 2px solid #000;
   text-align: left;
-  vertical-align: top;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
   white-space: normal;
   font-size: 14px;
@@ -233,7 +234,7 @@ tr:hover {
   padding: 0.5em 0.5em;
   border-bottom: 1px solid #000;
   text-align: left;
-  vertical-align: top;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
   word-wrap: break-word; /* Breaks long words onto the next line */
   white-space: normal; /* Allows the text to wrap */
   font-size: 14px;
@@ -305,26 +306,46 @@ tr:hover {
   font-size: 16px;
 }
 
-.notification {
-  position: relative;
-  top: 0;
-  left: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  padding: 5px;
-  border-radius: 50%;
-  background-color: #3639f4;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease-out;
+.cc-input {
+  text-transform: none;
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  border-radius: 0.2em;
+  width: 50%;
+  height: auto;
+  padding: 0.4em 1.2em 0.4em 1em;
+  font-size: 1em;
+  line-height: 1.2em;
+  font-family: "Arame";
+  margin-bottom: 20px;
 }
-.pending-nego {
-  background-color: #f44336;
+
+.cc-label {
+  font-size: 18px;
 }
-.notification ion-icon {
+
+.nego-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nego-table th {
+  padding: 0.5em 1em;
+  border-bottom: 1px solid #000;
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
   font-size: 16px;
-  color: #fff;
+}
+
+.nego-table td {
+  padding: 0.5em 1em;
+
+  border-bottom: 1px solid #000;
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
+  font-size: 16px;
 }

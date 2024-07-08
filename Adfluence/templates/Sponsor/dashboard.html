@@ -103,7 +103,7 @@
           <tbody>
             {% for request in sent_requests %}
             <tr>
-              <td class="w-14">{{request.ad_request.id}}</td>
+              <td class="w-14">{{loop.index}}</td>
               <td>{{ request.ad_request.campaign.name }}</td>
               <td>{{ request.influencer_name }}</td>
               <td

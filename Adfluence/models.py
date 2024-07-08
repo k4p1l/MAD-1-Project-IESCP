@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 
 class User(db.Model, UserMixin):
@@ -70,6 +71,7 @@ class Influencer(db.Model, UserMixin):
     )
 
 
+# ----------------------- Sent by sponsor to influencer ---------------------- #
 class AdRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey("campaign.id"), nullable=False)
@@ -82,8 +84,12 @@ class AdRequest(db.Model):
     completion_confirmed = db.Column(db.Boolean, default=False)
     payment_done = db.Column(db.Boolean, default=False)
     rating_done = db.Column(db.Boolean, default=False)
+    negotiations = relationship(
+        "Negotiation", backref="ad_request", cascade="all, delete-orphan"
+    )
 
 
+# ----------------------- Sent by influencer to sponsor ---------------------- #
 class campaignRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campaign_id = db.Column(db.Integer, db.ForeignKey("campaign.id"), nullable=False)
@@ -96,6 +102,16 @@ class campaignRequest(db.Model):
     completion_confirmed = db.Column(db.Boolean, default=False)
     payment_done = db.Column(db.Boolean, default=False)
     rating_done = db.Column(db.Boolean, default=False)
+
+class Negotiation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ad_request_id = db.Column(db.Integer, db.ForeignKey("ad_request.id"), nullable=True)
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaign.id"), nullable=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    offer_amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), default="Pending")  # Pending, Accepted, Rejected
+    created_at = db.Column(db.DateTime, default=func.now())
 
 
 class Bookmark(db.Model):

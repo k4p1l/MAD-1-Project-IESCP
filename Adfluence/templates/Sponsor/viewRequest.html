@@ -1,0 +1,110 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='src/sponsor_css/view_request.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <nav>
+    <div class="nav-1">
+      <a href="{{ url_for('sponsor.dashboard') }}" class="logo view">
+        AD <br />
+        FL
+      </a>
+      <a href="{{ url_for('views.logout') }}" class="view">logout</a>
+    </div>
+    <div class="nav-2">
+      <p class="menu-button">the</p>
+      <p class="x">v</p>
+      <p class="menu-button">dashboard</p>
+    </div>
+    <div class="nav-3">
+      <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
+      <a href="{{ url_for('sponsor.viewCampaigns') }}" class="view">
+        view <br />
+        campaigns
+      </a>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="col-1 col">
+      <div class="header">
+        <h1>Adrequest</h1>
+      </div>
+      <div class="numbers">
+        <p>xoxo</p>
+        <div class="hr"></div>
+        <p>xoxo</p>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="first-table">
+          <table>
+            <tr>
+              <th>Sno</th>
+              <th>Negotiated Amount</th>
+              <th></th>
+              <th></th>
+            </tr>
+            {% for negotiation in nego_details %} {% if negotiation.status ==
+            "Pending" %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ negotiation.offer_amount }}</td>
+              <td>
+                <form
+                  action="{{ url_for('sponsor.reject_negotiation',negotiation_id=negotiation.id)}}"
+                  method="post"
+                >
+                  <button class="link text-red-600 danger" type="submit">
+                    Reject
+                  </button>
+                </form>
+              </td>
+              <td>
+                <form
+                  action="{{ url_for('sponsor.accept_negotiation',negotiation_id=negotiation.id)}}"
+                  method="post"
+                >
+                  <button class="link text-green-600 approve" type="submit">
+                    Accept
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endif %} {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-2 col">
+      <h1>Negotiation History</h1>
+      <div class="table-wrapper-2">
+        <div class="nego-table">
+          <table>
+            <tr>
+              <th>Sno</th>
+              <th>
+                Negotiated <br />
+                Amount
+              </th>
+              <th>Status</th>
+              <th>Date/Time</th>
+            </tr>
+            {% for negotiation in nego_details %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ negotiation.offer_amount }}</td>
+              <td>{{ negotiation.status }}</td>
+              <td>{{ negotiation.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

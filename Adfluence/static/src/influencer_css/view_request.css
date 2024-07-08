@@ -304,3 +304,47 @@ tr:hover {
   color: #f44336;
   font-size: 16px;
 }
+
+.cc-input {
+  text-transform: none;
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  border-radius: 0.2em;
+  width: 50%;
+  height: auto;
+  padding: 0.4em 1.2em 0.4em 1em;
+  font-size: 1em;
+  line-height: 1.2em;
+  font-family: "Arame";
+  margin-bottom: 20px;
+}
+
+.cc-label {
+  font-size: 18px;
+}
+
+.nego-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nego-table th {
+  padding: 0.5em 1em;
+  border-bottom: 2px solid #000;
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
+  font-size: 14px;
+}
+
+.nego-table td {
+  padding: 0.5em 1em;
+
+  border-bottom: 1px solid #000;
+  text-align: left;
+  vertical-align: top; /* Ensures text starts from the top of the cell */
+  word-wrap: break-word; /* Breaks long words onto the next line */
+  white-space: normal; /* Allows the text to wrap */
+  font-size: 14px;
+}

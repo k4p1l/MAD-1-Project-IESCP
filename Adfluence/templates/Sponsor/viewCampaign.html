@@ -107,7 +107,20 @@
             request.request.completion_confirmed %}
 
             <tr>
-              <td>{{ request.request_type }}</td>
+              <td>
+                {% if request.negotiations %}
+                <a
+                  href="{{ url_for('sponsor.viewRequest', ad_request_id=request.request.id, request_type=request.request_type) }}"
+                  class="notification {% if request.pending_found %} pending-nego {% endif %}"
+                >
+                  {% if request.pending_found %}
+                  <ion-icon name="notifications-sharp"></ion-icon>
+                  {% else %}
+                  <ion-icon name="checkmark-sharp"></ion-icon> {% endif %}
+                </a>
+                {% endif %} {{ request.request_type }}
+              </td>
+
               <td>{{ request.influencer_name }}</td>
               <td>{{ request.request.messages }}</td>
               <td>{{ request.request.requirements }}</td>

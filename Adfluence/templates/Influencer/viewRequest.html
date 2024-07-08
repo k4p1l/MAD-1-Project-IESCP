@@ -20,12 +20,12 @@
       <p class="menu-button">dashboard</p>
     </div>
     <div class="nav-3">
-      <a  href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
+      <a href="{{ url_for('influencer.viewCampaigns') }}" class="create view">
         find <ion-icon name="arrow-forward-sharp"></ion-icon> <br />
         campaigns
       </a>
       <a
-      href="{{ url_for('influencer.activeCampaigns') }}"
+        href="{{ url_for('influencer.activeCampaigns') }}"
         class="pattern-2 view"
       >
         active<br />
@@ -73,10 +73,117 @@
             <td>Status</td>
             <td>{{ ad_request_details.ad_request.status }}</td>
           </tr>
+          <tr></tr>
         </table>
       </div>
+      <table class="first-table">
+        <tr>
+          <th class="text-left">Current Offer Price</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>{{latest_price}}</td>
+          <td>
+            <form
+              action="{{ url_for('influencer.reject_ad_request', ad_request_id=ad_request_details.ad_request.id) }}"
+              method="post"
+            >
+              <button class="link text-red-600 danger" type="submit">
+                Reject
+              </button>
+            </form>
+          </td>
+          <td>
+            <form
+              action="{{ url_for('influencer.accept_ad_request', ad_request_id=ad_request_details.ad_request.id,) }}"
+              method="post"
+            >
+              <input
+                type="text"
+                name="payment_amount"
+                hidden
+                value="{{latest_price}}"
+              />
+              <button class="link text-green-600 approve" type="submit">
+                Approve
+              </button>
+            </form>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="col-2 col">
+      <h1 class="text-4xl text-center cursor-pointer">Negotiations</h1>
+      {% if not negotiations %}
+      <form
+        method="post"
+        action="{{ url_for('influencer.make_ad_offer', ad_request_id=ad_request_details.ad_request.id) }}"
+      >
+        <label for="offer_amount" class="cc-label">Counter Offer Amount:</label>
+        <input
+          type="number"
+          id="offer_amount"
+          name="offer_amount"
+          class="cc-input"
+          required
+        />
+        <br />
+        <div class="text-right mr-5">
+          <button
+            class="link text-white bg-slate-900 px-4 py-2 mb-6 rounded-md"
+            type="submit"
+          >
+            Negotiate
+          </button>
+        </div>
+      </form>
+      {% else %}{% set show_form = True %} {% if latest_pending_nego.status ==
+      'Pending' %} {% set show_form = False %} {% endif %} {% endif %} {% if
+      show_form %}
+
+      <form
+        method="post"
+        action="{{ url_for('influencer.make_ad_offer', ad_request_id=ad_request_details.ad_request.id) }}"
+      >
+        <label for="offer_amount" class="cc-label">Counter Offer Amount:</label>
+        <input
+          type="number"
+          id="offer_amount"
+          name="offer_amount"
+          class="cc-input"
+          required
+        />
+        <br />
+        <div class="text-right mr-5">
+          <button
+            class="link text-white bg-slate-900 px-4 py-2 mb-6 rounded-md"
+            type="submit"
+          >
+            Negotiate
+          </button>
+        </div>
+      </form>
+      {% endif %}
+
+      <table class="nego-table">
+        <tr>
+          <th>Status</th>
+          <th>Offer Amount</th>
+          <th>Time</th>
+        </tr>
+        {% for negotiation in negotiations %}
+        <tr>
+          <td
+            class="{% if negotiation.status == 'Pending' %}status-pending{% elif negotiation.status == 'Rejected' %}status-rejected{% elif negotiation.status == 'Accepted' %}status-accepted{% endif %}"
+          >
+            {{negotiation.status}}
+          </td>
+          <td>{{negotiation.offer_amount}}</td>
+          <td>{{negotiation.created_at}}</td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
   </div>
 </div>

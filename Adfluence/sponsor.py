@@ -2,6 +2,7 @@ import csv
 import os
 from datetime import datetime
 from uuid import uuid4
+from sqlalchemy import desc
 
 from flask import (
     Blueprint,
@@ -25,6 +26,7 @@ from .models import (
     campaignRequest,
     Transaction,
     Rating,
+    Negotiation,
 )
 from .views import role_required
 
@@ -40,6 +42,7 @@ def dashboard():
     campaign_requests = (
         campaignRequest.query.join(Campaign)
         .filter(Campaign.user_id == current_user.id)
+        .order_by(desc(campaignRequest.id))
         .all()
     )
     campaign_requests_with_details = []
@@ -60,7 +63,10 @@ def dashboard():
             flash("Influencer not found", category="error")
 
     sent_requests = (
-        AdRequest.query.join(Campaign).filter(Campaign.user_id == current_user.id).all()
+        AdRequest.query.join(Campaign)
+        .filter(Campaign.user_id == current_user.id)
+        .order_by(desc(AdRequest.id))
+        .all()
     )
     sent_requests_with_details = []
     for sent_request in sent_requests:
@@ -119,7 +125,12 @@ def createCampaign():
 @login_required
 def viewCampaign(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
-    campaignRequests = campaignRequest.query.filter_by(campaign_id=campaign_id).all()
+    campaignRequests = (
+        campaignRequest.query.filter_by(campaign_id=campaign_id)
+        .order_by(desc(campaignRequest.id))
+        .all()
+    )
+
     campaign_requests_with_details = []
     for campaign_request in campaignRequests:
         influencer = Influencer.query.get(campaign_request.influencer_id)
@@ -134,18 +145,27 @@ def viewCampaign(campaign_id):
             )
         else:
             flash("Influencer not found", category="error")
-    adrequests = AdRequest.query.filter_by(campaign_id=campaign_id).all()
+    adrequests = (
+        AdRequest.query.filter_by(campaign_id=campaign_id)
+        .order_by(desc(AdRequest.id))
+        .all()
+    )
     sent_requests_with_details = []
     for sent_request in adrequests:
+        adrequest_negotiations = sent_request.negotiations
         influencer = Influencer.query.get(sent_request.influencer_id)
         influencer_name = influencer.name
+        pending_found = any(nego.status == "Pending" for nego in adrequest_negotiations)
         sent_requests_with_details.append(
             {
                 "request": sent_request,
                 "influencer_name": influencer_name,
                 "request_type": "Sent",
+                "negotiations": adrequest_negotiations,
+                "pending_found": pending_found,
             }
         )
+
     return render_template(
         "Sponsor/viewCampaign.html",
         user=current_user,
@@ -531,7 +551,7 @@ def export_csv():
     filename = uuid4().hex + ".csv"
     url = "static/csv/" + filename
     filepath = os.path.join(current_app.root_path, "static", "csv", filename)
-    Sno=0
+    Sno = 0
 
     # Ensure the directory exists
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -550,7 +570,7 @@ def export_csv():
             ]
         )
         for transaction in transaction_with_details:
-            Sno+=1
+            Sno += 1
             writer.writerow(
                 [
                     Sno,
@@ -628,3 +648,54 @@ def rate_influencer(ad_request_id, request_type):
         transaction=transaction,
         influencer_name=influencer.name,
     )
+
+
+@sponsor.route(
+    "/viewRequest/<string:request_type>/<int:ad_request_id>", methods=["GET", "POST"]
+)
+@role_required("Sponsor")
+@login_required
+def viewRequest(request_type, ad_request_id):
+    if request_type == "Sent":
+        ad_request = AdRequest.query.get_or_404(ad_request_id)
+        # get negotiation details from ad_request
+        nego_details = ad_request.negotiations
+    else:
+        ad_request = None
+    if request_type == "Received":
+        ad_request = campaignRequest.query.get_or_404(ad_request_id)
+        nego_details = ad_request.negotiations
+
+    print(nego_details)
+
+    return render_template(
+        "sponsor/viewRequest.html", ad_request=ad_request, nego_details=nego_details
+    )
+
+
+# ---------------------------- Accept Negotiation ---------------------------- #
+@sponsor.route("/accept_negotiation/<int:negotiation_id>>", methods=["POST"])
+@role_required("Sponsor")
+@login_required
+def accept_negotiation(negotiation_id):
+    negotiation = Negotiation.query.get_or_404(negotiation_id)
+    ad_request_id = negotiation.ad_request_id
+
+    negotiation.status = "Accepted"
+    db.session.commit()
+    flash("Negotiation accepted successfully.", category="success")
+    return redirect(url_for("sponsor.viewCampaigns"))
+
+
+# ---------------------------- Reject Negotiation ---------------------------- #
+@sponsor.route("/reject_negotiation/<int:negotiation_id>>", methods=["POST"])
+@role_required("Sponsor")
+@login_required
+def reject_negotiation(negotiation_id):
+    negotiation = Negotiation.query.get_or_404(negotiation_id)
+    ad_request_id = negotiation.ad_request_id
+
+    negotiation.status = "Rejected"
+    db.session.commit()
+    flash("Negotiation rejected successfully.", category="success")
+    return redirect(url_for("sponsor.viewCampaigns"))
