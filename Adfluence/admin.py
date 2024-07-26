@@ -447,7 +447,7 @@ def delete_influencer(influencer_id):
         user = User.query.get(influencer.user_id)
         db.session.delete(user)
         db.session.delete(influencer)
-        
+
     db.session.commit()
     flash("Influencer deleted!", category="success")
     return redirect(url_for("admin.view_influencers"))

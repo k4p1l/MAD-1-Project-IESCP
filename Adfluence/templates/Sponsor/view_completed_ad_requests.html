@@ -25,7 +25,7 @@
         href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
         class="view"
       >
-        view <br />
+    
         history
       </a>
     </div>
@@ -64,7 +64,7 @@
               <a
                 class="view"
                 href="{{url_for('sponsor.make_payment', ad_request_id=request.request.id, request_type=request.request_type)}}"
-                >Make Payment</a
+                >Pay</a
               >
               {%endif%}
             </td>
@@ -75,6 +75,7 @@
             <td>
               <a
                 href="{{url_for('sponsor.rate_influencer', ad_request_id=request.request.id, request_type=request.request_type)}}"
+                class="view"
                 >Give Rating</a
               >
             </td>

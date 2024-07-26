@@ -21,8 +21,7 @@
     </div>
     <div class="nav-3">
       <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
-      <a href="viewCampaigns" class="view">
-        view <br />
+      <a href="{{ url_for('sponsor.viewCampaigns') }}" class="view">
         campaigns
       </a>
     </div>
@@ -152,11 +151,10 @@
                 name="visibility"
                 required
               >
-              <option value="public" {% if campaign.visibility == 'public' %}selected{% endif %}>Public</option>
-              <option value="private" {% if campaign.visibility == 'private' %}selected{% endif %}>Private</option>
+              <option value="public" {% if campaign.visibility == 'public' %} selected {% endif %}>Public</option>
+              <option value="private" {% if campaign.visibility == 'private' %} selected {% endif %}>Private</option>
               </select>
             </div>
-
             <div>
               <label class="cc-label" for="goals">Goals:</label>
               <input

@@ -8,11 +8,11 @@ from datetime import datetime
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
-    name = db.Column(db.String(150))
-    role = db.Column(db.String(20), nullable=True)
-    niche = db.Column(db.String(100), nullable=True)
+    email = db.Column(db.String(40), unique=True)
+    password = db.Column(db.String(40))
+    name = db.Column(db.String(40))
+    role = db.Column(db.String(20), nullable=False)
+    niche = db.Column(db.String(40), nullable=False)
     flagged = db.Column(db.Boolean, default=False)
     influencers = relationship("Influencer", backref="user", lazy=True)
     campaigns = relationship("Campaign", backref="user", cascade="all, delete-orphan")
@@ -25,15 +25,15 @@ class User(db.Model, UserMixin):
 class Campaign(db.Model):
     __tablename__ = "campaign"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(140), nullable=False)
+    name = db.Column(db.String(40), nullable=False)
     description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     budget = db.Column(db.Integer, nullable=False)
     visibility = db.Column(db.String(10), nullable=False)  # 'public' or 'private'
     goals = db.Column(db.Text, nullable=False)
-    niche = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.String(100), nullable=False, default="Incomplete")
+    niche = db.Column(db.String(40), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="Incomplete")
     flagged = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     ad_requests = db.relationship(
@@ -47,8 +47,8 @@ class Campaign(db.Model):
 class Influencer(db.Model, UserMixin):
     __tablename__ = "influencer"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150), nullable=False)
-    email = db.Column(db.String(150), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
     profile_picture = db.Column(db.String(100), nullable=False)
     niche = db.Column(db.String(100), nullable=False)
     reach = db.Column(db.Integer, nullable=False)
@@ -102,6 +102,7 @@ class campaignRequest(db.Model):
     completion_confirmed = db.Column(db.Boolean, default=False)
     payment_done = db.Column(db.Boolean, default=False)
     rating_done = db.Column(db.Boolean, default=False)
+
 
 class Negotiation(db.Model):
     id = db.Column(db.Integer, primary_key=True)

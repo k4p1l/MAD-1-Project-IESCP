@@ -33,6 +33,22 @@ from .views import role_required
 sponsor = Blueprint("sponsor", __name__)
 
 
+def get_allocated_budget(campaign_id):
+    ad_requests_sum = (
+        db.session.query(func.sum(AdRequest.payment_amount))
+        .filter_by(campaign_id=campaign_id, status="Accepted")
+        .scalar()
+        or 0
+    )
+    campaign_requests_sum = (
+        db.session.query(func.sum(campaignRequest.payment_amount))
+        .filter_by(campaign_id=campaign_id, status="Accepted")
+        .scalar()
+        or 0
+    )
+    return ad_requests_sum + campaign_requests_sum
+
+
 # ---------- Sponsor Dashboard ------------------------#
 @sponsor.route("/dashboard", methods=["GET", "POST"])
 @role_required("Sponsor")
@@ -99,6 +115,10 @@ def createCampaign():
         goals = request.form.get("goals")
         niche = request.form.get("niche")
         user_id = current_user.id
+
+        if visibility == "private" and niche == "All":
+            flash("Private campaigns cannot be of All niche", "error")
+            return redirect(url_for("sponsor.createCampaign"))
 
         new_campaign = Campaign(
             name=name,
@@ -256,7 +276,17 @@ def create_ad_request(campaign_id):
         requirements = request.form["requirements"]
         payment_amount = request.form["payment_amount"]
 
-        # Retrieve the influencer name from the influencer_id
+        # Check if the new request would exceed the campaign budget
+        allocated_budget = get_allocated_budget(campaign_id)
+        if allocated_budget + payment_amount > campaign.budget:
+            flash(
+                f"This request would exceed the campaign budget. Available budget: {campaign.budget - allocated_budget}",
+                "error",
+            )
+            return redirect(
+                url_for("sponsor.create_ad_request", campaign_id=campaign_id)
+            )
+
         influencer = Influencer.query.get(influencer_id)
         if not influencer:
             flash("Influencer not found", "error")
@@ -288,7 +318,17 @@ def create_ad_request(campaign_id):
 @login_required
 def request_action(request_id, action):
     ad_request = campaignRequest.query.get_or_404(request_id)
+
     if action == "accept":
+        # Check if accepting this request would exceed the campaign budget
+        allocated_budget = get_allocated_budget(ad_request.campaign_id)
+        if allocated_budget + ad_request.payment_amount > ad_request.campaign.budget:
+            flash(
+                f"Accepting this request would exceed the campaign budget. Available budget: {ad_request.campaign.budget - allocated_budget}",
+                "error",
+            )
+            return redirect(url_for("sponsor.dashboard"))
+
         ad_request.status = "Accepted"
     elif action == "reject":
         ad_request.status = "Rejected"

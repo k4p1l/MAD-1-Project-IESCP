@@ -1,9 +1,8 @@
-from flask import Flask
 from .models import db, Campaign, User, AdRequest, Influencer, Rating, campaignRequest
 from flask_restful import Resource, marshal_with, fields, reqparse
 from datetime import datetime
-import json
 
+# A parser is used to parse and validate the incoming request data.
 campaign_parser = reqparse.RequestParser()
 campaign_parser.add_argument("name", type=str, required=True, help="Name is required")
 campaign_parser.add_argument(
@@ -33,6 +32,7 @@ campaign_parser.add_argument(
     "user_id", type=int, required=True, help="User ID is required"
 )
 
+# Fields are used to specify the structure of the response data. They help to format the output in a consistent manner.
 campaign_fields = {
     "id": fields.Integer,
     "name": fields.String,

@@ -27,7 +27,6 @@
         href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
         class="view"
       >
-        view <br />
         history
       </a>
     </div>
@@ -60,8 +59,8 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Budget</th>
-            <th>Campaign description</th>
-            <th>Goals</th>
+            <th>Visibility</th>
+            <th>Niche</th>
             <th class="link"></th>
             <th class="link"></th>
           </tr>
@@ -79,8 +78,8 @@
             <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
             <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
             <td>Rs. {{ campaign.budget }}</td>
-            <td>{{ campaign.description }}</td>
-            <td>{{ campaign.goals }}</td>
+            <td>{{ campaign.visibility }}</td>
+            <td>{{ campaign.niche }}</td>
 
             <td class="link danger">
               <form

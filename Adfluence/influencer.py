@@ -412,7 +412,6 @@ def viewRequest(ad_request_id):
         negotiations=negotiations,
         latest_price=latest_price,
         latest_pending_nego=latest_pending_nego,
-        
     )
 
 
