@@ -210,8 +210,11 @@ def campaign_stats():
     if len(most_populated_niches) > 1:
         first_most_populated_niche = most_populated_niches[0]
         second_most_populated_niche = most_populated_niches[1]
-    else:
+    elif len(most_populated_niches) == 1:
         first_most_populated_niche = most_populated_niches[0]
+        second_most_populated_niche = None
+    else:
+        first_most_populated_niche = None
         second_most_populated_niche = None
     campaigns_by_niche = (
         db.session.query(Campaign.niche, db.func.count(Campaign.id))
