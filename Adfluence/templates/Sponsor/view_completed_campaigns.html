@@ -23,8 +23,11 @@
       <a href="{{ url_for('sponsor.createCampaign') }}" class="view">create+</a>
 
       {% endif %}
-      <a href="{{ url_for('sponsor.view_completed_campaigns') }}" class="view">
-        completed <br> campaigns
+      <a
+        href="{{ url_for('sponsor.payment_history',user_id=current_user.id) }}"
+        class="view"
+      >
+        history
       </a>
     </div>
   </nav>
@@ -58,8 +61,7 @@
             <th>Budget</th>
             <th>Visibility</th>
             <th>Niche</th>
-            <th class="link"></th>
-            <th class="link"></th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +69,7 @@
           <tr>
             <td>
               <a
-                href="{{ url_for('sponsor.viewCampaign', campaign_id=campaign.id) }}"
+                href="{{ url_for('sponsor.view_completed_campaign', campaign_id=campaign.id) }}"
                 class="view"
                 >{{ campaign.name }}</a
               >
@@ -77,30 +79,7 @@
             <td>Rs. {{ campaign.budget }}</td>
             <td>{{ campaign.visibility }}</td>
             <td>{{ campaign.niche }}</td>
-
-            <td class="link danger">
-              <form
-                action="{{ url_for('sponsor.deleteCampaign', campaign_id=campaign.id) }}"
-                method="POST"
-                onsubmit="return confirm('Are you sure you want to delete this campaign?');"
-              >
-                <button type="submit">delete</button>
-              </form>
-            </td>
-            {% if campaign.flagged==True %}
-            <td class="status-rejected">Flagged by admin</td>
-            {% else %}
-
-            <td class="link view">
-              <form
-                action="{{ url_for('sponsor.editCampaign', campaign_id=campaign.id) }}"
-                method="POST"
-                onsubmit="return confirm('Are you sure you want to edit this campaign?');"
-              >
-                <button type="submit">edit</button>
-              </form>
-            </td>
-            {% endif %}
+            <td>{{ campaign.status }}</td>
           </tr>
           {% endfor %}
         </tbody>

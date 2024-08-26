@@ -199,7 +199,10 @@ def viewCampaign(campaign_id):
 @role_required("Sponsor")
 @login_required
 def viewCampaigns():
-    active_campaigns = Campaign.query.filter_by(user_id=current_user.id).all()
+    active_campaigns = Campaign.query.filter(
+        Campaign.user_id == current_user.id, Campaign.status == "Incomplete"
+    ).all()
+
     return render_template(
         "Sponsor/viewCampaigns.html", user=current_user, campaigns=active_campaigns
     )
@@ -264,6 +267,91 @@ def editCampaign(campaign_id):
     return render_template("Sponsor/editCampaign.html", campaign=campaign)
 
 
+# mark campaign as completed
+@sponsor.route("/campaign/<int:campaign_id>/mark_completed", methods=["POST"])
+@role_required("Sponsor")
+@login_required
+def mark_completed(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    if campaign.user_id != current_user.id:
+        flash(
+            "You are not authorized to mark this campaign as completed.",
+            category="error",
+        )
+        return redirect(url_for("sponsor.viewCampaigns"))
+    campaign.status = "Completed"
+    db.session.commit()
+    flash("Campaign marked as completed successfully!", category="success")
+    return redirect(url_for("sponsor.viewCampaign", campaign_id=campaign_id))
+
+
+# view completed campaigns
+@sponsor.route("/view_completed_campaigns")
+@role_required("Sponsor")
+@login_required
+def view_completed_campaigns():
+    campaigns = Campaign.query.filter_by(status="Completed").all()
+    return render_template(
+        "Sponsor/view_completed_campaigns.html", campaigns=campaigns, user=current_user
+    )
+
+
+# view completed campaign
+@sponsor.route("/view_completed_campaign/<int:campaign_id>")
+@role_required("Sponsor")
+@login_required
+def view_completed_campaign(campaign_id):
+    campaign = Campaign.query.get_or_404(campaign_id)
+    campaignRequests = (
+        campaignRequest.query.filter_by(campaign_id=campaign_id)
+        .order_by(desc(campaignRequest.id))
+        .all()
+    )
+
+    campaign_requests_with_details = []
+    for campaign_request in campaignRequests:
+        influencer = Influencer.query.get(campaign_request.influencer_id)
+        if influencer:
+            influencer_name = influencer.name
+            campaign_requests_with_details.append(
+                {
+                    "request": campaign_request,
+                    "influencer_name": influencer_name,
+                    "request_type": "Received",
+                }
+            )
+        else:
+            flash("Influencer not found", category="error")
+    adrequests = (
+        AdRequest.query.filter_by(campaign_id=campaign_id)
+        .order_by(desc(AdRequest.id))
+        .all()
+    )
+    sent_requests_with_details = []
+    for sent_request in adrequests:
+        adrequest_negotiations = sent_request.negotiations
+        influencer = Influencer.query.get(sent_request.influencer_id)
+        influencer_name = influencer.name
+        pending_found = any(nego.status == "Pending" for nego in adrequest_negotiations)
+        sent_requests_with_details.append(
+            {
+                "request": sent_request,
+                "influencer_name": influencer_name,
+                "request_type": "Sent",
+                "negotiations": adrequest_negotiations,
+                "pending_found": pending_found,
+            }
+        )
+
+    return render_template(
+        "Sponsor/view_completed_campaign.html",
+        campaign=campaign,
+        user=current_user,
+        ad_requests=sent_requests_with_details,
+        campaign_requests=campaign_requests_with_details,
+    )
+
+
 # --------------------------------Adrequest-------------------------------------#
 @sponsor.route("/campaign/<int:campaign_id>/create_ad_request", methods=["GET", "POST"])
 @role_required("Sponsor")
@@ -276,8 +364,12 @@ def create_ad_request(campaign_id):
         requirements = request.form["requirements"]
         payment_amount = request.form["payment_amount"]
 
+        
+
         # Check if the new request would exceed the campaign budget
         allocated_budget = get_allocated_budget(campaign_id)
+        allocated_budget = float(allocated_budget)
+        payment_amount = float(payment_amount)
         if allocated_budget + payment_amount > campaign.budget:
             flash(
                 f"This request would exceed the campaign budget. Available budget: {campaign.budget - allocated_budget}",
