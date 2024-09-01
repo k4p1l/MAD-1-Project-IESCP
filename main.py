@@ -13,5 +13,4 @@ if __name__ == "__main__":
 
 # todo end budget after its end date or give the option to end it.
 # limit budget of adrequests to budget of the campaign.
-#  in admin.py add conditional statement to check if there is data or not.
 # todo make my editCampaign's form better.
