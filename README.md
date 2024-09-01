@@ -53,7 +53,8 @@ venv\Scripts\activate.bat
 ```
 #### Install all the depedenices 
 ```
-pip install -r requirements.txt
+- pip install -r requirements.txt
+- npm install
 ```
 #### Run the app
 ```

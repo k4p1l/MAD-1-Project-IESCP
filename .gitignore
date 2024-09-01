@@ -1,2 +1,4 @@
 node_modules/
 instance/
+.idea/
+__pycache__/
