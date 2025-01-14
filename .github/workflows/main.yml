@@ -1,13 +1,35 @@
-name: Keep App Awake
+name: Keep App Awake - MAD Project
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # This runs the job every 5 minutes
+    - cron: '*/15 * * * *'  # Every 15 minutes
+  workflow_dispatch:  # Manual trigger option
 
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Flask App
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Ping App with Multiple Checks
         run: |
+          # Basic ping
           curl -s https://mad-1-project-iescp.onrender.com > /dev/null
+
+          # Detailed health check
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://mad-1-project-iescp.onrender.com --max-time 10)
+          
+          if [ $response -eq 200 ]; then
+            echo "App is responding correctly"
+          else
+            echo "App might be down. Response code: $response"
+            exit 1
+          fi
+
+      - name: Check Response Time
+        run: |
+          # Measure response time
+          time=$(curl -s -w "%{time_total}" https://mad-1-project-iescp.onrender.com -o /dev/null)
+          echo "Response Time: $time seconds"
+
