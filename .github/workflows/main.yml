@@ -1,0 +1,13 @@
+name: Keep App Awake
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # This runs the job every 5 minutes
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Flask App
+        run: |
+          curl -s https://mad-1-project-iescp.onrender.com > /dev/null
