@@ -2,7 +2,7 @@ name: Keep App Awake - MAD Project
 
 on:
   schedule:
-    - cron: '*/14 * * * *'  # Every 15 minutes
+    - cron: '*/15 11-22 * * *'  # Every 15 minutes
   workflow_dispatch:  # Manual trigger option
 
 jobs:
